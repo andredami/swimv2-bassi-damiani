@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,6 +47,17 @@ public class Message implements Serializable {
 	private Date timestamp = Calendar.getInstance().getTime();
 	
 	private Boolean read = false;
+	
+	@ManyToOne
+	@NotNull
+	private User addressee;
+	
+	@ManyToOne
+	@NotNull
+	private User sender;
+	
+	@ManyToOne
+	private Helps helpRelation;
 	
 	public Message(String text){
 		this.text = text;

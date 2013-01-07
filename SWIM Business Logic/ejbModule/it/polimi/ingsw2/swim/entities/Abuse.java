@@ -8,6 +8,7 @@ import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
@@ -33,6 +34,9 @@ public class Abuse implements Serializable {
 	private String descriprion;
 
 	private boolean handeled = false;
+	
+	@ManyToOne
+	private User author;
 
 	public Abuse(String descriprion) {
 		this.descriprion = descriprion;

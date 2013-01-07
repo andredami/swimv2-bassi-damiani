@@ -1,10 +1,13 @@
 package it.polimi.ingsw2.swim.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
@@ -25,6 +28,9 @@ public class Ability implements Serializable {
 	@NotEmpty
 	@NotNull
 	private String description;
+	
+	@OneToMany(mappedBy="ability")
+	private List<Alias> alias = new ArrayList<Alias>();
 
 	private boolean isStub;
 

@@ -4,12 +4,17 @@
 package it.polimi.ingsw2.swim.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.AssertTrue;
@@ -54,6 +59,17 @@ public class Helps implements Serializable {
 	@Enumerated
 	@NotNull
 	private State state = State.REQUESTED;
+	
+	@ManyToOne
+	@NotNull
+	private Ability ability;
+	
+	@OneToOne
+	@NotNull
+	private HelpRequest helpRequest;
+	
+	@OneToMany(mappedBy="helpRelation")
+	private List<Message> conversation = new ArrayList<Message>();
 	
 	public Helps(){
 		super();
