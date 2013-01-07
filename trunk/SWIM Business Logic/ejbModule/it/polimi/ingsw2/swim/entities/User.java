@@ -15,7 +15,9 @@ import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -25,6 +27,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -97,7 +100,19 @@ public class User implements Serializable {
 	private String skype;
 
 	private Float evaluation = (float) 0;
-
+	
+	@OneToMany(mappedBy="addresse")
+	private List<HelpRequest> incomingHelpRequests = new ArrayList<HelpRequest>();
+	
+	@OneToMany(mappedBy="sender")
+	private List<HelpRequest> myHelps = new ArrayList<HelpRequest>();
+	
+	@OneToMany(mappedBy="addresse")
+	private List<SimpleNotification> notifications = new ArrayList<SimpleNotification>();
+	
+	@OneToMany(mappedBy="addresse")
+	private List<Message> incomingMessages = new ArrayList<Message>();
+	
 	public User(String email, String password, String firstname,
 			String surname, String gender, String birthdate) throws ParseException {
 		super();
