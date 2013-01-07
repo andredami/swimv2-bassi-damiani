@@ -3,22 +3,21 @@
  */
 package it.polimi.ingsw2.swim.entities;
 
-import it.polimi.ingsw2.swim.exceptions.InvalidAddressException;
-import it.polimi.ingsw2.swim.exceptions.InvalidAgeException;
-import it.polimi.ingsw2.swim.exceptions.InvalidDateException;
-import it.polimi.ingsw2.swim.exceptions.InvalidEmailAddressException;
-import it.polimi.ingsw2.swim.exceptions.InvalidFullnameException;
-import it.polimi.ingsw2.swim.exceptions.InvalidGenderException;
-import it.polimi.ingsw2.swim.exceptions.InvalidTelephoneNumberException;
+import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
+import it.polimi.ingsw2.swim.util.Digester;
+import it.polimi.ingsw2.swim.validation.AddressType;
+import it.polimi.ingsw2.swim.validation.Name;
+import it.polimi.ingsw2.swim.validation.OfAge;
+import it.polimi.ingsw2.swim.validation.Telephone;
+import it.polimi.ingsw2.swim.validation.URLType;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,13 +29,17 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.Email;
+import org.hibernate.validator.NotEmpty;
+import org.hibernate.validator.NotNull;
+
 /**
  * @author Andrea Damiani
  * 
  */
 
 @Entity
-@SequenceGenerator(name="USER_SEQUENCE")
+@SequenceGenerator(name = "USER_SEQUENCE")
 public class User implements Serializable {
 
 	/**
@@ -45,40 +48,60 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 118322731871513243L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="USER_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQUENCE")
 	private Long id;
-	
+
+	@NotEmpty
+	@NotNull
+	private String password;
+
+	@Email
+	@NotNull
+	@NotEmpty
+	@Column(unique = true)
 	private String email;
-	
+
 	@Embedded
+	@NotNull
 	private FullName name;
-	
+
 	@Temporal(TemporalType.DATE)
+	@OfAge
+	@NotNull
 	private Date birthdate;
-	
+
 	@Enumerated
+	@NotNull
 	private Gender gender;
-	
+
+	@URLType
 	private String picture;
-	
+
 	@Enumerated
+	@NotNull
 	private Status status = Status.WAITING_FOR_CONFIRMATION;
-	
+
+	@AddressType
 	@Embedded
 	private Address address;
-	
+
+	@Telephone
 	private String telephone;
-	
+
+	@Telephone
 	private String mobile;
-	
+
+	@Telephone
 	private String fax;
-	
+
 	private String skype;
-	
+
 	private Float evaluation = (float) 0;
-	
-	public User(String email, String firstname, String surname, String gender, String birthdate) throws InvalidEmailAddressException, InvalidFullnameException, InvalidDateException, InvalidAgeException, InvalidGenderException{
+
+	public User(String email, String password, String firstname,
+			String surname, String gender, String birthdate) throws ParseException {
 		super();
+		this.setPassword(password);
 		this.setEmail(email);
 		this.name = new FullName(firstname, surname);
 		this.setBirthdate(birthdate);
@@ -100,14 +123,35 @@ public class User implements Serializable {
 	}
 
 	/**
+	 * @return the password
+	 */
+	Boolean checkPassword(String password) {
+		return this.password.equals(Digester.digest(password));
+	}
+
+	private void setPassword(String password) {
+		this.password = Digester.digest(password);
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 * @throws InvalidPasswordException
+	 */
+	void setPassword(String oldPassword, String newPassword) throws InvalidPasswordException{
+		if (!checkPassword(oldPassword)) {
+			throw new InvalidPasswordException();
+		}
+
+		this.setPassword(newPassword);
+	}
+
+	/**
 	 * @param email
 	 *            the email to set
 	 * @throws InvalidEmailAddressException
 	 */
-	void setEmail(String email) throws InvalidEmailAddressException {
-		if (email == null || email.isEmpty() || !email.matches("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$")) {
-			throw new InvalidEmailAddressException();
-		}
+	void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -117,7 +161,7 @@ public class User implements Serializable {
 	FullName getName() {
 		return name;
 	}
-	
+
 	/**
 	 * @return the birthdate
 	 */
@@ -128,45 +172,12 @@ public class User implements Serializable {
 	/**
 	 * @param birthdate
 	 *            the birthdate to set
+	 * @throws ParseException 
+	 * @throws InvalidDateException 
 	 */
-	private void setBirthdate(String birthdate) throws InvalidDateException, InvalidAgeException{
-		if(birthdate == null || birthdate.isEmpty()){
-			throw new InvalidDateException();
-		}
-		Calendar birthdateCal = Calendar.getInstance();
+	private void setBirthdate(String birthdate) throws ParseException {
 		Date parsedBirthdate = null;
-		try {
-			parsedBirthdate = DateFormat.getDateInstance().parse(birthdate);
-		} catch (ParseException e) {
-			throw new InvalidDateException();
-		}
-		birthdateCal.setTime(parsedBirthdate);
-		
-		int birthdateYear = birthdateCal.get(Calendar.YEAR);
-		int birthdateMonth = birthdateCal.get(Calendar.MONTH);
-		int birthdateDay = birthdateCal.get(Calendar.DAY_OF_MONTH);
-		
-		Calendar currentCal = Calendar.getInstance();
-		currentCal.setTimeInMillis(System.currentTimeMillis());
-		
-		int currentYear = currentCal.get(Calendar.YEAR);
-		int currentMonth = currentCal.get(Calendar.MONTH);
-		int currentDay = currentCal.get(Calendar.DAY_OF_MONTH);
-		
-		if(currentYear - birthdateYear < 0){
-			throw new InvalidAgeException();
-		} else {
-			if(currentYear - birthdateYear == 0){
-				if(currentMonth - birthdateMonth < 0){
-					throw new InvalidAgeException();
-				} else {
-					if(currentMonth - birthdateMonth == 0 && currentDay - birthdateDay < 0){
-						throw new InvalidAgeException();
-					}
-				}
-			}
-		}
-		
+		parsedBirthdate = DateFormat.getDateInstance().parse(birthdate);
 		this.birthdate = parsedBirthdate;
 	}
 
@@ -180,12 +191,9 @@ public class User implements Serializable {
 	/**
 	 * @param gender
 	 *            the gender to set
-	 * @throws InvalidGenderException 
+	 * @throws InvalidGenderException
 	 */
-	private void setGender(String gender) throws InvalidGenderException {
-		if(gender == null || gender.isEmpty() || Gender.valueOf(gender) == null){
-			throw new InvalidGenderException();
-		}
+	private void setGender(String gender) {
 		this.gender = Gender.valueOf(gender);
 	}
 
@@ -199,14 +207,10 @@ public class User implements Serializable {
 	/**
 	 * @param picture
 	 *            the picture to set
-	 * @throws MalformedURLException 
+	 * @throws MalformedURLException
 	 */
-	void setPicture(String picture) throws MalformedURLException {
-		if(picture == null || picture.isEmpty()){
-			this.picture = null;
-		} else {
-			this.picture = (new URL(picture)).toString();
-		}
+	void setPicture(String picture) {
+		this.picture = picture;
 	}
 
 	/**
@@ -217,13 +221,13 @@ public class User implements Serializable {
 	}
 
 	void confirmRegistration() {
-		if(this.status != Status.WAITING_FOR_CONFIRMATION){
+		if (this.status != Status.WAITING_FOR_CONFIRMATION) {
 			throw new IllegalStateException();
 		}
 		this.status = Status.REGISTERED;
 	}
-	
-	void ban(){
+
+	void ban() {
 		this.status = Status.BANNED;
 	}
 
@@ -237,12 +241,13 @@ public class User implements Serializable {
 	/**
 	 * @param address
 	 *            the address to set
-	 * @throws InvalidAddressException 
+	 * @throws InvalidAddressException
 	 */
-	void setAddress(String street, String streetNumber, String zip, String city,
-			String province) throws InvalidAddressException {
-		if(this.address == null){
-			this.address = new Address(street, streetNumber, zip, city, province);
+	void setAddress(String street, String streetNumber, String zip,
+			String city, String province) {
+		if (this.address == null) {
+			this.address = new Address(street, streetNumber, zip, city,
+					province);
 		} else {
 			this.address.setStreet(street);
 			this.address.setStreetNumber(streetNumber);
@@ -262,14 +267,9 @@ public class User implements Serializable {
 	/**
 	 * @param telephone
 	 *            the telephone to set
-	 * @throws InvalidTelephoneNumberException 
+	 * @throws InvalidTelephoneNumberException
 	 */
-	void setTelephone(String telephone) throws InvalidTelephoneNumberException {
-		if(telephone != null && !telephone.isEmpty()){
-		telephone.replaceAll("[ .-()]", "");
-		if(!telephone.matches("^\\+?[0-9]{3,}$")){
-			throw new InvalidTelephoneNumberException();
-		}}
+	void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
 
@@ -283,14 +283,9 @@ public class User implements Serializable {
 	/**
 	 * @param mobile
 	 *            the mobile to set
-	 * @throws InvalidTelephoneNumberException 
+	 * @throws InvalidTelephoneNumberException
 	 */
-	void setMobile(String mobile) throws InvalidTelephoneNumberException {
-		if(mobile != null && !mobile.isEmpty()){
-				mobile.replaceAll("[ .-()]", "");
-		if(!mobile.matches("^\\+?[0-9]{3,}$")){
-			throw new InvalidTelephoneNumberException();
-		}}
+	void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
@@ -304,14 +299,9 @@ public class User implements Serializable {
 	/**
 	 * @param fax
 	 *            the fax to set
-	 * @throws InvalidTelephoneNumberException 
+	 * @throws InvalidTelephoneNumberException
 	 */
-	void setFax(String fax) throws InvalidTelephoneNumberException {
-		if(fax != null && !fax.isEmpty()){
-		fax.replaceAll("[ .-()]", "");
-		if(!fax.matches("^\\+?[0-9]{3,}$")){
-			throw new InvalidTelephoneNumberException();
-		}}
+	void setFax(String fax) {
 		this.fax = fax;
 	}
 
@@ -342,7 +332,7 @@ public class User implements Serializable {
 	 *            the evaluation to set
 	 */
 	void setEvaluation(Float evaluation) {
-		//TODO: Autocomputation
+		// TODO: Autocomputation
 		this.evaluation = evaluation;
 	}
 
@@ -351,162 +341,118 @@ public class User implements Serializable {
 	 * 
 	 */
 	@Embeddable
-	class Address implements Serializable {
-	
+	public class Address implements Serializable {
+
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = -5709124674179797574L;
-	
+
 		private String street;
 		private String streetNumber;
 		private String zip;
 		private String city;
 		private String province;
-	
+
 		Address(String street, String streetNumber, String zip, String city,
-				String province) throws InvalidAddressException {
+				String province) {
 			super();
 			this.street = street;
 			this.streetNumber = streetNumber;
 			this.zip = zip;
 			this.city = city;
 			this.province = province;
-			if (!isValid()) {
-				throw new InvalidAddressException();
-			}
 		}
-	
-		Address(String address) {
+
+		public Address(String address) {
 			super();
 			// This method should use an external web service to parse the
 			// address
 		}
-	
+
 		/**
 		 * @return the street
 		 */
-		String getStreet() {
+		public String getStreet() {
 			return street;
 		}
-	
+
 		/**
 		 * @param street
 		 *            the street to set
 		 * @throws InvalidAddressException
 		 */
-		void setStreet(String street) throws InvalidAddressException {
-			if (!isValid(street, null, null, null, null)) {
-				throw new InvalidAddressException();
-			}
+		public void setStreet(String street) {
 			this.street = street;
 		}
-	
+
 		/**
 		 * @return the streetNumber
 		 */
-		String getStreetNumber() {
+		public String getStreetNumber() {
 			return streetNumber;
 		}
-	
+
 		/**
 		 * @param streetNumber
 		 *            the streetNumber to set
 		 * @throws InvalidAddressException
 		 */
-		void setStreetNumber(String streetNumber) throws InvalidAddressException {
-			if (!isValid(null, streetNumber, null, null, null)) {
-				throw new InvalidAddressException();
-			}
+		public void setStreetNumber(String streetNumber) {
 			this.streetNumber = streetNumber;
 		}
-	
+
 		/**
 		 * @return the zip
 		 */
-		String getZip() {
+		public String getZip() {
 			return zip;
 		}
-	
+
 		/**
 		 * @param zip
 		 *            the zip to set
 		 * @throws InvalidAddressException
 		 */
-		void setZip(String zip) throws InvalidAddressException {
-			if (!isValid(null, null, zip, null, null)) {
-				throw new InvalidAddressException();
-			}
+		public void setZip(String zip) {
 			this.zip = zip;
 		}
-	
+
 		/**
 		 * @return the city
 		 */
-		String getCity() {
+		public String getCity() {
 			return city;
 		}
-	
+
 		/**
 		 * @param city
 		 *            the city to set
 		 * @throws InvalidAddressException
 		 */
-		void setCity(String city) throws InvalidAddressException {
-			if (!isValid(null, null, null, city, null)) {
-				throw new InvalidAddressException();
-			}
+		public void setCity(String city) {
 			this.city = city;
 		}
-	
+
 		/**
 		 * @return the province
 		 */
-		String getProvince() {
+		public String getProvince() {
 			return province;
 		}
-	
+
 		/**
 		 * @param province
 		 *            the province to set
 		 * @throws InvalidAddressException
 		 */
-		void setProvince(String province) throws InvalidAddressException {
-			if (!isValid(null, null, null, null, province)) {
-				throw new InvalidAddressException();
-			}
+		public void setProvince(String province) {
 			this.province = province;
 		}
-	
-		boolean isValid() {
-			return isValid(null, null, null, null, null);
-		}
-	
-		boolean isValid(String street, String streetNumber, String zip,
-				String city, String province) {
-	
-			if (street == null || street.isEmpty()) {
-				street = this.street;
-			}
-			if (streetNumber == null || streetNumber.isEmpty()) {
-				streetNumber = this.streetNumber;
-			}
-			if (zip == null || zip.isEmpty()) {
-				zip = this.zip;
-			}
-			if (city == null || city.isEmpty()) {
-				city = this.city;
-			}
-			if (province == null || province.isEmpty()) {
-				province = this.province;
-			}
-	
-			// Connection to external web service used to validate addresses
-	
-			return true;
-		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override
@@ -525,7 +471,9 @@ public class User implements Serializable {
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
@@ -571,12 +519,15 @@ public class User implements Serializable {
 			return User.this;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#toString()
 		 */
 		@Override
 		public String toString() {
-			return street + " " + streetNumber + ", (" + zip + ") " + city + ", " + province;
+			return street + " " + streetNumber + ", (" + zip + ") " + city
+					+ ", " + province;
 		}
 	}
 
@@ -588,29 +539,36 @@ public class User implements Serializable {
 	enum Status implements Serializable {
 		WAITING_FOR_CONFIRMATION, REGISTERED, BANNED;
 	}
-	
+
 	enum Gender implements Serializable {
 		M, F;
 	}
 
 	@Embeddable
 	class FullName implements Serializable {
-	
+
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 4868236874128030998L;
-	
+
+		@Name
+		@NotNull
+		@NotEmpty
 		private String firstname;
+
+		@Name
+		@NotNull
+		@NotEmpty
 		private String surname;
-	
-		FullName(String firstname, String surname) throws InvalidFullnameException {
+
+		FullName(String firstname, String surname){
 			super();
 			this.setFirstname(firstname);
 			this.setSurname(surname);
 		}
-	
-		FullName(String fullname) throws InvalidFullnameException {
+
+		FullName(String fullname) {
 			super();
 			String[] nameParts = fullname.split(" ");
 			this.setFirstname(nameParts[0]);
@@ -620,34 +578,28 @@ public class User implements Serializable {
 			}
 			this.setSurname(surnameBuilder.toString());
 		}
-	
+
 		String getFirstname() {
 			return firstname;
 		}
-	
-		void setFirstname(String firstname) throws InvalidFullnameException {
-			if (firstname.matches("[^[ a-zA-Z]]")) {
-				throw new InvalidFullnameException();
-			}
+
+		void setFirstname(String firstname) {
 			this.firstname = firstname;
 		}
-	
+
 		String getSurname() {
 			return surname;
 		}
-	
-		void setSurname(String surname) throws InvalidFullnameException {
-			if (surname.matches("[^[ a-zA-Z]]")) {
-				throw new InvalidFullnameException();
-			}
+
+		void setSurname(String surname) {
 			this.surname = surname;
 		}
-	
+
 		@Override
 		public String toString() {
 			return firstname + " " + surname;
 		}
-	
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
@@ -659,7 +611,7 @@ public class User implements Serializable {
 					+ ((surname == null) ? 0 : surname.hashCode());
 			return result;
 		}
-	
+
 		@Override
 		public boolean equals(Object obj) {
 			if (this == obj)
@@ -683,11 +635,11 @@ public class User implements Serializable {
 				return false;
 			return true;
 		}
-	
+
 		private User getOuterType() {
 			return User.this;
 		}
-	
+
 	}
 
 }
