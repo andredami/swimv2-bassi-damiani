@@ -19,12 +19,17 @@ public class AddressValidator implements Validator<AddressType>,
 
 	@Override
 	public boolean isValid(Object value) {
+		if(value == null){
+			return true;
+		}
+		
 		Address address;
 		if(value instanceof Address){
 			address = (Address) value;
 		} else {
 			return false;
 		}
+		
 		
 		if(address.getCity() == null || (address.getZip() == null && address.getProvince() == null)){
 			return false;
