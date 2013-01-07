@@ -3,17 +3,18 @@
  */
 package it.polimi.ingsw2.swim.entities;
 
-import it.polimi.ingsw2.swim.exceptions.InvalidInputException;
-
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+import org.hibernate.validator.NotEmpty;
+import org.hibernate.validator.NotNull;
+
 /**
  * @author Administrator
- *
+ * 
  */
 @Entity
 public class Abuse implements Serializable {
@@ -24,17 +25,16 @@ public class Abuse implements Serializable {
 	private static final long serialVersionUID = -1415796722820168971L;
 
 	@Id
-	private Long id;
-	
+	private long id;
+
 	@Lob
+	@NotEmpty
+	@NotNull
 	private String descriprion;
-	
-	private Boolean handeled = false;
-	
-	public Abuse(String descriprion) throws InvalidInputException{
-		if(descriprion == null || descriprion.isEmpty()){
-			throw new InvalidInputException();
-		}
+
+	private boolean handeled = false;
+
+	public Abuse(String descriprion) {
 		this.descriprion = descriprion;
 	}
 
@@ -52,7 +52,6 @@ public class Abuse implements Serializable {
 		return descriprion;
 	}
 
-
 	/**
 	 * @return the handeled
 	 */
@@ -61,11 +60,11 @@ public class Abuse implements Serializable {
 	}
 
 	/**
-	 * @param handeled the handeled to set
+	 * @param handeled
+	 *            the handeled to set
 	 */
 	void handle() {
 		this.handeled = true;
 	}
-	
-	
+
 }

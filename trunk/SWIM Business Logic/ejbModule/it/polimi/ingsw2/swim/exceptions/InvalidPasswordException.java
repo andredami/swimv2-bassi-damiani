@@ -7,31 +7,31 @@ package it.polimi.ingsw2.swim.exceptions;
  * @author Administrator
  *
  */
-public class InvalidDateException extends InvalidInputException {
+public class InvalidPasswordException extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5659025982124975936L;
+	private static final long serialVersionUID = 8620261635301175452L;
 
 	/**
 	 * 
 	 */
-	public InvalidDateException() {
+	public InvalidPasswordException() {
 		super();
 	}
 
 	/**
 	 * @param message
 	 */
-	public InvalidDateException(String message) {
+	public InvalidPasswordException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public InvalidDateException(Throwable cause) {
+	public InvalidPasswordException(Throwable cause) {
 		super(cause);
 	}
 
@@ -39,7 +39,7 @@ public class InvalidDateException extends InvalidInputException {
 	 * @param message
 	 * @param cause
 	 */
-	public InvalidDateException(String message, Throwable cause) {
+	public InvalidPasswordException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -49,7 +49,7 @@ public class InvalidDateException extends InvalidInputException {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public InvalidDateException(String message, Throwable cause,
+	public InvalidPasswordException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}

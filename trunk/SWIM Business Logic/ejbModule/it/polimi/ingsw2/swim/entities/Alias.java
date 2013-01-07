@@ -3,11 +3,12 @@
  */
 package it.polimi.ingsw2.swim.entities;
 
-import it.polimi.ingsw2.swim.exceptions.InvalidInputException;
-
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+
+import org.hibernate.validator.NotEmpty;
 
 /**
  * @author Administrator
@@ -21,12 +22,11 @@ public class Alias implements Serializable {
 	 */
 	private static final long serialVersionUID = -5843877340059083829L;
 
+	@Id
+	@NotEmpty
 	private String name;
 	
-	public Alias(String name) throws InvalidInputException{
-		if(name == null || name.isEmpty()){
-			throw new InvalidInputException();
-		}
+	public Alias(String name){
 		this.name = name;
 	}
 
