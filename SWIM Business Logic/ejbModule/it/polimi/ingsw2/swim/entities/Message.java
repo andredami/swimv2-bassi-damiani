@@ -4,99 +4,61 @@
 package it.polimi.ingsw2.swim.entities;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
 
 /**
  * @author Administrator
- *
+ * 
  */
 @Entity
-@SequenceGenerator(name="MESSAGE_SEQUENCE")
-public class Message implements Serializable {
+@SequenceGenerator(name = "MESSAGE_SEQUENCE")
+public class Message extends Notification implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4589467236086784860L;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MESSAGE_SEQUENCE")
-	private Long id;
-	
-	@Lob
-	@NotEmpty
-	@NotNull
-	private String text;
-	
-	@Temporal(TemporalType.DATE)
-	private Date timestamp = Calendar.getInstance().getTime();
-	
-	private Boolean read = false;
-	
-	@ManyToOne
-	@NotNull
-	private User addressee;
-	
 	@ManyToOne
 	@NotNull
 	private User sender;
-	
+
 	@ManyToOne
-	private Helps helpRelation;
-	
-	public Message(String text){
-		this.text = text;
+	@NotNull
+	private Help helpRelation;
+
+	public Message() {
+		super();
 	}
 
-	/**
-	 * @return the read
-	 */
-	Boolean isRead() {
-		return read;
+	Message(User addresse, User sender, String text, Help helpRelation) {
+		super(addresse, text);
+		if (inConversation(helpRelation, addresse, sender)) {
+			this.sender = sender;
+			this.helpRelation = helpRelation;
+		} else {
+			throw new IllegalArgumentException();
+		}
 	}
 
-	/**
-	 * @param read the read to set
-	 */
-	void setAsRead() {
-		this.read = true;
+	User getSender() {
+		return sender;
 	}
 
-	/**
-	 * @return the id
-	 */
-	Long getId() {
-		return id;
+	Help getHelpRelation() {
+		return helpRelation;
 	}
 
-	/**
-	 * @return the text
-	 */
-	String getText() {
-		return text;
+	private boolean inConversation(Help h, User a, User b) {
+		if ((a == h.getAddressee() && b == h.getSender())
+				|| (a == h.getSender() && b == h.getAddressee())) {
+			return true;
+		}
+		return false;
 	}
-
-	/**
-	 * @return the timestamp
-	 */
-	Date getTimestamp() {
-		return timestamp;
-	}
-	
-	
 }

@@ -13,12 +13,11 @@ import it.polimi.ingsw2.swim.validation.URLType;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -27,7 +26,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -100,27 +101,31 @@ public class User implements Serializable {
 	private String skype;
 
 	private Float evaluation = (float) 0;
-	
-	@OneToMany(mappedBy="addresse")
-	private List<HelpRequest> incomingHelpRequests = new ArrayList<HelpRequest>();
-	
-	@OneToMany(mappedBy="sender")
-	private List<HelpRequest> myHelps = new ArrayList<HelpRequest>();
-	
-	@OneToMany(mappedBy="addresse")
-	private List<SimpleNotification> notifications = new ArrayList<SimpleNotification>();
-	
-	@OneToMany(mappedBy="addresse")
-	private List<Message> incomingMessages = new ArrayList<Message>();
-	
-	public User(String email, String password, String firstname,
-			String surname, String gender, String birthdate) throws ParseException {
+
+	@ManyToMany(mappedBy = "users")
+	private Set<Ability> abilities;
+
+	@ManyToMany(mappedBy = "firendships")
+	// TODO: Verificare correttezza
+	private Set<User> friendships;
+
+	@OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)
+	@OrderBy("timestamp DESC")
+	private List<Notification> notifications;
+
+	public User() {
+		super();
+	}
+
+	public User(String password, String email, FullName name, Date birthdate,
+			Gender gender, Set<Ability> abilities) {
 		super();
 		this.setPassword(password);
-		this.setEmail(email);
-		this.name = new FullName(firstname, surname);
-		this.setBirthdate(birthdate);
-		this.setGender(gender);
+		this.email = email;
+		this.name = name;
+		this.birthdate = birthdate;
+		this.gender = gender;
+		this.abilities = abilities;
 	}
 
 	/**
@@ -153,7 +158,8 @@ public class User implements Serializable {
 	 *            the password to set
 	 * @throws InvalidPasswordException
 	 */
-	void setPassword(String oldPassword, String newPassword) throws InvalidPasswordException{
+	void setPassword(String oldPassword, String newPassword)
+			throws InvalidPasswordException {
 		if (!checkPassword(oldPassword)) {
 			throw new InvalidPasswordException();
 		}
@@ -185,31 +191,10 @@ public class User implements Serializable {
 	}
 
 	/**
-	 * @param birthdate
-	 *            the birthdate to set
-	 * @throws ParseException 
-	 * @throws InvalidDateException 
-	 */
-	private void setBirthdate(String birthdate) throws ParseException {
-		Date parsedBirthdate = null;
-		parsedBirthdate = DateFormat.getDateInstance().parse(birthdate);
-		this.birthdate = parsedBirthdate;
-	}
-
-	/**
 	 * @return the gender
 	 */
 	Gender getGender() {
 		return gender;
-	}
-
-	/**
-	 * @param gender
-	 *            the gender to set
-	 * @throws InvalidGenderException
-	 */
-	private void setGender(String gender) {
-		this.gender = Gender.valueOf(gender);
 	}
 
 	/**
@@ -577,7 +562,7 @@ public class User implements Serializable {
 		@NotEmpty
 		private String surname;
 
-		FullName(String firstname, String surname){
+		FullName(String firstname, String surname) {
 			super();
 			this.setFirstname(firstname);
 			this.setSurname(surname);
@@ -657,4 +642,39 @@ public class User implements Serializable {
 
 	}
 
+	Set<Ability> getAbilities() {
+		return this.abilities;
+	}
+
+	void addAbility(Ability ability) {
+		this.abilities.add(ability);
+	}
+
+	void removeAbility(Ability ability) {
+		this.abilities.remove(ability);
+	}
+
+	Set<User> getFiendships() {
+		return this.friendships;
+	}
+
+	void addFirendship(User user) {
+		this.friendships.add(user);
+	}
+
+	void removeFriendships(User user) {
+		this.friendships.remove(user);
+	}
+
+	List<Notification> getNotification() {
+		return this.notifications;
+	}
+
+	void addNotification(Notification notification) {
+		this.notifications.add(notification);
+	}
+
+	void removeFriendships(Notification notification) {
+		this.notifications.remove(notification);
+	}
 }

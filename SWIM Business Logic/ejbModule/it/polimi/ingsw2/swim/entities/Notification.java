@@ -11,9 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,11 +24,12 @@ import org.hibernate.validator.NotNull;
 
 /**
  * @author Administrator
- *
+ * 
  */
 @Entity
-@SequenceGenerator(name="MESSAGE_SEQUENCE")
-public class HelpRequest implements Serializable {
+@SequenceGenerator(name = "MESSAGE_SEQUENCE")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Notification implements Serializable {
 
 	/**
 	 * 
@@ -35,33 +37,30 @@ public class HelpRequest implements Serializable {
 	private static final long serialVersionUID = 4589467236086784860L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MESSAGE_SEQUENCE")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_SEQUENCE")
 	private Long id;
-	
+
 	@Lob
 	@NotEmpty
 	@NotNull
 	private String text;
-	
+
 	@Temporal(TemporalType.DATE)
 	private Date timestamp = Calendar.getInstance().getTime();
-	
+
 	private Boolean read = false;
-	
-	@OneToOne
-	@NotNull
-	private Helps helpRelation;
-	
+
 	@ManyToOne
 	@NotNull
 	private User addressee;
-	
-	@ManyToOne
-	@NotNull
-	private User sender;
-	
-	
-	public HelpRequest(String text){
+
+	public Notification() {
+		super();
+	}
+
+	public Notification(User addresse, String text) {
+		super();
+		this.addressee = addresse;
 		this.text = text;
 	}
 
@@ -73,7 +72,8 @@ public class HelpRequest implements Serializable {
 	}
 
 	/**
-	 * @param read the read to set
+	 * @param read
+	 *            the read to set
 	 */
 	void setAsRead() {
 		this.read = true;
@@ -99,6 +99,8 @@ public class HelpRequest implements Serializable {
 	Date getTimestamp() {
 		return timestamp;
 	}
-	
-	
+
+	User getAddressee() {
+		return addressee;
+	}
 }

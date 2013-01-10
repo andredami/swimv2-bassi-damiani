@@ -14,7 +14,7 @@ import org.hibernate.validator.NotNull;
 
 /**
  * @author Administrator
- *
+ * 
  */
 @Entity
 public class Alias implements Serializable {
@@ -27,20 +27,26 @@ public class Alias implements Serializable {
 	@Id
 	@NotEmpty
 	private String name;
-	
+
 	@ManyToOne
 	@NotNull
 	private Ability ability;
-	
-	public Alias(String name){
-		this.name = name;
+
+	public Alias() {
+		super();
 	}
 
-	/**
-	 * @return the name
-	 */
+	Alias(String name, Ability ability) {
+		super();
+		this.name = name;
+		this.ability = ability;
+	}
+
 	String getName() {
 		return name;
 	}
-	
+
+	Ability getAbility() {
+		return ability;
+	}
 }

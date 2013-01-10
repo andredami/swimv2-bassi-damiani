@@ -51,11 +51,15 @@ public class Administrator implements Serializable {
 	@NotEmpty
 	private String password;
 
+	public Administrator() {
+		super();
+	}
+
 	public Administrator(String username, String email, String password) {
 		super();
-		this.setUsername(username);
+		this.username = username;
+		this.email = email;
 		this.setPassword(password);
-		this.setEmail(email);
 	}
 
 	/**
