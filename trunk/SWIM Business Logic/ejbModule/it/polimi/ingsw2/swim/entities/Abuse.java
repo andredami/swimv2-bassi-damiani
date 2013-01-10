@@ -1,74 +1,100 @@
-/**
- * 
- */
 package it.polimi.ingsw2.swim.entities;
+
+import it.polimi.ingsw2.swim.exceptions.AlreadyHandledException;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import javax.persistence.ManyToOne;
 
+import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
 
 /**
- * @author Administrator
+ * Represents a user-written report for inappropriate or offensive contents of
+ * the system.
  * 
+ * @author Andrea Damiani
+ * @category Entity
+ * @serial
  */
 @Entity
 public class Abuse implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1415796722820168971L;
 
+	/**
+	 * @category Primary Key
+	 */
 	@Id
 	private long id;
 
+	/**
+	 * Contains the reporting user email address. To enable also unregistered
+	 * users of the system to report abuses, {@link Abuse} will not point to a
+	 * {@link User} entity. Anyway, when a Registered {@link User} reports an
+	 * abuse, the system will automatically fill this field with the registered
+	 * email address.
+	 * 
+	 * @see //TODO: Riferimento al SessionBeen che si occupa degli abusi
+	 */
+	@Email
+	@NotEmpty
+	@NotNull
+	private String email;
+
+	/**
+	 * Contains the description of the abuse found by the user.
+	 */
 	@Lob
 	@NotEmpty
 	@NotNull
 	private String descriprion;
 
-	private boolean handeled = false;
-	
-	@ManyToOne
-	private User author;
+	/**
+	 * Is TRUE if an Administrator has taken charge of verifying the abuse,
+	 * FALSE otherwise.
+	 */
+	private boolean handled = false;
 
-	public Abuse(String descriprion) {
+	public Abuse() {
+		super();
+	}
+
+	public Abuse(String email, String descriprion) {
+		super();
+		this.email = email;
 		this.descriprion = descriprion;
 	}
 
-	/**
-	 * @return the id
-	 */
 	Long getId() {
 		return id;
 	}
 
-	/**
-	 * @return the descriprion
-	 */
 	String getDescriprion() {
 		return descriprion;
 	}
 
-	/**
-	 * @return the handeled
-	 */
-	Boolean getHandeled() {
-		return handeled;
+	String getEmail() {
+		return email;
+	}
+
+	Boolean isHandled() {
+		return handled;
 	}
 
 	/**
-	 * @param handeled
-	 *            the handeled to set
+	 * Takes the {@link Abuse} into handeled state. If the abuse is still
+	 * handled, it will throw an {@link AlreadyHandledException}.
+	 * 
+	 * @throws AlreadyHandledException
 	 */
-	void handle() {
-		this.handeled = true;
+	void handle() throws AlreadyHandledException {
+		if (this.handled == true) {
+			throw new AlreadyHandledException();
+		}
+		this.handled = true;
 	}
-
 }
