@@ -1,17 +1,17 @@
 package it.polimi.ingsw2.swim.session;
 
-import it.polimi.ingsw2.swim.session.Mailer.MessageType;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.session.Mailer.MessageType;
+import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class Activation
@@ -19,8 +19,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class Activation implements ActivationRemote {
 
-	@PersistenceContext(unitName = "persistentData")
-	private static EntityManager em;
+	private static EntityManager em = DAO.getInstance().getEntityManager();
 	
     /**
      * Default constructor. 

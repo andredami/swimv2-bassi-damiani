@@ -2,10 +2,10 @@ package it.polimi.ingsw2.swim.session;
 
 import it.polimi.ingsw2.swim.entities.Abuse;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
+import it.polimi.ingsw2.swim.util.DAO;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.InvalidValue;
@@ -19,8 +19,7 @@ public class AbuseDispatcher implements AbuseDispatcherRemote {
 	private static ClassValidator<Abuse> abuseValidator = new ClassValidator<Abuse>(
 			Abuse.class);
 	
-	@PersistenceContext(unitName = "persistentData")
-	private static EntityManager em;
+	private static EntityManager em = DAO.getInstance().getEntityManager();
 	
     /**
      * Default constructor. 
