@@ -46,7 +46,7 @@ public class Alias implements Serializable {
 		return name;
 	}
 
-	Ability getAbility() {
+	public Ability getAbility() {
 		return ability;
 	}
 }

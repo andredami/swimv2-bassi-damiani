@@ -147,7 +147,7 @@ public class Ability implements Serializable {
 	 * listing. If FALSE the {@link Ability} is Active, thus all users can list
 	 * it.
 	 */
-	Boolean isStub() {
+	public Boolean isStub() {
 		return isStub;
 	}
 
@@ -174,7 +174,7 @@ public class Ability implements Serializable {
 		return this.subscribers.contains(user);
 	}
 
-	void addSubscriber(User subscriber) {
+	public void addSubscriber(User subscriber) {
 		this.subscribers.add(subscriber);
 	}
 

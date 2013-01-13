@@ -3,22 +3,20 @@
  */
 package it.polimi.ingsw2.swim.entities;
 
-import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
-import it.polimi.ingsw2.swim.util.Digester;
+import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.validation.AddressType;
-import it.polimi.ingsw2.swim.validation.Name;
-import it.polimi.ingsw2.swim.validation.OfAge;
 import it.polimi.ingsw2.swim.validation.Telephone;
 import it.polimi.ingsw2.swim.validation.URLType;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.security.SecureRandom;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -30,10 +28,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
 
@@ -44,39 +39,18 @@ import org.hibernate.validator.NotNull;
 
 @Entity
 @SequenceGenerator(name = "USER_SEQUENCE")
-public class User implements Serializable {
+public class User extends TempUser implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 118322731871513243L;
+	
+	private static final SecureRandom random = new SecureRandom(); 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQUENCE")
 	private Long id;
-
-	@NotEmpty
-	@NotNull
-	private String password;
-
-	@Email
-	@NotNull
-	@NotEmpty
-	@Column(unique = true)
-	private String email;
-
-	@Embedded
-	@NotNull
-	private FullName name;
-
-	@Temporal(TemporalType.DATE)
-	@OfAge
-	@NotNull
-	private Date birthdate;
-
-	@Enumerated
-	@NotNull
-	private Gender gender;
 
 	@URLType
 	private String picture;
@@ -103,99 +77,43 @@ public class User implements Serializable {
 	private Float evaluation = (float) 0;
 
 	@ManyToMany(mappedBy = "users")
+	@NotEmpty
 	private Set<Ability> abilities;
 
 	@ManyToMany(mappedBy = "firendships")
-	// TODO: Verificare correttezza
 	private Set<User> friendships;
 
 	@OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)
 	@OrderBy("timestamp DESC")
 	private List<Notification> notifications;
 
+	private String activationCode;
+
 	public User() {
 		super();
 	}
 
+	public User(TempUser tempUser, Set<Ability> abilities){
+		super(tempUser);
+		this.abilities = abilities;
+		this.activationCode = new BigInteger(130, random).toString(32);
+	}
+	
 	public User(String password, String email, FullName name, Date birthdate,
 			Gender gender, Set<Ability> abilities) {
-		super();
-		this.setPassword(password);
-		this.email = email;
-		this.name = name;
-		this.birthdate = birthdate;
-		this.gender = gender;
+		super(password, email, name, birthdate, gender);
 		this.abilities = abilities;
+		this.activationCode = new BigInteger(130, random).toString(32);
 	}
 
 	/**
 	 * @return the id
 	 */
-	Long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	/**
-	 * @return the email
-	 */
-	String getEmail() {
-		return email;
-	}
 
-	/**
-	 * @return the password
-	 */
-	Boolean checkPassword(String password) {
-		return this.password.equals(Digester.digest(password));
-	}
-
-	private void setPassword(String password) {
-		this.password = Digester.digest(password);
-	}
-
-	/**
-	 * @param password
-	 *            the password to set
-	 * @throws InvalidPasswordException
-	 */
-	void setPassword(String oldPassword, String newPassword)
-			throws InvalidPasswordException {
-		if (!checkPassword(oldPassword)) {
-			throw new InvalidPasswordException();
-		}
-
-		this.setPassword(newPassword);
-	}
-
-	/**
-	 * @param email
-	 *            the email to set
-	 * @throws InvalidEmailAddressException
-	 */
-	void setEmail(String email) {
-		this.email = email;
-	}
-
-	/**
-	 * @return the name
-	 */
-	FullName getName() {
-		return name;
-	}
-
-	/**
-	 * @return the birthdate
-	 */
-	Date getBirthdate() {
-		return birthdate;
-	}
-
-	/**
-	 * @return the gender
-	 */
-	Gender getGender() {
-		return gender;
-	}
 
 	/**
 	 * @return the picture
@@ -216,15 +134,20 @@ public class User implements Serializable {
 	/**
 	 * @return the status
 	 */
-	Status getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	void confirmRegistration() {
+	public void confirmRegistration(String activationCode) throws InvalidActivationCode {
 		if (this.status != Status.WAITING_FOR_CONFIRMATION) {
 			throw new IllegalStateException();
 		}
-		this.status = Status.REGISTERED;
+		if (this.activationCode.equals(activationCode)){
+			this.status = Status.REGISTERED;
+			this.activationCode = null;
+		} else {
+			throw new InvalidActivationCode();
+		}
 	}
 
 	void ban() {
@@ -332,7 +255,6 @@ public class User implements Serializable {
 	 *            the evaluation to set
 	 */
 	void setEvaluation(Float evaluation) {
-		// TODO: Autocomputation
 		this.evaluation = evaluation;
 	}
 
@@ -536,117 +458,19 @@ public class User implements Serializable {
 	 * 
 	 */
 
-	enum Status implements Serializable {
+	public enum Status implements Serializable {
 		WAITING_FOR_CONFIRMATION, REGISTERED, BANNED;
 	}
 
-	enum Gender implements Serializable {
+	public enum Gender implements Serializable {
 		M, F;
-	}
-
-	@Embeddable
-	class FullName implements Serializable {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 4868236874128030998L;
-
-		@Name
-		@NotNull
-		@NotEmpty
-		private String firstname;
-
-		@Name
-		@NotNull
-		@NotEmpty
-		private String surname;
-
-		FullName(String firstname, String surname) {
-			super();
-			this.setFirstname(firstname);
-			this.setSurname(surname);
-		}
-
-		FullName(String fullname) {
-			super();
-			String[] nameParts = fullname.split(" ");
-			this.setFirstname(nameParts[0]);
-			StringBuilder surnameBuilder = new StringBuilder(nameParts[1]);
-			for (int i = 2; i < (nameParts.length); i++) {
-				surnameBuilder.append(" " + nameParts[i]);
-			}
-			this.setSurname(surnameBuilder.toString());
-		}
-
-		String getFirstname() {
-			return firstname;
-		}
-
-		void setFirstname(String firstname) {
-			this.firstname = firstname;
-		}
-
-		String getSurname() {
-			return surname;
-		}
-
-		void setSurname(String surname) {
-			this.surname = surname;
-		}
-
-		@Override
-		public String toString() {
-			return firstname + " " + surname;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + getOuterType().hashCode();
-			result = prime * result
-					+ ((firstname == null) ? 0 : firstname.hashCode());
-			result = prime * result
-					+ ((surname == null) ? 0 : surname.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			FullName other = (FullName) obj;
-			if (!getOuterType().equals(other.getOuterType()))
-				return false;
-			if (firstname == null) {
-				if (other.firstname != null)
-					return false;
-			} else if (!firstname.equals(other.firstname))
-				return false;
-			if (surname == null) {
-				if (other.surname != null)
-					return false;
-			} else if (!surname.equals(other.surname))
-				return false;
-			return true;
-		}
-
-		private User getOuterType() {
-			return User.this;
-		}
-
 	}
 
 	Set<Ability> getAbilities() {
 		return this.abilities;
 	}
 
-	void addAbility(Ability ability) {
+	public void addAbility(Ability ability) {
 		this.abilities.add(ability);
 	}
 
@@ -676,5 +500,9 @@ public class User implements Serializable {
 
 	void removeFriendships(Notification notification) {
 		this.notifications.remove(notification);
+	}
+
+	public String getActivationCode() {
+		return activationCode;
 	}
 }
