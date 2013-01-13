@@ -38,7 +38,7 @@ public class Abuse implements Serializable {
 	 * abuse, the system will automatically fill this field with the registered
 	 * email address.
 	 * 
-	 * @see //TODO: Riferimento al SessionBeen che si occupa degli abusi
+	 * @see AbuseDispatcher
 	 */
 	@Email
 	@NotEmpty
