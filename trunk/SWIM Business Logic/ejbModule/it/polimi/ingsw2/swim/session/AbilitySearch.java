@@ -2,13 +2,13 @@ package it.polimi.ingsw2.swim.session;
 
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.Alias;
+import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -17,8 +17,7 @@ import javax.persistence.Query;
 @Stateless
 public class AbilitySearch implements AbilitySearchRemote {
 
-	@PersistenceContext(unitName = "persistentData")
-	private static EntityManager em;
+	private static EntityManager em = DAO.getInstance().getEntityManager();
 
 	/**
 	 * Default constructor.

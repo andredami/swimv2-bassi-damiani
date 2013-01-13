@@ -4,11 +4,11 @@ import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.util.DAO;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class AbilityRequest
@@ -16,8 +16,7 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class AbilityRequest implements AbilityRequestRemote {
 
-	@PersistenceContext(unitName = "persistentData")
-	private static EntityManager em;
+	private static EntityManager em = DAO.getInstance().getEntityManager();
 
 	/**
 	 * Default constructor.
