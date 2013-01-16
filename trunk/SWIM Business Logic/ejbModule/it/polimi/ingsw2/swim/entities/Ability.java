@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
@@ -86,7 +87,7 @@ public class Ability implements Serializable {
 	 * @category Many-to-Many Relations
 	 * @see Alias
 	 */
-	@OneToMany(mappedBy = "ability", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "ability", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<Alias> alias;
 
 	public Ability() {
