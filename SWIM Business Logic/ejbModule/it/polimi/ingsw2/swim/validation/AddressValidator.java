@@ -3,7 +3,7 @@
  */
 package it.polimi.ingsw2.swim.validation;
 
-import it.polimi.ingsw2.swim.entities.User.Address;
+import it.polimi.ingsw2.swim.entities.Address;
 
 import org.hibernate.mapping.Property;
 import org.hibernate.validator.PropertyConstraint;
@@ -24,14 +24,14 @@ public class AddressValidator implements Validator<AddressType>,
 		}
 		
 		Address address;
-		if(value instanceof Address){
+		if(value instanceof it.polimi.ingsw2.swim.entities.Address){
 			address = (Address) value;
 		} else {
 			return false;
 		}
 		
 		
-		if(address.getCity() == null || (address.getZip() == null && address.getProvince() == null)){
+		if(address.getCity() == null){
 			return false;
 		}
 		

@@ -51,7 +51,7 @@ public class TempUser {
 			Gender gender) {
 		super();
 		this.setPassword(password);
-		this.email = email;
+		this.email = email.toLowerCase();
 		this.name = name;
 		this.birthdate = birthdate;
 		this.gender = gender;
@@ -59,7 +59,7 @@ public class TempUser {
 	
 	public TempUser(TempUser tempUser) {
 		this.password = new String(tempUser.password);
-		this.email = new String(tempUser.email);
+		this.email = new String(tempUser.email.toLowerCase());
 		this.name = new FullName(new String(tempUser.name.getFirstname()), new String(tempUser.name.getSurname()));
 		this.birthdate = new Date(tempUser.birthdate.getTime());
 		this.gender = tempUser.gender;
@@ -103,7 +103,7 @@ public class TempUser {
 	 * @throws InvalidEmailAddressException
 	 */
 	void setEmail(String email) {
-		this.email = email;
+		this.email = email.toLowerCase();
 	}
 
 	/**
