@@ -15,6 +15,8 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 import org.hibernate.validator.ClassValidator;
@@ -42,10 +44,66 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 	 * Default constructor.
 	 */
 	public UserDirectoryManager() {
+		super();
+	}
 
+	@Override
+	public User getUserWithFriends(String userId)
+			throws UserDoesNotExixtException {
+		try {
+			return (User) em.createNamedQuery("getUserWithFriends")
+					.setParameter("id", userId).getSingleResult();
+		} catch (NoResultException e) {
+			throw new UserDoesNotExixtException();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+			throw new UserDoesNotExixtException();
+		}
+	}
+
+	@Override
+	public User getUserWithAbilities(String userId)
+			throws UserDoesNotExixtException {
+		try {
+			return (User) em.createNamedQuery("getUserWithAbilities")
+					.setParameter("id", userId).getSingleResult();
+		} catch (NoResultException e) {
+			throw new UserDoesNotExixtException();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+			throw new UserDoesNotExixtException();
+		}
+	}
+
+	@Override
+	public User getUserWithNotifications(String userId)
+			throws UserDoesNotExixtException {
+		try {
+			return (User) em.createNamedQuery("getUserWithNotifications")
+					.setParameter("id", userId).getSingleResult();
+		} catch (NoResultException e) {
+			throw new UserDoesNotExixtException();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+			throw new UserDoesNotExixtException();
+		}
+	}
+
+	@Override
+	public User getCompleteUser(String userId) throws UserDoesNotExixtException {
+		try {
+			return (User) em.createNamedQuery("getCompleteUser")
+					.setParameter("id", userId).getSingleResult();
+		} catch (NoResultException e) {
+			throw new UserDoesNotExixtException();
+		} catch (NonUniqueResultException e) {
+			e.printStackTrace();
+			throw new UserDoesNotExixtException();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<User> findUserByNameAndEmail(String firstname, String surname,
 			String email, int page) throws InvalidDataException {
 		if (email == null || email.isEmpty() || !emailValidator.isValid(email)) {
@@ -57,28 +115,27 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 			}
 		}
 
-		String selectQuery = "SELECT u" +
-				"FROM User u" +
-				"WHERE ";
+		String selectQuery = "SELECT u" + "FROM User u" + "WHERE ";
 		String emailClause = "u.email =:email";
-		String usernameClause = "u.name.getFirstname() =:firstname AND" +
-				"u.name.getSurname() =:surname" +
-				"ORDER BY u.name.getSurname(), u.name.getFirstname()";
-		
+		String usernameClause = "u.name.getFirstname() =:firstname AND"
+				+ "u.name.getSurname() =:surname"
+				+ "ORDER BY u.name.getSurname(), u.name.getFirstname()";
+
 		Query query = null;
-		if(emailValidator.isValid(email)){
+		if (emailValidator.isValid(email)) {
 			query = em.createQuery(selectQuery + emailClause);
 		} else {
 			query = em.createQuery(selectQuery + usernameClause);
 		}
-		
+
 		query.setFirstResult((page * ENTRIES_PER_PAGE) - 1);
 		query.setMaxResults(ENTRIES_PER_PAGE);
-		
+
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public List<User> findUserByAbility(String userId, String abilityName,
 			String location, int minFeedback, int page)
 			throws LocationMissingException, InvalidDataException,

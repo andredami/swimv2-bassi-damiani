@@ -9,6 +9,8 @@ import it.polimi.ingsw2.swim.util.DAO;
 import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 
 /**
  * Session Bean implementation class AbilityRequest
@@ -16,7 +18,8 @@ import javax.persistence.EntityManager;
 @Stateless
 public class AbilityRequest implements AbilityRequestRemote {
 
-	private static EntityManager em = DAO.getInstance().getEntityManager();
+	private static final EntityManager em = DAO.getInstance().getEntityManager();
+	
 
 	/**
 	 * Default constructor.
@@ -27,13 +30,15 @@ public class AbilityRequest implements AbilityRequestRemote {
 
 	@Override
 	public void registerSubscription(String id, String abilityName) throws UserDoesNotExixtException, InvalidDataException {
-		User user = em.find(User.class, Long.parseLong(id));
-		if (user == null) {
-			throw new UserDoesNotExixtException();
-		}
-
-		Ability ability = em.find(Ability.class, abilityName);
-		if (ability == null) {
+		User user = (new UserDirectoryManager()).getUserWithAbilities(id);
+		
+		Ability ability; 
+		try {
+			ability = (Ability) em.createNamedQuery("getAbilityWithSubscriber").setParameter("ability", abilityName.toLowerCase()).getSingleResult();
+		} catch (NoResultException e){
+			throw new InvalidDataException();
+		} catch(NonUniqueResultException  e){
+			e.printStackTrace();
 			throw new InvalidDataException();
 		}
 
@@ -44,17 +49,13 @@ public class AbilityRequest implements AbilityRequestRemote {
 			user.addAbility(ability);
 			em.merge(user);
 		}
-
 	}
 	
 	@Override
 	public void registerNewRequest(String id, String abilityName,
 			String description) throws UserDoesNotExixtException {
-		User user = em.find(User.class, Long.parseLong(id));
-		if (user == null) {
-			throw new UserDoesNotExixtException();
-		}
-
+		User user = (new UserDirectoryManager()).getUserWithAbilities(id);
+		
 		Ability stub = new Ability(abilityName, description, user);
 
 		try {
@@ -67,5 +68,4 @@ public class AbilityRequest implements AbilityRequestRemote {
 			}
 		}
 	}
-
 }

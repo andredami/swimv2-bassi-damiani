@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.Email;
@@ -23,6 +24,9 @@ import org.hibernate.validator.NotNull;
  * @author Administrator
  * 
  */
+@NamedQuery(
+		name = "getAdministratorByEmail", 
+		query = "SELECT a FROM Administrator a WHERE a.email =:email")
 @Entity
 @SequenceGenerator(name = "ADMIN_SEQUENCE")
 public class Administrator implements Serializable {
