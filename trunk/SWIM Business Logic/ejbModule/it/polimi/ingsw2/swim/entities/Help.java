@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
@@ -25,11 +26,14 @@ import org.hibernate.validator.NotNull;
  * @author Administrator
  * 
  */
+@NamedQuery(
+		name = "getCompleteHelp",
+		query = "SELECT h FROM Help h JOIN FETCH h.conversation WHERE h.id =:id")
 @Entity
 @SequenceGenerator(name = "HELP_SEQUENCE")
 public class Help extends Notification implements Serializable {
 
-	enum Direction {
+	public enum Direction {
 		BACK, FORTH;
 	}
 
@@ -37,7 +41,7 @@ public class Help extends Notification implements Serializable {
 	 * @author Administrator
 	 * 
 	 */
-	enum State {
+	public enum State {
 		REQUESTED, ACCEPTED, CLOSED;
 	}
 
@@ -97,7 +101,7 @@ public class Help extends Notification implements Serializable {
 	 * @param helperFeedback
 	 *            the helperFeedback to set
 	 */
-	void setHelperFeedback(Integer helperFeedback) {
+	public void setHelperFeedback(Integer helperFeedback) {
 		if (this.helperFeedback != null) {
 			throw new IllegalStateException();
 		}
@@ -121,7 +125,7 @@ public class Help extends Notification implements Serializable {
 	 * @param helpedFeedback
 	 *            the helpedFeedback to set
 	 */
-	void setHelpedFeedback(Integer helpedFeedback) {
+	public void setHelpedFeedback(Integer helpedFeedback) {
 		if (this.helpedFeedback != null) {
 			throw new IllegalStateException();
 		}
@@ -137,18 +141,18 @@ public class Help extends Notification implements Serializable {
 	/**
 	 * @return the state
 	 */
-	State getState() {
+	public State getState() {
 		return state;
 	}
 
-	void accept() {
+	public void accept() {
 		if (this.state != State.REQUESTED) {
 			throw new IllegalStateException();
 		}
 		this.state = State.ACCEPTED;
 	}
 
-	void close() {
+	private void close() {
 		if (this.state != State.ACCEPTED) {
 			throw new IllegalStateException();
 		}
@@ -159,11 +163,14 @@ public class Help extends Notification implements Serializable {
 		return ability;
 	}
 
-	List<Message> getConversation() {
+	public List<Message> getConversation() {
 		return conversation;
 	}
 
-	void addMessage(Direction direction, String message) {
+	public void addMessage(Direction direction, String message) {
+		if(state != State.REQUESTED){
+			throw new IllegalStateException();
+		}
 		if (direction == Direction.BACK) {
 			this.conversation.add(new Message(this.sender, this.getAddressee(),
 					message, this));
@@ -190,7 +197,7 @@ public class Help extends Notification implements Serializable {
 		return true;
 	}
 
-	User getSender() {
+	public User getSender() {
 		return sender;
 	}
 

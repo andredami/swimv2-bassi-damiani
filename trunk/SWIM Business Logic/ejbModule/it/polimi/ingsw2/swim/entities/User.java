@@ -24,6 +24,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
@@ -35,7 +37,23 @@ import org.hibernate.validator.NotNull;
  * @author Andrea Damiani
  * 
  */
-
+@NamedQueries({
+	@NamedQuery(
+			name = "getUserByEmail",
+			query = "SELECT u FROM User u WHERE u.email =:email"),
+	@NamedQuery(
+			name = "getUserWithFriends", 
+			query = "SELECT u FROM User u join fetch u.friendships WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED"),
+	@NamedQuery(
+			name = "getUserWithAbilities",
+			query = "SELECT u FROM User u join fetch u.abilities WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED"),
+	@NamedQuery(
+			name = "getUserWithNotification",
+			query = "SELECT u FROM User u join fetch u.notifications WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED"),
+	@NamedQuery(
+			name = "getCompleteUser",
+			query = "SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED")
+})
 @Entity
 @SequenceGenerator(name = "USER_SEQUENCE")
 public class User extends TempUser implements Serializable {
@@ -44,8 +62,8 @@ public class User extends TempUser implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 118322731871513243L;
-	
-	private static final SecureRandom random = new SecureRandom(); 
+
+	private static final SecureRandom random = new SecureRandom();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQUENCE")
@@ -74,6 +92,8 @@ public class User extends TempUser implements Serializable {
 	private String skype;
 
 	private Float evaluation = (float) 0;
+	
+	private Integer evaluationCount = 0; 
 
 	@ManyToMany(mappedBy = "users")
 	@NotEmpty
@@ -92,12 +112,12 @@ public class User extends TempUser implements Serializable {
 		super();
 	}
 
-	public User(TempUser tempUser, Set<Ability> abilities){
+	public User(TempUser tempUser, Set<Ability> abilities) {
 		super(tempUser);
 		this.abilities = abilities;
 		this.activationCode = new BigInteger(130, random).toString(32);
 	}
-	
+
 	public User(String password, String email, FullName name, Date birthdate,
 			Gender gender, Set<Ability> abilities) {
 		super(password, email, name, birthdate, gender);
@@ -111,8 +131,6 @@ public class User extends TempUser implements Serializable {
 	public Long getId() {
 		return id;
 	}
-
-
 
 	/**
 	 * @return the picture
@@ -137,11 +155,12 @@ public class User extends TempUser implements Serializable {
 		return status;
 	}
 
-	public void confirmRegistration(String activationCode) throws InvalidActivationCode {
+	public void confirmRegistration(String activationCode)
+			throws InvalidActivationCode {
 		if (this.status != Status.WAITING_FOR_CONFIRMATION) {
 			throw new IllegalStateException();
 		}
-		if (this.activationCode.equals(activationCode)){
+		if (this.activationCode.equals(activationCode)) {
 			this.status = Status.REGISTERED;
 			this.activationCode = null;
 		} else {
@@ -253,8 +272,12 @@ public class User extends TempUser implements Serializable {
 	 * @param evaluation
 	 *            the evaluation to set
 	 */
-	void setEvaluation(Float evaluation) {
-		this.evaluation = evaluation;
+	public void addFeedback(int feedback) {
+		if(feedback<-5 || feedback >5){
+			throw new IllegalArgumentException();
+		}
+		this.evaluation = ((this.evaluation * this.evaluationCount) + feedback) / (this.evaluationCount + 1);
+		this.evaluationCount++;
 	}
 
 	/**

@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.NotEmpty;
@@ -26,6 +28,23 @@ import org.hibernate.validator.NotNull;
  * @serial
  * @see User
  */
+@NamedQueries({
+	@NamedQuery(
+			name = "getAbilityByAlias",
+			query = "SELECT a FROM Ability a, IN (a.alias) AS al " +
+					"WHERE a.name =:ability OR al.name =:ability"),
+	@NamedQuery(
+			name = "getAbilityWithSubscriber",
+			query = "SELECT a FROM Ability a join fetch a.subscribers WHERE a.name =:ability"),
+	@NamedQuery(
+			name = "getAbilityWithAlias", 
+			query = "SELECT a FROM Ability a join fetch a.alias WHERE a.name =:ability"),
+	@NamedQuery(
+			name = "getCompleteAbility",
+			query = "SELECT a FROM Ability a join fetch a.subscribers join fetch a.alias " +
+					"WHERE a.name =:ability")
+})
+
 @Entity
 public class Ability implements Serializable {
 
@@ -99,7 +118,7 @@ public class Ability implements Serializable {
 
 	public Ability(String name, String description, Set<String> alias) {
 		this();
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.description = description;
 		for (String a : alias) {
 			this.alias.add(new Alias(a, this));
@@ -120,7 +139,7 @@ public class Ability implements Serializable {
 	 */
 	public Ability(String name, String description, User subscriber) {
 		super();
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.description = description;
 		this.isStub = true;
 		this.addSubscriber(subscriber);
@@ -131,7 +150,7 @@ public class Ability implements Serializable {
 	}
 
 	void setName(String name) {
-		this.name = name;
+		this.name = name.toLowerCase();
 	}
 
 	String getDescription() {

@@ -100,7 +100,7 @@ public class Notification implements Serializable {
 		return timestamp;
 	}
 
-	User getAddressee() {
+	public User getAddressee() {
 		return addressee;
 	}
 }
