@@ -30,7 +30,7 @@ public class AbilityRequest implements AbilityRequestRemote {
 
 	@Override
 	public void registerSubscription(String id, String abilityName) throws UserDoesNotExixtException, InvalidDataException {
-		User user = (new UserDirectoryManager()).getUserWithAbilities(id);
+		User user = (new ProfileManager()).getUserWithAbilities(id);
 		
 		Ability ability; 
 		try {
@@ -54,7 +54,7 @@ public class AbilityRequest implements AbilityRequestRemote {
 	@Override
 	public void registerNewRequest(String id, String abilityName,
 			String description) throws UserDoesNotExixtException {
-		User user = (new UserDirectoryManager()).getUserWithAbilities(id);
+		User user = (new ProfileManager()).getUserWithAbilities(id);
 		
 		Ability stub = new Ability(abilityName, description, user);
 

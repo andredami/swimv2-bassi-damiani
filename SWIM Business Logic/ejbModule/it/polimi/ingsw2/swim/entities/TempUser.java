@@ -88,7 +88,7 @@ public class TempUser {
 	 *            the password to set
 	 * @throws InvalidPasswordException
 	 */
-	void setPassword(String oldPassword, String newPassword)
+	protected void setPassword(String oldPassword, String newPassword)
 			throws InvalidPasswordException {
 		if (!checkPassword(oldPassword)) {
 			throw new InvalidPasswordException();
@@ -102,7 +102,7 @@ public class TempUser {
 	 *            the email to set
 	 * @throws InvalidEmailAddressException
 	 */
-	void setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email.toLowerCase();
 	}
 
