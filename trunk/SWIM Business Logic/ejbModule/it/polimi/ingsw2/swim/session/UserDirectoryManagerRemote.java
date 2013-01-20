@@ -12,15 +12,6 @@ import javax.ejb.Remote;
 @Remote
 public interface UserDirectoryManagerRemote {
 
-	User getUserWithFriends(String userId) throws UserDoesNotExixtException;
-
-	User getUserWithAbilities(String userId) throws UserDoesNotExixtException;
-
-	User getUserWithNotifications(String userId)
-			throws UserDoesNotExixtException;
-
-	User getCompleteUser(String userId) throws UserDoesNotExixtException;
-
 	List<User> findUserByNameAndEmail(String firstname, String surname,
 			String email, int page) throws InvalidDataException;
 

@@ -15,8 +15,6 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 import org.hibernate.validator.ClassValidator;
@@ -45,61 +43,6 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 	 */
 	public UserDirectoryManager() {
 		super();
-	}
-
-	@Override
-	public User getUserWithFriends(String userId)
-			throws UserDoesNotExixtException {
-		try {
-			return (User) em.createNamedQuery("getUserWithFriends")
-					.setParameter("id", userId).getSingleResult();
-		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
-		} catch (NonUniqueResultException e) {
-			e.printStackTrace();
-			throw new UserDoesNotExixtException();
-		}
-	}
-
-	@Override
-	public User getUserWithAbilities(String userId)
-			throws UserDoesNotExixtException {
-		try {
-			return (User) em.createNamedQuery("getUserWithAbilities")
-					.setParameter("id", userId).getSingleResult();
-		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
-		} catch (NonUniqueResultException e) {
-			e.printStackTrace();
-			throw new UserDoesNotExixtException();
-		}
-	}
-
-	@Override
-	public User getUserWithNotifications(String userId)
-			throws UserDoesNotExixtException {
-		try {
-			return (User) em.createNamedQuery("getUserWithNotifications")
-					.setParameter("id", userId).getSingleResult();
-		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
-		} catch (NonUniqueResultException e) {
-			e.printStackTrace();
-			throw new UserDoesNotExixtException();
-		}
-	}
-
-	@Override
-	public User getCompleteUser(String userId) throws UserDoesNotExixtException {
-		try {
-			return (User) em.createNamedQuery("getCompleteUser")
-					.setParameter("id", userId).getSingleResult();
-		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
-		} catch (NonUniqueResultException e) {
-			e.printStackTrace();
-			throw new UserDoesNotExixtException();
-		}
 	}
 
 	@SuppressWarnings("unchecked")

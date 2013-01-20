@@ -4,6 +4,8 @@
 package it.polimi.ingsw2.swim.entities;
 
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
+import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
+import it.polimi.ingsw2.swim.exceptions.LastAbilityDeletionException;
 import it.polimi.ingsw2.swim.validation.AddressType;
 import it.polimi.ingsw2.swim.validation.Telephone;
 import it.polimi.ingsw2.swim.validation.URLType;
@@ -142,7 +144,7 @@ public class User extends TempUser implements Serializable {
 	 *            the picture to set
 	 * @throws MalformedURLException
 	 */
-	void setPicture(String picture) {
+	public void setPicture(String picture) {
 		this.picture = picture;
 	}
 
@@ -182,7 +184,7 @@ public class User extends TempUser implements Serializable {
 	 *            the address to set
 	 * @throws InvalidAddressException
 	 */
-	void setAddress(String street, String streetNumber, String zip,
+	public void setAddress(String street, String streetNumber, String zip,
 			String city, String province) {
 		if (this.address == null) {
 			this.address = new Address(street, streetNumber, zip, city,
@@ -208,7 +210,7 @@ public class User extends TempUser implements Serializable {
 	 *            the telephone to set
 	 * @throws InvalidTelephoneNumberException
 	 */
-	void setTelephone(String telephone) {
+	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
 
@@ -224,7 +226,7 @@ public class User extends TempUser implements Serializable {
 	 *            the mobile to set
 	 * @throws InvalidTelephoneNumberException
 	 */
-	void setMobile(String mobile) {
+	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
 
@@ -240,7 +242,7 @@ public class User extends TempUser implements Serializable {
 	 *            the fax to set
 	 * @throws InvalidTelephoneNumberException
 	 */
-	void setFax(String fax) {
+	public void setFax(String fax) {
 		this.fax = fax;
 	}
 
@@ -255,7 +257,7 @@ public class User extends TempUser implements Serializable {
 	 * @param skype
 	 *            the skype to set
 	 */
-	void setSkype(String skype) {
+	public void setSkype(String skype) {
 		this.skype = skype;
 	}
 
@@ -299,7 +301,10 @@ public class User extends TempUser implements Serializable {
 		this.abilities.add(ability);
 	}
 
-	void removeAbility(Ability ability) {
+	public void removeAbility(Ability ability) throws LastAbilityDeletionException {
+		if(abilities.size()==1 && abilities.contains(ability)){
+			throw new LastAbilityDeletionException();
+		}
 		this.abilities.remove(ability);
 	}
 
@@ -329,5 +334,9 @@ public class User extends TempUser implements Serializable {
 
 	public String getActivationCode() {
 		return activationCode;
+	}
+	
+	public void setPassword(String oldPassword, String newPassword) throws InvalidPasswordException{
+		super.setPassword(oldPassword, newPassword);
 	}
 }
