@@ -1,4 +1,4 @@
-ï»¿<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,7 +28,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 957px; height: 137px">
 		
-				<h1><a href="Login.html">SWIM</a></h1>
+				<h1><a href="../index.jsp">SWIM</a></h1>
 
 
 			</div>
@@ -39,14 +39,14 @@
 				<div class="welcome">
 					<h2 class="title">Iscrizione quasi completata!</h2>
 					
-					<div class="entry"> &nbsp;<p>Ti Ã¨ 
+					<div class="entry"> &nbsp;<p>Ti è 
 						stata inviata una mail all'indirizzo &lt;indirizzo 
 						dell'utente&gt; per confermare la tua iscrizione e ricevere 
 						la tua password.<br />
-						Se non ti Ã¨ arrivato nessun messaggio, clicca <a href="">qui</a> per 
+						Se non ti è arrivato nessun messaggio, clicca <a href="">qui</a> per 
 						farti inviare nuovamente la richiesta. <br />
 						Se vuoi tornare alla home per effettuare il login, 
-						clicca <a href="Login.html">qui</a>.<br />
+						clicca <a href="../index.jsp">qui</a>.<br />
 						</p>
 					</div>
 				</div>

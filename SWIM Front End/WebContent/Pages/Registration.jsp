@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,7 +28,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 957px; height: 137px">
 		
-				<h1><a href="Login.html">SWIM</a></h1>
+				<h1><a href="../index.jsp">SWIM</a></h1>
 
 
 			</div>
@@ -41,8 +41,8 @@
 					
 					<div class="entry"><p>Compila i seguenti campi per 
 						registrarti alla piattaforma. <br />
-						Se invece sei già registrato, clicca <a href="Login.html">qui</a>, 
-						altrimenti torna alla <a href="Login.html">home</a>.</p>
+						Se invece sei gi� registrato, clicca <a href="../index.jsp">qui</a>, 
+						altrimenti torna alla <a href="../index.jsp">home</a>.</p>
 					</div>
 				</div>
 				<div id="layer6" style="position: absolute; width: 476px; height: 282px; z-index: 1; left: 75px; top: 330px" class="headerTextForm">
