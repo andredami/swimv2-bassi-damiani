@@ -13,4 +13,5 @@ import org.hibernate.validator.ValidatorClass;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Name {
+	String message() default "Not valid as a person name";
 }

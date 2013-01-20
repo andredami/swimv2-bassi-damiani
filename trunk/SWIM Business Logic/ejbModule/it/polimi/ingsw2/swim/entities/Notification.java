@@ -9,13 +9,11 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -27,7 +25,6 @@ import org.hibernate.validator.NotNull;
  * 
  */
 @Entity
-@SequenceGenerator(name = "MESSAGE_SEQUENCE")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Notification implements Serializable {
 
@@ -37,18 +34,18 @@ public class Notification implements Serializable {
 	private static final long serialVersionUID = 4589467236086784860L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MESSAGE_SEQUENCE")
+	@GeneratedValue
 	private Long id;
 
 	@Lob
 	@NotEmpty
 	@NotNull
-	private String text;
+	private String description;
 
 	@Temporal(TemporalType.DATE)
 	private Date timestamp = Calendar.getInstance().getTime();
 
-	private Boolean read = false;
+	private Boolean readByUser = false;
 
 	@ManyToOne
 	@NotNull
@@ -61,22 +58,22 @@ public class Notification implements Serializable {
 	public Notification(User addresse, String text) {
 		super();
 		this.addressee = addresse;
-		this.text = text;
+		this.description = text;
 	}
 
 	/**
 	 * @return the read
 	 */
 	Boolean isRead() {
-		return read;
+		return readByUser;
 	}
 
 	/**
-	 * @param read
+	 * @param readByUser
 	 *            the read to set
 	 */
 	void setAsRead() {
-		this.read = true;
+		this.readByUser = true;
 	}
 
 	/**
@@ -90,7 +87,7 @@ public class Notification implements Serializable {
 	 * @return the text
 	 */
 	String getText() {
-		return text;
+		return description;
 	}
 
 	/**

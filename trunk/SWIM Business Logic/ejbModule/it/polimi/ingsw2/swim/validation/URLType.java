@@ -21,4 +21,5 @@ import org.hibernate.validator.ValidatorClass;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface URLType {
+	String message() default "Not valid as a URL";
 }

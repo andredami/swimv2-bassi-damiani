@@ -20,5 +20,6 @@ import org.hibernate.validator.ValidatorClass;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface OfAge {
+	String message() default "Too young";
 	int minimumAge() default 18;
 }

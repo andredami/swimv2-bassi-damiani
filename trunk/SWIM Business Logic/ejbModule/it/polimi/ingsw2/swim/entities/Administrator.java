@@ -11,10 +11,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.Email;
 import org.hibernate.validator.NotEmpty;
@@ -28,7 +26,6 @@ import org.hibernate.validator.NotNull;
 		name = "getAdministratorByEmail", 
 		query = "SELECT a FROM Administrator a WHERE a.email =:email")
 @Entity
-@SequenceGenerator(name = "ADMIN_SEQUENCE")
 public class Administrator implements Serializable {
 
 	/**
@@ -37,7 +34,7 @@ public class Administrator implements Serializable {
 	private static final long serialVersionUID = -7500647892207458612L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ADMIN_SEQUENCE")
+	@GeneratedValue
 	private long id;
 
 	@NotNull

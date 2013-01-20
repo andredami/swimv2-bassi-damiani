@@ -20,4 +20,5 @@ import org.hibernate.validator.ValidatorClass;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface AddressType {
+	String message() default "Not valid as an address";
 }

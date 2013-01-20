@@ -21,14 +21,12 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
@@ -43,19 +41,18 @@ import org.hibernate.validator.NotNull;
 			query = "SELECT u FROM User u WHERE u.email =:email"),
 	@NamedQuery(
 			name = "getUserWithFriends", 
-			query = "SELECT u FROM User u join fetch u.friendships WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED"),
+			query = "SELECT u FROM User u join fetch u.friendships WHERE u.id =:id AND u.status = REGISTERED"),
 	@NamedQuery(
 			name = "getUserWithAbilities",
-			query = "SELECT u FROM User u join fetch u.abilities WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED"),
+			query = "SELECT u FROM User u join fetch u.abilities WHERE u.id =:id AND u.status = REGISTERED"),
 	@NamedQuery(
 			name = "getUserWithNotification",
-			query = "SELECT u FROM User u join fetch u.notifications WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED"),
+			query = "SELECT u FROM User u join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED"),
 	@NamedQuery(
 			name = "getCompleteUser",
-			query = "SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id AND u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED")
+			query = "SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED")
 })
 @Entity
-@SequenceGenerator(name = "USER_SEQUENCE")
 public class User extends TempUser implements Serializable {
 
 	/**
@@ -66,7 +63,7 @@ public class User extends TempUser implements Serializable {
 	private static final SecureRandom random = new SecureRandom();
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_SEQUENCE")
+	@GeneratedValue
 	private Long id;
 
 	@URLType
@@ -99,7 +96,8 @@ public class User extends TempUser implements Serializable {
 	@NotEmpty
 	private Set<Ability> abilities;
 
-	@ManyToMany(mappedBy = "firendships")
+//	@ManyToMany(mappedBy = "firendships")
+	@ManyToMany
 	private Set<User> friendships;
 
 	@OneToMany(mappedBy = "addressee", cascade = CascadeType.ALL)

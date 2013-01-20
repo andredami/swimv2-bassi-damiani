@@ -15,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.AssertTrue;
 import org.hibernate.validator.Max;
@@ -30,7 +29,6 @@ import org.hibernate.validator.NotNull;
 		name = "getCompleteHelp",
 		query = "SELECT h FROM Help h JOIN FETCH h.conversation WHERE h.id =:id")
 @Entity
-@SequenceGenerator(name = "HELP_SEQUENCE")
 public class Help extends Notification implements Serializable {
 
 	public enum Direction {
