@@ -9,7 +9,7 @@
 
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-<link href="../css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
 <style type="text/css">
 .auto-style1 {
 	margin-top: 0;
@@ -27,7 +27,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 959px; height: 137px">
 		
-				<h1><a href="Login.html">SWIM</a></h1>
+				<h1><a href="../index.jsp">SWIM</a></h1>
 
 
 			</div>
@@ -57,7 +57,7 @@
 								Resta collegato
 								<input name="submitLogin" style="height: 20px; left: 121px; top: 69px" type="submit" value="Accedi" /><br />
 								Non hai un account?
-								<a href="Registration.html">Registrati</a> </span></form>
+								<a href="Pages/Registration.html">Registrati</a> </span></form>
 						</div>
 						<p>Sed vel quam. Vestibulum pellentesque. Morbi sit amet magna ac lacus interdum. Donec pede nisl, Maecenas sed sem sit amet lectus mattis molestie. Integer quis eros lorem ipsum dolor sit.</p>
 					</div>

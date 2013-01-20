@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,7 +28,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 957px; height: 137px">
 		
-				<h1><a href="Login.html">SWIM</a></h1>
+				<h1><a href="../index.jsp">SWIM</a></h1>
 
 
 			</div>
@@ -37,12 +37,12 @@
 		<div id="page">
 			<div id="content" class="auto-style1" style="height: 623px; width: 838px">
 				<div class="welcome">
-					<h2 class="title">Attenzione! C'è un errore!</h2>
+					<h2 class="title">Attenzione! C'� un errore!</h2>
 					
 					<div class="entry"><p>La data di nascita corrisponde ad una 
 						persona non maggiorenne. I minorenni non possono avere 
 						accesso alla piattaforma.<br />
-						Torna alla <a href="Login.html">home</a>.<br />
+						Torna alla <a href="../index.jsp">home</a>.<br />
 						</p>
 					</div>
 				</div>

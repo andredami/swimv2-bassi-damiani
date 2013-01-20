@@ -1,4 +1,4 @@
-Ôªø<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -24,7 +24,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 957px; height: 137px">
 		
-				<h1><a href="Login.html">SWIM</a></h1>
+				<h1><a href="../index.jsp">SWIM</a></h1>
 
 
 			</div>
@@ -35,8 +35,8 @@
 				<div class="welcome">
 					<h2 class="title">Ricerca di aiuto</h2>
 					
-					<div class="entry"><p>Ricerca l'utente che pu√≤ darti una 
-						mano ricercando una sua abilit√† specifica, oppure 
+					<div class="entry"><p>Ricerca l'utente che puÚ darti una 
+						mano ricercando una sua abilit‡ specifica, oppure 
 						ricercandolo per nome. <br />
 						Oppure <a href="HomePage.html">
 						torna alla home</a>.<br />
@@ -85,7 +85,7 @@
 							
 				<div id="layer6" style="position: absolute; width: 343px; height: 147px; z-index: 1; left: 77px; top: 314px" class="headerTextForm">
 							<form method="post" action="RequestForHelp.html" style="border-style: ridge; width: 328px; height: 143px; position: absolute; left: 1px; top: 4px; right: 6px;">
-								Ricerca l'abilit√† che possiede l'utente <br />
+								Ricerca l'abilit‡ che possiede l'utente <br />
 								&nbsp;&nbsp;
 								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">qui 
 								l'errore quando scrive qualcosa di assurdo</label>

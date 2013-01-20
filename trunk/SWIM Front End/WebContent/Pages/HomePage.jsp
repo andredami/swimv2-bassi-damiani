@@ -1,4 +1,4 @@
-Ôªø<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -47,7 +47,7 @@
 						    <li><a href="RequestForHelp.html">Cerca Aiuto</a></li>
 						    <li><a href="Profile.html">Profilo</a></li>	
 						    <li><a href="SearchFriends.html">Cerca Amici</a></li>
-							<li><a href="Login.html">Logout</a></li>						    
+							<li><a href="../index.jsp">Logout</a></li>						    
 						</ul>
 					</div>
 
@@ -140,7 +140,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
 										<div id="requestLabel"><a href="FriendProfile.html">Utente 1</a> 
 											<br />
-											Abilit√†<br />
+											Abilit‡<br />
 											DateTime
 										</div>
 										<form method="post">
@@ -154,7 +154,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
 										<div id="requestLabel"><a href="FriendProfile.html">Utente 2</a> 
 											<br />
-											Abilit√†<br />
+											Abilit‡<br />
 											DateTime</div>
 										<form method="post">
 											<input type="button" onclick="javascript:open_winFeedback('../Popup/FeedbackPopup.html', 'feedbackPopup');" id="feedbackButton" name="feedbackButton"value="Valuta"/>
@@ -166,7 +166,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
 										<div id="requestLabel"><a href="FriendProfile.html">Utente 3</a> 
 											<br />
-											Abilit√†<br />
+											Abilit‡<br />
 											DateTime</div>
 										<form method="post">
 											<input type="button" onclick="javascript:open_winFeedback('../Popup/FeedbackPopup.html', 'feedbackPopup');" id="feedbackButton" name="feedbackButton"value="Valuta"/>
@@ -185,7 +185,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
 										<div id="requestLabel"><a href="FriendProfile.html">Utente 1</a> 
 											<br />
-											Abilit√†<br />
+											Abilit‡<br />
 											DateTime
 										</div>
 										<form method="post" action="HelpRequest.html">
@@ -199,7 +199,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
 										<div id="requestLabel"><a href="FriendProfile.html">Utente 1</a> 
 											<br />
-											Abilit√†<br />
+											Abilit‡<br />
 											DateTime
 										</div>
 										<form method="post" action="HelpRequest.html">
@@ -213,7 +213,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
 										<div id="requestLabel"><a href="FriendProfile.html">Utente 1</a> 
 											<br />
-											Abilit√†<br />
+											Abilit‡<br />
 											DateTime
 										</div>
 										<form method="post">
