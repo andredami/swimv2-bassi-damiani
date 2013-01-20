@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -25,7 +26,8 @@ import javax.mail.internet.MimeMessage;
  * Session Bean implementation class Mailer
  */
 @Stateless
-public class Mailer {
+@Local
+public class Mailer implements MailerLocal {
 	
 	private static final String TOKEN = "[^\\\\]#";
 	private static final Pattern customTokenPattern = Pattern.compile(TOKEN + "(\\w+)");
@@ -91,6 +93,7 @@ public class Mailer {
     public Mailer() {
     }
     
+    @Override
     public void sendApplicationEmail(String to, MessageType type, Map<String,String> parameters){
     	if(!type.parameters.equals(parameters.keySet())){
     		throw new IllegalArgumentException();
@@ -103,7 +106,8 @@ public class Mailer {
     	}
     	sendEmail(to, subject, text);
     }
-
+    
+    @Override
     public void sendEmail(String to, String subject, String text){
     	Properties props = new Properties();
     	props.put("mail.smtp.host", host);

@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 
 import org.hibernate.validator.NotNull;
 
@@ -16,7 +15,6 @@ import org.hibernate.validator.NotNull;
  * 
  */
 @Entity
-@SequenceGenerator(name = "MESSAGE_SEQUENCE")
 public class FriendshipRequest extends Notification implements Serializable {
 
 	/**

@@ -1,10 +1,12 @@
 package it.polimi.ingsw2.swim.entities;
 
 import it.polimi.ingsw2.swim.exceptions.AlreadyHandledException;
+import it.polimi.ingsw2.swim.session.AbuseDispatcher;
 
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
@@ -29,6 +31,7 @@ public class Abuse implements Serializable {
 	 * @category Primary Key
 	 */
 	@Id
+	@GeneratedValue
 	private long id;
 
 	/**

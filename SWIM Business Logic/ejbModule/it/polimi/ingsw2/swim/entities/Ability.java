@@ -31,8 +31,8 @@ import org.hibernate.validator.NotNull;
 @NamedQueries({
 	@NamedQuery(
 			name = "getAbilityByAlias",
-			query = "SELECT a FROM Ability a, IN (a.alias) AS al " +
-					"WHERE a.name =:ability OR al.name =:ability"),
+			query = "SELECT ab FROM Ability ab, IN (ab.alias) al " +
+			"WHERE ab.name =:ability OR al.name =:ability"),	
 	@NamedQuery(
 			name = "getAbilityWithSubscriber",
 			query = "SELECT a FROM Ability a join fetch a.subscribers WHERE a.name =:ability"),

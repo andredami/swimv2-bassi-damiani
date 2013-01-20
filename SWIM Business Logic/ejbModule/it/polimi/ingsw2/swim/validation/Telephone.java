@@ -20,4 +20,5 @@ import org.hibernate.validator.ValidatorClass;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Telephone {
+	String message() default "Not valid as a telephone number";
 }

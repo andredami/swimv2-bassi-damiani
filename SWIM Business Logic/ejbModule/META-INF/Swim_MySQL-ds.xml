@@ -11,7 +11,7 @@
 			on SwimDB Database -->
   <user-name>swimadmin</user-name>
   <password>swimpsw</password>
-  <exception-sorter-class-name>org.jboss.resource.adapter.jdbc.vendor.MySQLExceprionSorter</exception-sorter-class-name>
+  <exception-sorter-class-name>com.mysql.jdbc.integration.jboss.ExtendedMysqlExceptionSorter</exception-sorter-class-name>
   <type-mapping>mySQL</type-mapping>
  </local-tx-datasource>
 </datasources>
