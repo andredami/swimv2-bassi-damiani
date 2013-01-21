@@ -72,15 +72,15 @@ public class Abuse implements Serializable {
 		this.descriprion = descriprion;
 	}
 
-	Long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	String getDescriprion() {
+	public String getDescriprion() {
 		return descriprion;
 	}
 
-	String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 
@@ -94,7 +94,7 @@ public class Abuse implements Serializable {
 	 * 
 	 * @throws AlreadyHandledException
 	 */
-	void handle() throws AlreadyHandledException {
+	public void handle() throws AlreadyHandledException {
 		if (this.handled == true) {
 			throw new AlreadyHandledException();
 		}

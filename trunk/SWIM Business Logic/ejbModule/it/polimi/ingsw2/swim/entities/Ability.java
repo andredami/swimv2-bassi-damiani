@@ -145,19 +145,19 @@ public class Ability implements Serializable {
 		this.addSubscriber(subscriber);
 	}
 
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
-	void setName(String name) {
+	public void setName(String name) {
 		this.name = name.toLowerCase();
 	}
 
-	String getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	void setDescription(String description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
@@ -179,14 +179,14 @@ public class Ability implements Serializable {
 	 * @throws AlreadyActiveException
 	 * 
 	 */
-	void confirm() throws AlreadyActiveException {
+	public void confirm() throws AlreadyActiveException {
 		if (this.isStub = false) {
 			throw new AlreadyActiveException();
 		}
 		this.isStub = false;
 	}
 
-	Set<User> getSubscribers() {
+	public Set<User> getSubscribers() {
 		return subscribers;
 	}
 
@@ -202,7 +202,7 @@ public class Ability implements Serializable {
 		this.subscribers.clear();
 	}
 
-	Set<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
@@ -214,7 +214,7 @@ public class Ability implements Serializable {
 		this.users.remove(user);
 	}
 
-	Set<Alias> getAlias() {
+	public Set<Alias> getAlias() {
 		return alias;
 	}
 
@@ -222,7 +222,7 @@ public class Ability implements Serializable {
 		this.alias.add(alias);
 	}
 
-	void addAlias(String alias) {
+	public void addAlias(String alias) {
 		this.alias.add(new Alias(alias, this));
 	}
 
@@ -230,9 +230,9 @@ public class Ability implements Serializable {
 		this.alias.remove(alias);
 	}
 
-	void removeAlias(String alias) {
+	public void removeAlias(String alias) {
 		for (Alias a : this.alias) {
-			if (a.getName().equals(alias)) {
+			if (a.getName().equals(alias.toLowerCase())) {
 				this.alias.remove(a);
 				return;
 			}
