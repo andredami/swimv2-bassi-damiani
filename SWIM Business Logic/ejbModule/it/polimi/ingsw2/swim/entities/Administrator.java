@@ -12,6 +12,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
 import org.hibernate.validator.Email;
@@ -22,9 +23,9 @@ import org.hibernate.validator.NotNull;
  * @author Administrator
  * 
  */
-@NamedQuery(
-		name = "getAdministratorByEmail", 
-		query = "SELECT a FROM Administrator a WHERE a.email =:email")
+@NamedQueries({
+		@NamedQuery(name = "getAdministratorByEmail", query = "SELECT a FROM Administrator a WHERE a.email =:email"),
+		@NamedQuery(name = "getAdministratorByUsername", query = "SELECT a FROM Administrator a WHERE a.username =:username") })
 @Entity
 public class Administrator implements Serializable {
 
@@ -66,14 +67,14 @@ public class Administrator implements Serializable {
 	/**
 	 * @return the id
 	 */
-	Long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * @return the username
 	 */
-	String getUsername() {
+	public String getUsername() {
 		return username;
 	}
 
@@ -82,14 +83,14 @@ public class Administrator implements Serializable {
 	 *            the username to set
 	 * @throws InvalidUsernameException
 	 */
-	void setUsername(String username) {
+	public void setUsername(String username) {
 		this.username = username;
 	}
 
 	/**
 	 * @return the email
 	 */
-	String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 
@@ -98,7 +99,7 @@ public class Administrator implements Serializable {
 	 *            the email to set
 	 * @throws InvalidEmailAddressException
 	 */
-	void setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -118,7 +119,7 @@ public class Administrator implements Serializable {
 	 *            the password to set
 	 * @throws InvalidPasswordException
 	 */
-	void setPassword(String oldPassword, String newPassword)
+	public void setPassword(String oldPassword, String newPassword)
 			throws InvalidPasswordException {
 		if (!checkPassword(oldPassword)) {
 			throw new InvalidPasswordException();

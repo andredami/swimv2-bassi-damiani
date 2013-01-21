@@ -166,7 +166,7 @@ public class Help extends Notification implements Serializable {
 		this.state = State.CLOSED;
 	}
 
-	Ability getAbility() {
+	public Ability getAbility() {
 		return ability;
 	}
 
@@ -190,7 +190,7 @@ public class Help extends Notification implements Serializable {
 	}
 
 	@AssertTrue
-	boolean checkState() {
+	public boolean checkState() {
 		if (this.helperFeedback != null && this.helpedFeedback != null) {
 			if (this.state != State.CLOSED) {
 				return false;

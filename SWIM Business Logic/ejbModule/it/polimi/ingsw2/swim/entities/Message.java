@@ -44,11 +44,11 @@ public class Message extends Notification implements Serializable {
 		}
 	}
 
-	User getSender() {
+	public User getSender() {
 		return sender;
 	}
 
-	Help getHelpRelation() {
+	public Help getHelpRelation() {
 		return helpRelation;
 	}
 

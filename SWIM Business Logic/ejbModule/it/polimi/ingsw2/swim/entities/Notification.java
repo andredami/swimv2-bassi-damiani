@@ -79,21 +79,21 @@ public class Notification implements Serializable {
 	/**
 	 * @return the id
 	 */
-	Long getId() {
+	public Long getId() {
 		return id;
 	}
 
 	/**
 	 * @return the text
 	 */
-	String getText() {
+	public String getText() {
 		return description;
 	}
 
 	/**
 	 * @return the timestamp
 	 */
-	Date getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 

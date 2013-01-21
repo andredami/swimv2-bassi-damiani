@@ -44,7 +44,7 @@ public class FullName implements Serializable {
 		this.setSurname(surnameBuilder.toString());
 	}
 
-	String getFirstname() {
+	public String getFirstname() {
 		return firstname;
 	}
 
@@ -52,7 +52,7 @@ public class FullName implements Serializable {
 		this.firstname = firstname;
 	}
 
-	String getSurname() {
+	public String getSurname() {
 		return surname;
 	}
 

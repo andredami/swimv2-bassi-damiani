@@ -38,11 +38,11 @@ public class Alias implements Serializable {
 
 	Alias(String name, Ability ability) {
 		super();
-		this.name = name;
+		this.name = name.toLowerCase();
 		this.ability = ability;
 	}
 
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
