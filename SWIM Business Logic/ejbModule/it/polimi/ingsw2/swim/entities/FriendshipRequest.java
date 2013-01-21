@@ -30,12 +30,12 @@ public class FriendshipRequest extends Notification implements Serializable {
 		super();
 	}
 
-	FriendshipRequest(User addresse, User sender, String text) {
-		super(addresse, text);
+	public FriendshipRequest(User addresse, User sender) {
+		super(addresse, "L'utente " + sender.getName() + " vuole diventare tuo amico.");
 		this.sender = sender;
 	}
 
-	User getSender() {
+	public User getSender() {
 		return sender;
 	}
 }

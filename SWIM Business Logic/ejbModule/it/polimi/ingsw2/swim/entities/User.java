@@ -6,6 +6,7 @@ package it.polimi.ingsw2.swim.entities;
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.LastAbilityDeletionException;
+import it.polimi.ingsw2.swim.util.Digester;
 import it.polimi.ingsw2.swim.validation.AddressType;
 import it.polimi.ingsw2.swim.validation.Telephone;
 import it.polimi.ingsw2.swim.validation.URLType;
@@ -38,22 +39,11 @@ import org.hibernate.validator.NotNull;
  * 
  */
 @NamedQueries({
-	@NamedQuery(
-			name = "getUserByEmail",
-			query = "SELECT u FROM User u WHERE u.email =:email"),
-	@NamedQuery(
-			name = "getUserWithFriends", 
-			query = "SELECT u FROM User u join fetch u.friendships WHERE u.id =:id AND u.status = REGISTERED"),
-	@NamedQuery(
-			name = "getUserWithAbilities",
-			query = "SELECT u FROM User u join fetch u.abilities WHERE u.id =:id AND u.status = REGISTERED"),
-	@NamedQuery(
-			name = "getUserWithNotification",
-			query = "SELECT u FROM User u join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED"),
-	@NamedQuery(
-			name = "getCompleteUser",
-			query = "SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED")
-})
+		@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.email =:email"),
+		@NamedQuery(name = "getUserWithFriends", query = "SELECT u FROM User u join fetch u.friendships WHERE u.id =:id AND u.status = REGISTERED"),
+		@NamedQuery(name = "getUserWithAbilities", query = "SELECT u FROM User u join fetch u.abilities WHERE u.id =:id AND u.status = REGISTERED"),
+		@NamedQuery(name = "getUserWithNotification", query = "SELECT u FROM User u join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED"),
+		@NamedQuery(name = "getCompleteUser", query = "SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED") })
 @Entity
 public class User extends TempUser implements Serializable {
 
@@ -91,14 +81,14 @@ public class User extends TempUser implements Serializable {
 	private String skype;
 
 	private Float evaluation = (float) 0;
-	
-	private Integer evaluationCount = 0; 
+
+	private Integer evaluationCount = 0;
 
 	@ManyToMany(mappedBy = "users")
 	@NotEmpty
 	private Set<Ability> abilities;
 
-//	@ManyToMany(mappedBy = "firendships")
+	// @ManyToMany(mappedBy = "firendships")
 	@ManyToMany
 	private Set<User> friendships;
 
@@ -107,6 +97,8 @@ public class User extends TempUser implements Serializable {
 	private List<Notification> notifications;
 
 	private String activationCode;
+
+	private String tempPassword;
 
 	public User() {
 		super();
@@ -135,7 +127,7 @@ public class User extends TempUser implements Serializable {
 	/**
 	 * @return the picture
 	 */
-	String getPicture() {
+	public String getPicture() {
 		return picture;
 	}
 
@@ -168,7 +160,7 @@ public class User extends TempUser implements Serializable {
 		}
 	}
 
-	void ban() {
+	public void ban() {
 		this.status = Status.BANNED;
 	}
 
@@ -201,7 +193,7 @@ public class User extends TempUser implements Serializable {
 	/**
 	 * @return the telephone
 	 */
-	String getTelephone() {
+	public String getTelephone() {
 		return telephone;
 	}
 
@@ -217,7 +209,7 @@ public class User extends TempUser implements Serializable {
 	/**
 	 * @return the mobile
 	 */
-	String getMobile() {
+	public String getMobile() {
 		return mobile;
 	}
 
@@ -233,7 +225,7 @@ public class User extends TempUser implements Serializable {
 	/**
 	 * @return the fax
 	 */
-	String getFax() {
+	public String getFax() {
 		return fax;
 	}
 
@@ -249,7 +241,7 @@ public class User extends TempUser implements Serializable {
 	/**
 	 * @return the skype
 	 */
-	String getSkype() {
+	public String getSkype() {
 		return skype;
 	}
 
@@ -273,10 +265,11 @@ public class User extends TempUser implements Serializable {
 	 *            the evaluation to set
 	 */
 	public void addFeedback(int feedback) {
-		if(feedback<-5 || feedback >5){
+		if (feedback < -5 || feedback > 5) {
 			throw new IllegalArgumentException();
 		}
-		this.evaluation = ((this.evaluation * this.evaluationCount) + feedback) / (this.evaluationCount + 1);
+		this.evaluation = ((this.evaluation * this.evaluationCount) + feedback)
+				/ (this.evaluationCount + 1);
 		this.evaluationCount++;
 	}
 
@@ -293,7 +286,7 @@ public class User extends TempUser implements Serializable {
 		M, F;
 	}
 
-	Set<Ability> getAbilities() {
+	public Set<Ability> getAbilities() {
 		return this.abilities;
 	}
 
@@ -301,42 +294,64 @@ public class User extends TempUser implements Serializable {
 		this.abilities.add(ability);
 	}
 
-	public void removeAbility(Ability ability) throws LastAbilityDeletionException {
-		if(abilities.size()==1 && abilities.contains(ability)){
+	public void removeAbility(Ability ability)
+			throws LastAbilityDeletionException {
+		if (abilities.size() == 1 && abilities.contains(ability)) {
 			throw new LastAbilityDeletionException();
 		}
 		this.abilities.remove(ability);
 	}
 
-	Set<User> getFiendships() {
+	public Set<User> getFriendships() {
 		return this.friendships;
 	}
 
-	void addFirendship(User user) {
-		this.friendships.add(user);
+	public void addFriendship(User user) {
+		if (user != this) {
+			this.friendships.add(user);
+		}
 	}
 
-	void removeFriendships(User user) {
+	public void removeFriendships(User user) {
 		this.friendships.remove(user);
 	}
 
-	List<Notification> getNotification() {
+	public List<Notification> getNotification() {
 		return this.notifications;
 	}
 
-	void addNotification(Notification notification) {
-		this.notifications.add(notification);
-	}
-
-	void removeFriendships(Notification notification) {
-		this.notifications.remove(notification);
+	public void addNotification(Notification notification) {
+		this.notifications.add(0, notification);
 	}
 
 	public String getActivationCode() {
 		return activationCode;
 	}
-	
-	public void setPassword(String oldPassword, String newPassword) throws InvalidPasswordException{
+
+	@Override
+	public void setPassword(String oldPassword, String newPassword)
+			throws InvalidPasswordException {
 		super.setPassword(oldPassword, newPassword);
+		this.tempPassword = null;
+	}
+
+	public String setTemporaryPassword() {
+		String plainPassword = new BigInteger(130, random).toString(16);
+		this.tempPassword = Digester.digest(plainPassword);
+		return plainPassword;
+	}
+
+	@Override
+	public Boolean checkPassword(String password) {
+		if (super.checkPassword(password)) {
+			return true;
+		}
+		if (tempPassword != null) {
+			if(this.tempPassword.equals(Digester.digest(password))){
+				tempPassword = null;
+				return true;
+			}
+		}
+		return false;
 	}
 }
