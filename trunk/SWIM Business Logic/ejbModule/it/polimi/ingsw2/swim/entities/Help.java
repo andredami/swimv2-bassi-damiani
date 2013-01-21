@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -25,9 +26,17 @@ import org.hibernate.validator.NotNull;
  * @author Administrator
  * 
  */
-@NamedQuery(
-		name = "getCompleteHelp",
-		query = "SELECT h FROM Help h JOIN FETCH h.conversation WHERE h.id =:id")
+@NamedQueries(
+		{
+			@NamedQuery(
+					name = "getCompleteHelp",
+					query = "SELECT h FROM Help h JOIN FETCH h.conversation WHERE h.id =:id"),
+			@NamedQuery(
+					name = "getActiveHelpByUser",
+					query = "SELECT h FROM Help h JOIN h.addressee t JOIN h.sender f WHERE (t.id =:user OR f.id =:user) AND h.state <> CLOSED")
+		}
+		)
+
 @Entity
 public class Help extends Notification implements Serializable {
 

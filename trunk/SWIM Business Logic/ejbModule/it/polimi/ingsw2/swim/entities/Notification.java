@@ -55,16 +55,16 @@ public class Notification implements Serializable {
 		super();
 	}
 
-	public Notification(User addresse, String text) {
+	public Notification(User addressee, String text) {
 		super();
-		this.addressee = addresse;
+		this.addressee = addressee;
 		this.description = text;
 	}
 
 	/**
 	 * @return the read
 	 */
-	Boolean isRead() {
+	public Boolean isRead() {
 		return readByUser;
 	}
 
@@ -72,7 +72,7 @@ public class Notification implements Serializable {
 	 * @param readByUser
 	 *            the read to set
 	 */
-	void setAsRead() {
+	public void setAsRead() {
 		this.readByUser = true;
 	}
 

@@ -75,7 +75,7 @@ public class TempUser {
 	/**
 	 * @return the password
 	 */
-	Boolean checkPassword(String password) {
+	public Boolean checkPassword(String password) {
 		return this.password.equals(Digester.digest(password));
 	}
 
@@ -116,14 +116,14 @@ public class TempUser {
 	/**
 	 * @return the birthdate
 	 */
-	Date getBirthdate() {
+	public Date getBirthdate() {
 		return birthdate;
 	}
 
 	/**
 	 * @return the gender
 	 */
-	Gender getGender() {
+	public Gender getGender() {
 		return gender;
 	}
 }
