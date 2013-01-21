@@ -36,7 +36,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	public void sendNotification(String addresseeId, String text) throws NoSuchUserException {
 		User addressee = new ProfileManager().getUserWithNotifications(addresseeId);
 		addressee.addNotification(new Notification(addressee, text));
-		em.persist(addressee);
+		em.merge(addressee);
 	}
 	
 	void sendFriendshipRequest(String addresseeId, String senderId) throws NoSuchUserException {
