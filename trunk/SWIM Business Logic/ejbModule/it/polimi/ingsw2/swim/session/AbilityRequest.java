@@ -3,7 +3,7 @@ package it.polimi.ingsw2.swim.session;
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.AbilityRequestRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
@@ -30,7 +30,7 @@ public class AbilityRequest implements AbilityRequestRemote {
 	}
 
 	@Override
-	public void registerSubscription(String id, String abilityName) throws UserDoesNotExixtException, InvalidDataException {
+	public void registerSubscription(String id, String abilityName) throws NoSuchUserException, InvalidDataException {
 		User user = (new ProfileManager()).getUserWithAbilities(id);
 		
 		Ability ability; 
@@ -54,7 +54,7 @@ public class AbilityRequest implements AbilityRequestRemote {
 	
 	@Override
 	public void registerNewRequest(String id, String abilityName,
-			String description) throws UserDoesNotExixtException {
+			String description) throws NoSuchUserException {
 		User user = (new ProfileManager()).getUserWithAbilities(id);
 		
 		Ability stub = new Ability(abilityName, description, user);

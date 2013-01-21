@@ -9,7 +9,7 @@ import it.polimi.ingsw2.swim.entities.Help;
 import it.polimi.ingsw2.swim.entities.Message;
 import it.polimi.ingsw2.swim.entities.Notification;
 import it.polimi.ingsw2.swim.entities.User;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.NotificationManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
@@ -33,24 +33,24 @@ public class NotificationManager implements NotificationManagerRemote {
     }
 
     @Override
-	public void sendNotification(String addresseeId, String text) throws UserDoesNotExixtException {
+	public void sendNotification(String addresseeId, String text) throws NoSuchUserException {
 		User addressee = new ProfileManager().getUserWithNotifications(addresseeId);
 		addressee.addNotification(new Notification(addressee, text));
 		em.persist(addressee);
 	}
 	
-	void sendFriendshipRequest(String addresseeId, String senderId) throws UserDoesNotExixtException {
+	void sendFriendshipRequest(String addresseeId, String senderId) throws NoSuchUserException {
 		User sender;
     	try {
 			sender = new ProfileManager().getUserWithNotifications(addresseeId);
-		} catch (UserDoesNotExixtException e) {
-			throw new UserDoesNotExixtException("fromUser");
+		} catch (NoSuchUserException e) {
+			throw new NoSuchUserException("fromUser");
 		}
     	User addressee;
     	try {
     		addressee = new ProfileManager().getUserWithNotifications(addresseeId);
-		} catch (UserDoesNotExixtException e) {
-			throw new UserDoesNotExixtException("toUser");
+		} catch (NoSuchUserException e) {
+			throw new NoSuchUserException("toUser");
 		}
     	if(!sender.getFriendships().contains(addressee) && !addressee.getFriendships().contains(sender)){
     		addressee.addNotification(new FriendshipRequest(addressee,sender));
@@ -68,7 +68,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	}
 	
 	@Override
-	public List<Notification> retriveNotificationsByUser(String userId) throws UserDoesNotExixtException{
+	public List<Notification> retriveNotificationsByUser(String userId) throws NoSuchUserException{
 		User user = new ProfileManager().getUserWithNotifications(userId);
 		List<Notification> allNotifications = user.getNotification();
 		List<Notification> output = new LinkedList<Notification>();
@@ -85,7 +85,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	}
 	
 	@Override
-	public List<Message> retriveIncomingMessagesByUser(String userId) throws UserDoesNotExixtException{
+	public List<Message> retriveIncomingMessagesByUser(String userId) throws NoSuchUserException{
 		User user = new ProfileManager().getUserWithNotifications(userId);
 		List<Notification> allNotifications = user.getNotification();
 		List<Message> output = new LinkedList<Message>();
@@ -100,7 +100,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	}
 	
 	@Override
-	public List<FriendshipRequest> retriveFriendshipRequestsByUser(String userId) throws UserDoesNotExixtException{
+	public List<FriendshipRequest> retriveFriendshipRequestsByUser(String userId) throws NoSuchUserException{
 		User user = new ProfileManager().getUserWithNotifications(userId);
 		List<Notification> allNotifications = user.getNotification();
 		List<FriendshipRequest> output = new LinkedList<FriendshipRequest>();
@@ -116,7 +116,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Help> retriveHelpRelationStatusByUser(String userId) throws UserDoesNotExixtException{
+	public List<Help> retriveHelpRelationStatusByUser(String userId) throws NoSuchUserException{
 		return em.createNamedQuery("getActiveHelpByUser").setParameter("user", Long.parseLong(userId)).getResultList();
 	}
 }

@@ -4,7 +4,7 @@ import it.polimi.ingsw2.swim.entities.FriendshipRequest;
 import it.polimi.ingsw2.swim.entities.Help;
 import it.polimi.ingsw2.swim.entities.Message;
 import it.polimi.ingsw2.swim.entities.Notification;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 
 import java.util.List;
 
@@ -13,18 +13,18 @@ public interface NotificationManagerRemote {
 	void markNotificationAsRead(String notificationId);
 
 	List<FriendshipRequest> retriveFriendshipRequestsByUser(String userId)
-			throws UserDoesNotExixtException;
+			throws NoSuchUserException;
 
 	List<Help> retriveHelpRelationStatusByUser(String userId)
-			throws UserDoesNotExixtException;
+			throws NoSuchUserException;
 
 	List<Message> retriveIncomingMessagesByUser(String userId)
-			throws UserDoesNotExixtException;
+			throws NoSuchUserException;
 
 	List<Notification> retriveNotificationsByUser(String userId)
-			throws UserDoesNotExixtException;
+			throws NoSuchUserException;
 
 	void sendNotification(String addresseeId, String text)
-			throws UserDoesNotExixtException;
+			throws NoSuchUserException;
 
 }

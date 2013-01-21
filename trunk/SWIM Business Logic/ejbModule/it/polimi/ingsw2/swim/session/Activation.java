@@ -3,7 +3,7 @@ package it.polimi.ingsw2.swim.session;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.Mailer.MessageType;
 import it.polimi.ingsw2.swim.session.remote.ActivationRemote;
 import it.polimi.ingsw2.swim.util.DAO;
@@ -30,10 +30,10 @@ public class Activation implements ActivationRemote {
 	}
 	
 	@Override
-    public void activateUser(String userId, String activationToken) throws UserDoesNotExixtException, InvalidActivationCode {
+    public void activateUser(String userId, String activationToken) throws NoSuchUserException, InvalidActivationCode {
         User user = em.find(User.class, Long.parseLong(userId));
         if(user == null){
-        	throw new UserDoesNotExixtException();
+        	throw new NoSuchUserException();
         }
         user.confirmRegistration(activationToken);
         em.merge(user);

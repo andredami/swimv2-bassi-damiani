@@ -7,7 +7,7 @@ package it.polimi.ingsw2.swim.exceptions;
  * @author Administrator
  *
  */
-public class UserDoesNotExixtException extends Exception {
+public class NoSuchUserException extends Exception {
 
 	/**
 	 * 
@@ -17,21 +17,21 @@ public class UserDoesNotExixtException extends Exception {
 	/**
 	 * 
 	 */
-	public UserDoesNotExixtException() {
+	public NoSuchUserException() {
 		super();
 	}
 
 	/**
 	 * @param message
 	 */
-	public UserDoesNotExixtException(String message) {
+	public NoSuchUserException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public UserDoesNotExixtException(Throwable cause) {
+	public NoSuchUserException(Throwable cause) {
 		super(cause);
 	}
 
@@ -39,7 +39,7 @@ public class UserDoesNotExixtException extends Exception {
 	 * @param message
 	 * @param cause
 	 */
-	public UserDoesNotExixtException(String message, Throwable cause) {
+	public NoSuchUserException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -49,7 +49,7 @@ public class UserDoesNotExixtException extends Exception {
 	 * @param enableSuppression
 	 * @param writableStackTrace
 	 */
-	public UserDoesNotExixtException(String message, Throwable cause,
+	public NoSuchUserException(String message, Throwable cause,
 			boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 	}
