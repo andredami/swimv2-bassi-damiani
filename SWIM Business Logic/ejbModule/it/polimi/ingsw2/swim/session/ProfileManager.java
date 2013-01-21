@@ -6,6 +6,7 @@ import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.LastAbilityDeletionException;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.session.remote.ProfileManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.Set;

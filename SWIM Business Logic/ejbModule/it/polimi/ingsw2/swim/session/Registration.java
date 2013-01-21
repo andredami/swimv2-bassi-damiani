@@ -7,6 +7,7 @@ import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Gender;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
+import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.Date;

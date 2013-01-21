@@ -7,6 +7,7 @@ import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.LocationMissingException;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.session.remote.UserDirectoryManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 import it.polimi.ingsw2.swim.validation.NameValidator;
 

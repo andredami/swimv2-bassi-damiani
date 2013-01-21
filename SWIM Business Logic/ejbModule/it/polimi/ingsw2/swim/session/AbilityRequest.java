@@ -4,6 +4,7 @@ import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.session.remote.AbilityRequestRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import javax.ejb.Stateless;

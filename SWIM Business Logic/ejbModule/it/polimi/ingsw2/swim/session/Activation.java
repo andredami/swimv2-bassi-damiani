@@ -5,6 +5,7 @@ import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
 import it.polimi.ingsw2.swim.session.Mailer.MessageType;
+import it.polimi.ingsw2.swim.session.remote.ActivationRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.HashMap;
