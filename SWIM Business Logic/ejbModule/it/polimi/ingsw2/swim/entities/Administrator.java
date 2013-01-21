@@ -106,7 +106,7 @@ public class Administrator implements Serializable {
 	/**
 	 * @return the password
 	 */
-	Boolean checkPassword(String password) {
+	public Boolean checkPassword(String password) {
 		return this.password.equals(Digester.digest(password));
 	}
 
