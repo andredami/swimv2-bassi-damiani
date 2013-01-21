@@ -39,13 +39,14 @@
 					<h2 class="title">Benvenuto su SWIM!</h2>
 					
 					<div class="entry"> &nbsp;<div>
-						<p>Sed vel quam. Vestibulum pellentesque. Morbi sit amet magna ac lacus interdum. Donec pede nisl, Maecenas sed sem sit amet lectus mattis molestie. Integer quis eros lorem ipsum dolor sit.</p>
+						<p>SWIMv2 è l'esclusiva piattaforma online che vi permetterà di offrire le vostre abilità lavorative e usufruire delle abilità delle altre persone registrate!
+						Incomincia anche tu registrandoti! </p>
 						</div>
 					</div>
 				</div>
 				<div class="welcome">
 					<div class="entry"> &nbsp;<div id="layer6" style="position: absolute; width: 249px; height: 106px; z-index: 1; left: 696px; top: 22px">
-							<form method="post" action="HomePage.html" style="width: 246px; height: 102px; position: absolute; left: 1px; top: 3px;">
+							<form method="post" action="/RegistrationServlet" style="width: 246px; height: 102px; position: absolute; left: 1px; top: 3px;">
 								<input name="emailText" type="text" class="auto-style2" style="position: absolute; left: 65px; top: 3px; width: 130px;" />
 								<label id="labelUser" class="headerText" style="position: absolute; left: -2px; top: 6px; height: 18px; right: 216px;">Email</label>
 								<br />
@@ -57,7 +58,7 @@
 								Resta collegato
 								<input name="submitLogin" style="height: 20px; left: 121px; top: 69px" type="submit" value="Accedi" /><br />
 								Non hai un account?
-								<a href="Pages/Registration.html">Registrati</a> </span></form>
+								<a href="Pages/Registration.jsp">Registrati</a> </span></form>
 						</div>
 						<p>Sed vel quam. Vestibulum pellentesque. Morbi sit amet magna ac lacus interdum. Donec pede nisl, Maecenas sed sem sit amet lectus mattis molestie. Integer quis eros lorem ipsum dolor sit.</p>
 					</div>

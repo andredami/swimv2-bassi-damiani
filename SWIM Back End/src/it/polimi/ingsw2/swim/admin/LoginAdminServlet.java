@@ -1,4 +1,4 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.admin;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class LoginServlet
+ * Servlet implementation class LoginAdminServlet
  */
-public class LoginServlet extends HttpServlet {
+public class LoginAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginServlet() {
+    public LoginAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,17 +34,8 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+		
 
-        out.println("<html>");
-        out.println("<head>");
-        out.println("<title>Io sono un titolo!</title>");
-        out.println("</head>");
-        out.println("<body bgcolor=\"white\">");
-        out.println("<h1>Questa è una prova!</h1>");
-        out.println("</body>");
-        out.println("</html>");
 	}
 
 }
