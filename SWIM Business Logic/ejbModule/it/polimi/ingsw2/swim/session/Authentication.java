@@ -1,7 +1,7 @@
 package it.polimi.ingsw2.swim.session;
 
 import it.polimi.ingsw2.swim.entities.User;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.Mailer.MessageType;
 import it.polimi.ingsw2.swim.session.remote.AuthenticationRemote;
 import it.polimi.ingsw2.swim.util.DAO;
@@ -54,19 +54,19 @@ public class Authentication implements AuthenticationRemote {
 	}
 
 	public void generateTemporaryPassword(String email)
-			throws UserDoesNotExixtException {
+			throws NoSuchUserException {
 		User user;
 		try {
 			user = (User) em.createNamedQuery("getUserByEmail")
 					.setParameter("email", email).getSingleResult();
 		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			throw new RuntimeException();
 		}
 
 		if (user.getStatus() != User.Status.REGISTERED) {
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		}
 
 		String temporaryPassword = user.setTemporaryPassword();

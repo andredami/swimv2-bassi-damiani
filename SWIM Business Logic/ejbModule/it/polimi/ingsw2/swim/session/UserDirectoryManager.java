@@ -6,7 +6,7 @@ import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.LocationMissingException;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.UserDirectoryManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 import it.polimi.ingsw2.swim.validation.NameValidator;
@@ -83,7 +83,7 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 	public List<User> findUserByAbility(String userId, String abilityName,
 			String location, int minFeedback, int page)
 			throws LocationMissingException, InvalidDataException,
-			UserDoesNotExixtException {
+			NoSuchUserException {
 		if (abilityName == null) {
 			throw new IllegalArgumentException();
 		}
@@ -97,7 +97,7 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 		if (userId != null) {
 			user = em.find(User.class, Long.parseLong(userId));
 			if (user == null || user.getStatus() != Status.REGISTERED) {
-				throw new UserDoesNotExixtException();
+				throw new NoSuchUserException();
 			}
 		}
 

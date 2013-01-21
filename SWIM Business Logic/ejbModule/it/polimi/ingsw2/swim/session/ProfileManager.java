@@ -5,7 +5,7 @@ import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.LastAbilityDeletionException;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.ProfileManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
@@ -39,56 +39,56 @@ public class ProfileManager implements ProfileManagerRemote {
 
 	@Override
 	public User getUserWithFriends(String userId)
-			throws UserDoesNotExixtException {
+			throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getUserWithFriends")
 					.setParameter("id", userId).getSingleResult();
 		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			e.printStackTrace();
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		}
 	}
 
 	@Override
 	public User getUserWithAbilities(String userId)
-			throws UserDoesNotExixtException {
+			throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getUserWithAbilities")
 					.setParameter("id", userId).getSingleResult();
 		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			e.printStackTrace();
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		}
 	}
 
 	@Override
 	public User getUserWithNotifications(String userId)
-			throws UserDoesNotExixtException {
+			throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getUserWithNotifications")
 					.setParameter("id", userId).getSingleResult();
 		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			e.printStackTrace();
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		}
 	}
 
 	@Override
-	public User retriveProfile(String userId) throws UserDoesNotExixtException {
+	public User retriveProfile(String userId) throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getCompleteUser")
 					.setParameter("id", userId).getSingleResult();
 		} catch (NoResultException e) {
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			e.printStackTrace();
-			throw new UserDoesNotExixtException();
+			throw new NoSuchUserException();
 		}
 	}
 
@@ -96,7 +96,7 @@ public class ProfileManager implements ProfileManagerRemote {
 	public void editProfile(String userId, String email, String picture,
 			String street, String streetNumber, String zip, String city,
 			String province, String telephone, String mobile, String fax,
-			String skype) throws UserDoesNotExixtException,
+			String skype) throws NoSuchUserException,
 			InvalidDataException {
 		User user = retriveProfile(userId);
 		if (email != null && !email.isEmpty()) {
@@ -122,21 +122,21 @@ public class ProfileManager implements ProfileManagerRemote {
 
 	@Override
 	public void insertNewPassword(String userId, String oldPassword,
-			String newPassword) throws UserDoesNotExixtException,
+			String newPassword) throws NoSuchUserException,
 			InvalidPasswordException {
 		User user = retriveProfile(userId);
 		user.setPassword(oldPassword, newPassword);
 	}
 
 	@Override
-	public void deleteUser(String userId) throws UserDoesNotExixtException {
+	public void deleteUser(String userId) throws NoSuchUserException {
 		User user = retriveProfile(userId);
 		em.remove(user);
 	}
 
 	@Override
 	public void removeAbilities(String userId, Set<String> abilities)
-			throws UserDoesNotExixtException, LastAbilityDeletionException {
+			throws NoSuchUserException, LastAbilityDeletionException {
 		User user = getUserWithAbilities(userId);
 		for (String abilityName : abilities) {
 			Ability ability = em.find(Ability.class, abilityName);
@@ -150,7 +150,7 @@ public class ProfileManager implements ProfileManagerRemote {
 	
 	@Override
 	public void addAbilities(String userId, Set<String> abilities)
-			throws UserDoesNotExixtException {
+			throws NoSuchUserException {
 		User user = getUserWithAbilities(userId);
 		for (String abilityName : abilities) {
 			Ability ability = em.find(Ability.class, abilityName);

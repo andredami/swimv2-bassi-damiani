@@ -3,7 +3,7 @@ package it.polimi.ingsw2.swim.session;
 import it.polimi.ingsw2.swim.entities.FriendshipRequest;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
-import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.FriendshipManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
@@ -25,21 +25,21 @@ public class FriendshipManager implements FriendshipManagerRemote {
         super();
     }
 
-    public void ask(String addresseeId, String senderId) throws UserDoesNotExixtException{
+    public void ask(String addresseeId, String senderId) throws NoSuchUserException{
     	if(addresseeId.equals(senderId)){
     		return;
     	}
     	User sender;
     	try {
 			sender = new ProfileManager().getUserWithFriends(addresseeId);
-		} catch (UserDoesNotExixtException e) {
-			throw new UserDoesNotExixtException("fromUser");
+		} catch (NoSuchUserException e) {
+			throw new NoSuchUserException("fromUser");
 		}
     	User addressee;
     	try {
     		addressee = new ProfileManager().getUserWithFriends(addresseeId);
-		} catch (UserDoesNotExixtException e) {
-			throw new UserDoesNotExixtException("toUser");
+		} catch (NoSuchUserException e) {
+			throw new NoSuchUserException("toUser");
 		}
     	
 		if(!sender.getFriendships().contains(addressee) && !addressee.getFriendships().contains(sender)){
@@ -65,7 +65,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
     		try {
         		sender = new ProfileManager().getUserWithFriends(request.getSender().getId().toString());
 				addressee = new ProfileManager().getUserWithFriends(request.getAddressee().getId().toString());
-			} catch (UserDoesNotExixtException e) {
+			} catch (NoSuchUserException e) {
 				throw new RuntimeException();
 			}
     		sender.addFriendship(addressee);
@@ -75,7 +75,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
     		em.remove(request);
     		try {
 				new NotificationManager().sendNotification(sender.getId().toString(), "L'utente " + addressee.getName() + " ha accettato la tua richiesta di amicizia.");
-			} catch (UserDoesNotExixtException e) {
+			} catch (NoSuchUserException e) {
 				throw new RuntimeException();
 			}    		
     	}
@@ -92,7 +92,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
     		try {
         		sender = new ProfileManager().getUserWithFriends(request.getSender().getId().toString());
 				addressee = new ProfileManager().getUserWithFriends(request.getAddressee().getId().toString());
-			} catch (UserDoesNotExixtException e) {
+			} catch (NoSuchUserException e) {
 				throw new RuntimeException();
 			}
     		sender.removeFriendships(addressee);
@@ -103,20 +103,20 @@ public class FriendshipManager implements FriendshipManagerRemote {
     	}
     }
     
-    public void remove(String userId, String friendToBeRemovedId) throws UserDoesNotExixtException{
+    public void remove(String userId, String friendToBeRemovedId) throws NoSuchUserException{
     	if(userId.equals(friendToBeRemovedId)){
     		return;
     	}
     	User user;
     	try {
 			user = new ProfileManager().getUserWithFriends(userId);
-		} catch (UserDoesNotExixtException e) {
-			throw new UserDoesNotExixtException();
+		} catch (NoSuchUserException e) {
+			throw new NoSuchUserException();
 		}
     	User friendToBeRemoved;
     	try {
     		friendToBeRemoved = new ProfileManager().getUserWithFriends(friendToBeRemovedId);
-		} catch (UserDoesNotExixtException e) {
+		} catch (NoSuchUserException e) {
 			return;
 		}
     	user.removeFriendships(friendToBeRemoved);
