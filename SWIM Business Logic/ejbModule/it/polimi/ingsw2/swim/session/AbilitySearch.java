@@ -30,8 +30,8 @@ public class AbilitySearch implements AbilitySearchRemote {
 	public List<Ability> findAbility(String name) {
 		Query query = em.createQuery("SELECT a" +
 				"FROM Ability a, IN (a.alias) AS al" +
-				"WHERE a.name LIKE :namePattern" +
-				"OR al.name LIKE :namePattern");
+				"WHERE a.name LIKE ':namePattern'" +
+				"OR al.name LIKE ':namePattern'");
 		
 		query.setParameter("namePattern", "%" + name + "%");
 		return query.getResultList();
