@@ -2,6 +2,7 @@ package it.polimi.ingsw2.swim.session;
 
 import it.polimi.ingsw2.swim.entities.Abuse;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
+import it.polimi.ingsw2.swim.session.remote.AbuseDispatcherRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import javax.ejb.Stateless;

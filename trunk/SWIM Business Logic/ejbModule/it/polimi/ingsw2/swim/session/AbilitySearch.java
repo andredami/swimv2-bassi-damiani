@@ -1,6 +1,7 @@
 package it.polimi.ingsw2.swim.session;
 
 import it.polimi.ingsw2.swim.entities.Ability;
+import it.polimi.ingsw2.swim.session.remote.AbilitySearchRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.List;

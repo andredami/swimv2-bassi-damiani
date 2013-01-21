@@ -8,6 +8,7 @@ import it.polimi.ingsw2.swim.entities.Message;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserDoesNotExixtException;
+import it.polimi.ingsw2.swim.session.remote.HelpManagerRemote;
 import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.List;
@@ -37,11 +38,11 @@ public class HelpManager implements HelpManagerRemote {
 			UserDoesNotExixtException {
 		User addressee = em.find(User.class, Long.parseLong(addresseeId));
 		if (addressee == null) {
-			throw new UserDoesNotExixtException("Addressee not valid");
+			throw new UserDoesNotExixtException("toUser");
 		}
 		User sender = em.find(User.class, Long.parseLong(senderId));
 		if (sender == null) {
-			throw new UserDoesNotExixtException("Sender not valid");
+			throw new UserDoesNotExixtException("fromUser");
 		}
 		Ability ability = em.find(Ability.class, abilityName.toLowerCase());
 		if (ability == null) {
@@ -52,6 +53,9 @@ public class HelpManager implements HelpManagerRemote {
 		}
 
 		em.persist(new Help(addressee, sender, ability, text));
+		new NotificationManager().sendNotification(
+				addressee.getId().toString(), "L'utente " + sender.getName()
+						+ " ti ha chiesto aiuto.");
 	}
 
 	public void forwardReplyMessage(String senderId, String helpId, String text)
@@ -85,6 +89,14 @@ public class HelpManager implements HelpManagerRemote {
 			throw new InvalidDataException();
 		}
 
+		User addressee;
+		try {
+			addressee = new ProfileManager().getUserWithNotifications(help.getAddressee().getId().toString());
+		} catch (UserDoesNotExixtException e) {
+			throw new RuntimeException();
+		}
+		addressee.addNotification(help.getConversation().get(help.getConversation().size() - 1));
+		em.merge(addressee);
 		em.merge(help);
 	}
 
@@ -99,10 +111,36 @@ public class HelpManager implements HelpManagerRemote {
 				throw new IllegalStateException();
 			}
 			help.accept();
+			try {
+				new NotificationManager().sendNotification(help.getSender().getId().toString(),
+						"L'utente " + help.getAddressee().getName()
+								+ " ha accettato di aiutarti.");
+			} catch (UserDoesNotExixtException e) {
+				throw new RuntimeException();
+			}
 		} else {
 			throw new IllegalStateException();
 		}
 		em.merge(help);
+	}
+
+	public void denyHelp(String helpId) throws InvalidDataException {
+		Help help = em.find(Help.class, Long.parseLong(helpId));
+		if (help == null) {
+			throw new InvalidDataException();
+		}
+
+		if (help.getState() != State.REQUESTED) {
+			throw new IllegalStateException();
+		}
+		em.remove(help);
+		try {
+			new NotificationManager().sendNotification(help.getSender().getId().toString(),
+					"L'utente " + help.getAddressee().getName()
+							+ " ha rifiutato di aiutarti.");
+		} catch (UserDoesNotExixtException e) {
+			throw new RuntimeException();
+		}
 	}
 
 	public List<Message> retriveConversationByHelpRelationship(String helpId)
@@ -121,7 +159,8 @@ public class HelpManager implements HelpManagerRemote {
 		return help.getConversation();
 	}
 
-	public void registerFeedback(String helpId, String userId, int feedback) throws InvalidDataException, UserDoesNotExixtException {
+	public void registerFeedback(String helpId, String userId, int feedback)
+			throws InvalidDataException, UserDoesNotExixtException {
 		if (feedback < -5 || feedback > 5) {
 			throw new IllegalArgumentException();
 		}
@@ -145,7 +184,7 @@ public class HelpManager implements HelpManagerRemote {
 		} else {
 			throw new InvalidDataException();
 		}
-		
+
 		evaluatedUser.addFeedback(feedback);
 		em.merge(evaluatedUser);
 		em.merge(help);
