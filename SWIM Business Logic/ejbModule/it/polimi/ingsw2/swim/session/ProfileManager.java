@@ -38,8 +38,7 @@ public class ProfileManager implements ProfileManagerRemote {
 	}
 
 	@Override
-	public User getUserWithFriends(String userId)
-			throws NoSuchUserException {
+	public User getUserWithFriends(String userId) throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getUserWithFriends")
 					.setParameter("id", userId).getSingleResult();
@@ -52,8 +51,7 @@ public class ProfileManager implements ProfileManagerRemote {
 	}
 
 	@Override
-	public User getUserWithAbilities(String userId)
-			throws NoSuchUserException {
+	public User getUserWithAbilities(String userId) throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getUserWithAbilities")
 					.setParameter("id", userId).getSingleResult();
@@ -96,10 +94,21 @@ public class ProfileManager implements ProfileManagerRemote {
 	public void editProfile(String userId, String email, String picture,
 			String street, String streetNumber, String zip, String city,
 			String province, String telephone, String mobile, String fax,
-			String skype) throws NoSuchUserException,
-			InvalidDataException {
+			String skype) throws NoSuchUserException, InvalidDataException {
 		User user = retriveProfile(userId);
-		if (email != null && !email.isEmpty()) {
+		boolean correctMail = false;
+		if (email != null && !user.getEmail().equals(email.toLowerCase())) {
+			try {
+				em.createNativeQuery("getUserByEmail")
+						.setParameter("email", email).getSingleResult();
+			} catch (NoResultException e) {
+				correctMail = true;
+			}
+		} else {
+			correctMail = true;
+		}
+
+		if (correctMail && email != null && !email.isEmpty()) {
 			user.setEmail(email);
 		}
 
@@ -144,10 +153,10 @@ public class ProfileManager implements ProfileManagerRemote {
 				user.removeAbility(ability);
 			}
 		}
-		
+
 		em.merge(user);
 	}
-	
+
 	@Override
 	public void addAbilities(String userId, Set<String> abilities)
 			throws NoSuchUserException {
@@ -158,7 +167,7 @@ public class ProfileManager implements ProfileManagerRemote {
 				user.addAbility(ability);
 			}
 		}
-		
+
 		em.merge(user);
 	}
 
