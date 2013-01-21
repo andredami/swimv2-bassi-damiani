@@ -22,6 +22,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import it.polimi.ingsw2.swim.session.local.MailerLocal;
+
 /**
  * Session Bean implementation class Mailer
  */
