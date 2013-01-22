@@ -12,11 +12,12 @@
 <body>
 
 <p>Benvenuto nella sezione degli amministratori!</p>
-<form action="../Pages/LoginAdminServlet" method="post">
+<form action="../admin/LoginAdminServlet" method="post">
 	Username: <input name="Username" type="text"><br><br>Password:
 	<input name="Password" type="text"><br><br>
 	<input name="Submit1" type="submit" value="Login"></form>
 
+	<a href="../admin/LoginAdminServlet">Prova</a>
 </body>
 
 </html>

@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 
 /**
@@ -50,9 +51,9 @@ public class RegistrationServlet extends HttpServlet {
 			String confirmedEmail = request.getParameter("TextConfirmEmail");
 			String password = request.getParameter("TextPassword");
 			String confirmedPassword = request.getParameter("TextConfirmPassword");
-			//if (!(email.equals(confirmedEmail)) || !(password.equals(confirmedPassword))){
-				//forward(request,response,"/Pages/Registration.jsp");
-			//}
+			if (!(email.equals(confirmedEmail)) || !(password.equals(confirmedPassword))){
+				forward(request,response,"/Pages/Registration.jsp");
+			}
 			// assignment
 			String name = request.getParameter("TextName");
 			String surname = request.getParameter("TextSurname");
@@ -65,6 +66,8 @@ public class RegistrationServlet extends HttpServlet {
 			birthdate.setYear(year);
 			String sex = request.getParameter("Gender");
 			//r.createUser(password, email, name, surname, birthdate, gender);
+		    
+			forward(request,response,"/AbilitySelection.jsp");
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="../Popup/popup.js"></script>
+<jsp:useBean id="nomeBean" scope="page" class="it.polimi.ingsw2.swim.session.AbilitySearch"/>
 
 <title>Swim</title>
 
@@ -25,8 +26,7 @@
 			<div id="logo" style="width: 957px; height: 137px">
 		
 				<h1><a href="../index.jsp">SWIM</a></h1>
-
-
+	
 			</div>
 			</div>
 		<!-- end #header -->
@@ -75,7 +75,7 @@
 								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">qui 
 								l'errore quando scrive qualcosa di assurdo</label>
 							</form>
-							<form method="post" action="AbilitySelection.html" style="height: 148px">
+							<form method="post" action="AbilitySelection.jsp" style="height: 148px">
 								<input class="absolute" name="SubmitAbilityButton" style="left: 182px; top: 81px; height: 30px; width: 129px;" type="submit" value="Inserisci" />
 								<input class="absolute" name="TextAbility" style="border-style: outset; left: 25px; top: 49px; width: 205px;" type="text" />
 							</form>

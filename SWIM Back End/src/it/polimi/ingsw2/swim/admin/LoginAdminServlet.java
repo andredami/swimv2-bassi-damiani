@@ -34,7 +34,18 @@ public class LoginAdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        String name = request.getParameter("Username");
+        String pass = request.getParameter("Password");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("<title>"+name+"</title>");
+        out.println("</head>");
+        out.println("<body bgcolor=\"white\">");
+        out.println("<h1>"+pass+"</h1>");
+        out.println("</body>");
+        out.println("</html>");
 
 	}
 

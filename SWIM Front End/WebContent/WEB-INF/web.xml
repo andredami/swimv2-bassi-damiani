@@ -43,4 +43,14 @@
     <exception-type>java.lang.RuntimeException</exception-type>
     <location>/Error/InternalServerError.jsp</location>
   </error-page>
+  <servlet>
+    <description></description>
+    <display-name>SelectAbilityRegistrationServlet</display-name>
+    <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.SelectAbilityRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
+    <url-pattern>/SelectAbilityRegistrationServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
