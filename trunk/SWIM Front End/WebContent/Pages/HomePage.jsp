@@ -43,12 +43,12 @@
 			<div id="content" class="auto-style1" style="height: 623px; width: 830px">
 				<div class="welcome">
 					<div id="navigation" style="height: 22px">
-						<ul class="absolute" style="left: 658px; top: 192px; height: 18px">
+						<ul class="absolute" style="left: 734px; top: 192px; height: 18px">
 						    <li><a href="RequestForHelp.html">Cerca Aiuto</a></li>
-						    <li><a href="Profile.html">Profilo</a></li>	
-						    <li><a href="SearchFriends.html">Cerca Amici</a></li>
-							<li><a href="../index.jsp">Logout</a></li>						    
+						    <li><a href="Profile.html">Profilo</a></li>
+							<li><a href="Login.html">Logout</a></li>						    
 						</ul>
+
 					</div>
 
 					

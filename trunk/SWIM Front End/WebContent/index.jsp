@@ -46,7 +46,7 @@
 				</div>
 				<div class="welcome">
 					<div class="entry"> &nbsp;<div id="layer6" style="position: absolute; width: 249px; height: 106px; z-index: 1; left: 696px; top: 22px">
-							<form method="post" action="/RegistrationServlet" style="width: 246px; height: 102px; position: absolute; left: 1px; top: 3px;">
+							<form method="post" action="../swim/LoginServlet" style="width: 246px; height: 102px; position: absolute; left: 1px; top: 3px;">
 								<input name="emailText" type="text" class="auto-style2" style="position: absolute; left: 65px; top: 3px; width: 130px;" />
 								<label id="labelUser" class="headerText" style="position: absolute; left: -2px; top: 6px; height: 18px; right: 216px;">Email</label>
 								<br />
