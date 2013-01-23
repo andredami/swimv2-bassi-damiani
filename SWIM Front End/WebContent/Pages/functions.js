@@ -8,5 +8,5 @@ function goingOn(){
 }
 
 function setCheckToNone (){
-		$("#prova").removeAttr("checked");
+		$("#prosegui").removeAttr("checked");
 }
