@@ -53,4 +53,14 @@
     <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
     <url-pattern>/SelectAbilityRegistrationServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ValidationServlet</display-name>
+    <servlet-name>ValidationServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.ValidationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ValidationServlet</servlet-name>
+    <url-pattern>/ValidationServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

@@ -107,7 +107,7 @@ $(document).load(function () {
 								}
 								%>
 								</select>
-								<input class="absolute" id="prova" name="CheckboxConfirm" onclick="javascript:goingOn();" style="left: 15px; top: 288px; width: 30px; right: 415px" type="checkbox">
+								<input class="absolute" id="prosegui" name="CheckboxConfirm" onclick="javascript:goingOn();" style="left: 15px; top: 288px; width: 30px; right: 415px" type="checkbox">
 								</form>
 						</div>
 

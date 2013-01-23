@@ -5,7 +5,11 @@
 <head>
 <script type="text/javascript" src="../Popup/popup.js"></script>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-
+<%
+	HttpSession s = request.getSession();
+	if (s.getAttribute("emailText")== null)
+		response.sendRedirect("../Pages/index.jsp");
+%>
 <title>Swim</title>
 
 <meta name="keywords" content="" />

@@ -1,12 +1,10 @@
 package it.polimi.ingsw2.swim.pages;
 
-import it.polimi.ingsw2.swim.entities.User.Gender;
-import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
-import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
-import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
+import it.polimi.ingsw2.swim.entities.Ability;
+import it.polimi.ingsw2.swim.session.remote.AbilitySearchRemote;
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.naming.Context;
@@ -22,13 +20,15 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class RegistrationServlet
  */
-public class RegistrationServlet extends HttpServlet {
+public class SelectAbilityRegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
+	// these are the desired ability of the user at the moment of registration
+	private ArrayList<Ability> desired = new ArrayList<Ability>();
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RegistrationServlet() {
+    public SelectAbilityRegistrationServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,7 +36,6 @@ public class RegistrationServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@SuppressWarnings("deprecation")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
@@ -45,39 +44,25 @@ public class RegistrationServlet extends HttpServlet {
 			env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
 			env.put(Context.PROVIDER_URL,"localhost:1099");
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("RegistrationRemote/remote");
-			RegistrationRemote r = (RegistrationRemote) ref; 
+			Object ref = jndiContext.lookup("AbilitySearchRemote/remote");
+			AbilitySearchRemote a = (AbilitySearchRemote) ref; 
 			
-			
-			String email= request.getParameter("TextEmail");
-			String confirmedEmail = request.getParameter("TextConfirmEmail");
-			String password = request.getParameter("TextPassword");
-			String confirmedPassword = request.getParameter("TextConfirmPassword");
-			// verify password and email 
-			if (!(email.equals(confirmedEmail)) || !(password.equals(confirmedPassword))){
-				forward(request,response,"/Pages/Registration.jsp");
+			// if the ability name is not specified, return with an error message
+			if (request.getParameter("TextAbility") == null){
+				request.setAttribute("EmptyRequest", 1);
+				forward(request,response,"/Pages/AbilitySelection.jsp");
 			}
-			// assignment
-			String name = request.getParameter("TextName");
-			String surname = request.getParameter("TextSurname");
-			Date birthdate = new Date();
-			int day = Integer.parseInt(request.getParameter("Day"));
-			int month = Integer.parseInt(request.getParameter("Month"));
-			int year = Integer.parseInt(request.getParameter("Year"));
-			birthdate.setDate(day);
-			birthdate.setMonth(month);
-			birthdate.setYear(year);
-			Gender gender = Gender.valueOf(request.getParameter("Gender"));
-			try {
-				r.createUser(password, email, name, surname, birthdate, gender);
-			} catch (InvalidDataException e) {
-				// invio frase di errore
-				forward(request,response,"/Pages/Registration.jsp");
-			} catch (UserAlreadyExistsException e) {
-				// invio frase di errore
-				forward(request,response,"/Pages/Registration.jsp");
+			String abilityRequested = request.getParameter("TextAbility");
+			// if there is no ability with that name, return a notification
+			if (a.findAbility(abilityRequested).isEmpty()){
+				request.setAttribute("NotFoundAbility", 1);
+				forward(request,response,"/Pages/AbilitySelection.jsp");
 			}
-			request.setAttribute("Registration", 1);
+				
+			// set the attribute for the jsp page
+			request.setAttribute("AbilityList", a.findAbility(abilityRequested));
+			desired.addAll(a.findAbility(abilityRequested));
+			request.setAttribute("desired", desired);
 			forward(request,response,"/Pages/AbilitySelection.jsp");
 			
 		} catch (NamingException e) {
