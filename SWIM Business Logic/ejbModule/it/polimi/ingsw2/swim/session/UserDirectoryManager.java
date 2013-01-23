@@ -8,14 +8,15 @@ import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.LocationMissingException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.UserDirectoryManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 import it.polimi.ingsw2.swim.validation.NameValidator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.validator.ClassValidator;
@@ -26,11 +27,13 @@ import org.hibernate.validator.InvalidValue;
  * Session Bean implementation class UserDirectoryManager
  */
 @Stateless
+@Remote
 public class UserDirectoryManager implements UserDirectoryManagerRemote {
 
 	private static final int ENTRIES_PER_PAGE = 25;
 
-	private static EntityManager em = DAO.getInstance().getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 
 	private static final ClassValidator<Address> addressValidator = new ClassValidator<Address>(
 			Address.class);

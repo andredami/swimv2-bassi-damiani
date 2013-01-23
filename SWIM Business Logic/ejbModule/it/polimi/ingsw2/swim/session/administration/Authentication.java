@@ -2,21 +2,23 @@ package it.polimi.ingsw2.swim.session.administration;
 
 import it.polimi.ingsw2.swim.entities.Administrator;
 import it.polimi.ingsw2.swim.session.remote.AdministrationAuthenticationRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class Authentication
  */
 @Stateless(name = "AdministrationAuthentication")
+@Remote
 public class Authentication implements AdministrationAuthenticationRemote {
 
-	private static final EntityManager em = DAO.getInstance()
-			.getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 	
     /**
      * Default constructor. 

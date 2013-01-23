@@ -1,22 +1,25 @@
 package it.polimi.ingsw2.swim.session.administration;
 
-import java.util.List;
-
 import it.polimi.ingsw2.swim.entities.Abuse;
 import it.polimi.ingsw2.swim.exceptions.AlreadyHandledException;
 import it.polimi.ingsw2.swim.session.remote.AbuseManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
+import java.util.List;
+
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class AbuseManager
  */
 @Stateless
+@Remote
 public class AbuseManager implements AbuseManagerRemote {
 
-	private static final EntityManager em = DAO.getInstance().getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 	
     /**
      * Default constructor. 

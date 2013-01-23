@@ -8,16 +8,17 @@ import it.polimi.ingsw2.swim.entities.User.Gender;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.Remote;
 import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.hibernate.validator.ClassValidator;
@@ -28,6 +29,7 @@ import org.jboss.ejb3.annotation.CacheConfig;
  * Session Bean implementation class Registration
  */
 @Stateful
+@Remote
 @CacheConfig(idleTimeoutSeconds = 60, removalTimeoutSeconds = 6000)
 public class Registration implements RegistrationRemote {
 
@@ -40,7 +42,8 @@ public class Registration implements RegistrationRemote {
 	private static ClassValidator<User> userValidator = new ClassValidator<User>(
 			User.class);
 
-	private static EntityManager em = DAO.getInstance().getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 
 	private TempUser temp;
 	private User user;

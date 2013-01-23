@@ -1,24 +1,27 @@
 package it.polimi.ingsw2.swim.session.administration;
 
-import java.util.List;
-
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.NotificationManager;
 import it.polimi.ingsw2.swim.session.remote.UserManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
+import java.util.List;
+
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class UserManager
  */
 @Stateless
+@Remote
 public class UserManager implements UserManagerRemote {
 
-	private static final EntityManager em = DAO.getInstance().getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 	
     /**
      * Default constructor. 

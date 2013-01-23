@@ -1,9 +1,5 @@
 package it.polimi.ingsw2.swim.session;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import it.polimi.ingsw2.swim.entities.FriendshipRequest;
 import it.polimi.ingsw2.swim.entities.Help;
 import it.polimi.ingsw2.swim.entities.Message;
@@ -11,19 +7,27 @@ import it.polimi.ingsw2.swim.entities.Notification;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.NotificationManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class NotificationManager
  */
 @Stateless
+@Remote
 public class NotificationManager implements NotificationManagerRemote {
 
 	private static final int  MAX_NOTIFICATION = 25;
-	private static EntityManager em = DAO.getInstance().getEntityManager();
+
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 	
     /**
      * Default constructor. 

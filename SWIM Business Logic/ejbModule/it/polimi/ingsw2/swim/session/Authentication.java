@@ -4,24 +4,26 @@ import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.Mailer.MessageType;
 import it.polimi.ingsw2.swim.session.remote.AuthenticationRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class Authentication
  */
 @Stateless
+@Remote
 public class Authentication implements AuthenticationRemote {
 
-	private static final EntityManager em = DAO.getInstance()
-			.getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 
 	/**
 	 * Default constructor.

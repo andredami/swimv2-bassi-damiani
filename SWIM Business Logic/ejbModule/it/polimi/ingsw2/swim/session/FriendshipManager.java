@@ -5,18 +5,21 @@ import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.FriendshipManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class FriendshipManager
  */
 @Stateless
+@Remote
 public class FriendshipManager implements FriendshipManagerRemote {
 
-	private static EntityManager em = DAO.getInstance().getEntityManager();	
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;	
 	
     /**
      * Default constructor. 

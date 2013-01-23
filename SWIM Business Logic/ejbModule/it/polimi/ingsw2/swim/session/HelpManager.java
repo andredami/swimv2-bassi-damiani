@@ -9,22 +9,25 @@ import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.HelpManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.List;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class HelpManager
  */
 @Stateless
+@Remote
 public class HelpManager implements HelpManagerRemote {
 
-	private static EntityManager em = DAO.getInstance().getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 
 	/**
 	 * Default constructor.
