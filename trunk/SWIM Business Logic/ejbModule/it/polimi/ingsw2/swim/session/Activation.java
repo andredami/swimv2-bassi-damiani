@@ -6,21 +6,24 @@ import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.Mailer.MessageType;
 import it.polimi.ingsw2.swim.session.remote.ActivationRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class Activation
  */
 @Stateless
+@Remote
 public class Activation implements ActivationRemote {
 
-	private static EntityManager em = DAO.getInstance().getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 	
     /**
      * Default constructor. 

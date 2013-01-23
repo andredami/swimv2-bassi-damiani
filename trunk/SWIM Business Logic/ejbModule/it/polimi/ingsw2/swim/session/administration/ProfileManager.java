@@ -6,13 +6,14 @@ import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.Mailer;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
 import java.util.List;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 
 import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.InvalidValue;
@@ -21,10 +22,11 @@ import org.hibernate.validator.InvalidValue;
  * Session Bean implementation class ProfileManager
  */
 @Stateless(name = "AdministrationProfileManager")
+@Remote
 public class ProfileManager implements AdministrationProfileManagerRemote {
 
-	private static final EntityManager em = DAO.getInstance()
-			.getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 
 	private static final ClassValidator<Administrator> adminValidator = new ClassValidator<Administrator>(
 			Administrator.class);

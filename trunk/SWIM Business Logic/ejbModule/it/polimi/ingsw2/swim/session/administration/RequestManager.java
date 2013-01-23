@@ -1,9 +1,5 @@
 package it.polimi.ingsw2.swim.session.administration;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.Alias;
 import it.polimi.ingsw2.swim.entities.User;
@@ -15,20 +11,26 @@ import it.polimi.ingsw2.swim.exceptions.NoSuchRequestException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.NotificationManager;
 import it.polimi.ingsw2.swim.session.remote.RequestManagerRemote;
-import it.polimi.ingsw2.swim.util.DAO;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 
 /**
  * Session Bean implementation class RequestManager
  */
 @Stateless
+@Remote
 public class RequestManager implements RequestManagerRemote {
 
-	private static final EntityManager em = DAO.getInstance()
-			.getEntityManager();
+	@PersistenceContext(unitName = "persistentData")
+	private EntityManager em;
 
 	/**
 	 * Default constructor.
