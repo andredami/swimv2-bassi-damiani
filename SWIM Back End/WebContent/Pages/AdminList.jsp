@@ -8,11 +8,15 @@
 <title>Admin List</title>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
-<jsp:useBean id="listAdmin" scope="session" class="it.polimi.ingsw2.swim.session.administration.ProfileManager" />
 
 <%
-	if (session.getAttribute("Name")== null)
-		response.sendRedirect(response.encodeRedirectURL("../index.jsp"));
+//check if exists a valid session
+	String admin = (String)session.getAttribute("Username");
+		if (admin == null){
+			String url = response.encodeURL("/index.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
 %>
 
 </head>
@@ -21,25 +25,31 @@
 <h3>Lista degli amministratori</h3>
 
 <%
-	List<Administrator> a = listAdmin.retriveList();
-	Iterator<Administrator> i = a.iterator();
-	if (i.hasNext()){
-	out.println("<ul>");
-	while (i.hasNext()){
-		Administrator el = i.next();
-		out.println("<li>");
-		out.println("Username: "+ el.getUsername()+"<br>");
-		out.println("Email:" + el.getEmail()+"<br>");
-		out.println("<a href=" + "ContactUser.jsp" + ">Contatta</a>");
-		out.println("</li>");				
+	try{
+		List<Administrator> a = new ArrayList<Administrator>();
+		a = (List<Administrator>)request.getSession().getAttribute("list");
+		Iterator<Administrator> i = a.iterator();
+		if (i.hasNext()){
+		out.println("<ul>");
+		while (i.hasNext()){
+			Administrator el = i.next();
+			out.println("<li>");
+			out.println("Username: "+ el.getUsername()+"<br>");
+			out.println("Email:" + el.getEmail()+"<br>");
+			out.println("<a href=" + "ContactUser.jsp" + ">Contatta</a>");
+			out.println("</li>");				
+		}
+		out.println("</ul>");
+		}
+	}catch(NullPointerException e){
+		out.println("Non ci sono amministratori.");
 	}
-	out.println("</ul>");
-	}
+	
 %>
 
-<a href="AddNewAdmin.jsp">Aggiungi nuovo amministratore</a><br>
-<a href="ChangePassword.jsp">Cambia la mia password</a><br>
-<a href="ContactUser.jsp">Contatta utente</a><br>
+<a href="../Pages/AddNewAdmin.jsp">Aggiungi nuovo amministratore</a><br>
+<a href="../Pages/ChangePassword.jsp?Username=Username">Cambia la mia password</a><br>
+<a href="../Pages/ContactUser.jsp">Contatta utente</a><br>
 
 </body>
 

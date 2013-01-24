@@ -63,4 +63,24 @@
     <servlet-name>ValidationServlet</servlet-name>
     <url-pattern>/ValidationServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>SearchAbilityServlet</display-name>
+    <servlet-name>SearchAbilityServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.SearchAbilityServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SearchAbilityServlet</servlet-name>
+    <url-pattern>/SearchAbilityServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>InsertAbilityServlet</display-name>
+    <servlet-name>InsertAbilityServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.InsertAbilityServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>InsertAbilityServlet</servlet-name>
+    <url-pattern>/InsertAbilityServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

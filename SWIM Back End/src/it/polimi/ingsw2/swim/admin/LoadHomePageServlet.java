@@ -1,26 +1,27 @@
 package it.polimi.ingsw2.swim.admin;
 
-import it.polimi.ingsw2.swim.session.remote.AdministrationAuthenticationRemote;
+import it.polimi.ingsw2.swim.entities.Ability;
+import it.polimi.ingsw2.swim.session.remote.RequestManagerRemote;
 import java.io.IOException;
+import java.util.List;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 /**
- * Servlet implementation class LoginAdminServlet
+ * Servlet implementation class LoadPageServlet
  */
-public class LoginAdminServlet extends HttpServlet {
+public class LoadHomePageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoginAdminServlet() {
+    public LoadHomePageServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,30 +37,17 @@ public class LoginAdminServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("AdministrationAuthentication/remote");
-			AdministrationAuthenticationRemote a = (AdministrationAuthenticationRemote) ref;
-		
-			// acquire the login parameters
-			String username = request.getParameter("Username");
-			String password = request.getParameter("Password");
+			Object ref = jndiContext.lookup("RequestManager/remote");
+			RequestManagerRemote a = (RequestManagerRemote) ref;
 			
-			// if the login is not corrected, redirect to the home page
-			if (!a.authenticate(username, password)){
-				request.getSession().setAttribute("LoginError", 1);
-				response.sendRedirect(request.getContextPath() + "/index.jsp");
-				return;
-			}
-			
-			// login session created, forward to the servlet that creates the home page
-			HttpSession s = request.getSession();
-			s.setAttribute("Username", username);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/LoadHomePageServlet");
-			dispatcher.forward(request, response);
+			List<Ability> list = a.retriveRequestsList();
+			request.getSession().setAttribute("list", list);
+			String url = response.encodeURL("/Pages/home.jsp");
+			response.sendRedirect(request.getContextPath() + url);
 			return;
 			
 		} catch (NamingException e) {
@@ -68,6 +56,7 @@ public class LoginAdminServlet extends HttpServlet {
 		}
 		
 
-	}	
-	
-}
+	}
+		
+	}
+

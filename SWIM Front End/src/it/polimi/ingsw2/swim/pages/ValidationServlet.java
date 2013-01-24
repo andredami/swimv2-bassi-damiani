@@ -48,7 +48,7 @@ public class ValidationServlet extends HttpServlet {
 			env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
 			env.put(Context.PROVIDER_URL,"localhost:1099");
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("AbilitySearchRemote/remote");
+			Object ref = jndiContext.lookup("AbilitySearch/remote");
 			RegistrationRemote a = (RegistrationRemote) ref; 
 			
 			// obtain all the abilities chosen by the user
