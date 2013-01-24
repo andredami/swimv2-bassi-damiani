@@ -7,12 +7,9 @@ import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Hashtable;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,11 +38,8 @@ public class RegistrationServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		try {
 			// Starting the context
-			Hashtable<String,String> env = new Hashtable<String,String>();
-			env.put(Context.INITIAL_CONTEXT_FACTORY, "org.jnp.interfaces.NamingContextFactory");
-			env.put(Context.PROVIDER_URL,"localhost:1099");
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("RegistrationRemote/remote");
+			Object ref = jndiContext.lookup("Registration/remote");
 			RegistrationRemote r = (RegistrationRemote) ref; 
 			
 			
@@ -55,12 +49,15 @@ public class RegistrationServlet extends HttpServlet {
 			String confirmedPassword = request.getParameter("TextConfirmPassword");
 			// verify password and email 
 			if (!(email.equals(confirmedEmail)) || !(password.equals(confirmedPassword))){
-				forward(request,response,"/Pages/Registration.jsp");
+				request.getSession().setAttribute("Wrong", 1);
+				response.sendRedirect(request.getContextPath() + "/Pages/Registration.jsp");
+				return;
 			}
 			// assignment
 			String name = request.getParameter("TextName");
 			String surname = request.getParameter("TextSurname");
 			Date birthdate = new Date();
+			//if ((request.getParameter("Day").equals("")) || (request.getParameter("Month").equals("")) || (request.getParameter("Year").equals("")))
 			int day = Integer.parseInt(request.getParameter("Day"));
 			int month = Integer.parseInt(request.getParameter("Month"));
 			int year = Integer.parseInt(request.getParameter("Year"));
@@ -72,13 +69,19 @@ public class RegistrationServlet extends HttpServlet {
 				r.createUser(password, email, name, surname, birthdate, gender);
 			} catch (InvalidDataException e) {
 				// invio frase di errore
-				forward(request,response,"/Pages/Registration.jsp");
+				request.getSession().setAttribute("DataException", 1);
+				response.sendRedirect(request.getContextPath() + "/Pages/Registration.jsp");
+				return;
 			} catch (UserAlreadyExistsException e) {
 				// invio frase di errore
-				forward(request,response,"/Pages/Registration.jsp");
+				request.getSession().setAttribute("AlreadyExists", 1);
+				response.sendRedirect(request.getContextPath() + "/Pages/Registration.jsp");
+				return;
 			}
-			request.setAttribute("Registration", 1);
-			forward(request,response,"/Pages/AbilitySelection.jsp");
+			request.getSession().setAttribute("Registration", 1);
+			//request.getSession().setAttribute("utente", utente);
+			response.sendRedirect(request.getContextPath() + "/Pages/AbilityRequest.jsp");
+			return;
 			
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
@@ -94,13 +97,5 @@ public class RegistrationServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
-	
-	private void forward(HttpServletRequest request, HttpServletResponse response, String page) 
-		       throws ServletException, IOException
-		    {
-		        RequestDispatcher rd = request.getRequestDispatcher(page);
-		        rd.forward(request,response);
-		  }
-	
 	
 }

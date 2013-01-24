@@ -22,7 +22,7 @@
 <p>Aggiunta/Modifica abilità</p>
 <form action="" method="post">
 	Nome: <input name="Text1" type="text"><br><br>Descrizione:<br>&nbsp;<textarea name="TextArea1" style="width: 308px; height: 134px"></textarea><br>
-	<br>Alias:<input name="Text2" type="text"><input name="Button1" type="button" value="button"><br>
+	<br>Alias:<input name="Text2" type="text"><input name="Button1" type="button" value="Assegna"><br>
 	<br>Lista di alias:
 	<br><br>
 	<input name="SubmitAbility" type="submit" value="Inserisci"><br><br><br><br>

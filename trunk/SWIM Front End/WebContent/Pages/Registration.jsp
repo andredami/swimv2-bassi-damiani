@@ -44,10 +44,27 @@ $(document).load(function () {
 				<div class="welcome">
 					<h2 class="title">Registrazione alla piattaforma</h2>
 					
-					<div class="entry"><p>Compila i seguenti campi per 
-						registrarti alla piattaforma. <br />
-						Se invece sei già registrato, clicca <a href="../index.jsp">qui</a>, 
-						altrimenti torna alla <a href="../index.jsp">home</a>.</p>
+					<div class="entry"><p>
+						<%
+						try {
+							if (request.getSession().getAttribute("DataException").equals(1)){
+								request.getSession().setAttribute("DataException", null);
+								out.println("Attenzione! I dati non sono stati inseriti correttamente. Ritenta ancora.");	
+							}
+							if (request.getSession().getAttribute("AlreadyExists").equals(1)){
+								request.getSession().setAttribute("AlreadyExists", null);
+								out.println("Attenzione! I dati inseriti corrispondono ad un utente già registrato! Riprova con altri valori.");	
+							}
+							if (request.getSession().getAttribute("Wrong").equals(1)){
+								request.getSession().setAttribute("Wrong", null);
+								out.println("Attenzione! La combinazione di email e password risulta errata. Ritenta ancora.");	
+							}
+						}
+						catch (NullPointerException e){
+							out.println("Compila i seguenti campi per registrarti alla piattaforma. <br />Se invece sei già registrato, clicca <a href='../index.jsp'>qui</a>, altrimenti torna alla <a href='../index.jsp'>home</a>.");
+						}
+						%>
+						</p>
 					</div>
 				</div>
 				<div id="layer6" style="position: absolute; width: 476px; height: 356px; z-index: 1; left: 75px; top: 330px" class="headerTextForm">

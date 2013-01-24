@@ -43,8 +43,10 @@
 						
 						<%
 							try {
-								if ((Integer)request.getAttribute("Error") == 1)
+								if (request.getSession().getAttribute("ErrorLogin").equals(1)){
+									request.getSession().setAttribute("ErrorLogin", null);
 									out.println("Attenzione! La combinazione di email è password è errata. Ritenta ancora.");
+								}
 							}
 							catch (NullPointerException e){
 								out.println("SWIMv2 è l'esclusiva piattaforma online che vi permetterà di offrire le vostre abilità lavorative e usufruire delle abilità delle altre persone registrate! Incomincia anche tu registrandoti!");

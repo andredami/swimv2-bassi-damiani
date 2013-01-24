@@ -41,7 +41,7 @@
 					<p>
 						<%
 							try{
-							if ((Integer)request.getAttribute("Registration") == 1){
+							if (request.getAttribute("Registration").equals(1)){
 								out.println ("La prima fase della registrazione è andata a buon fine!");
 								out.println ("Ora serve che tu inserisca almeno un abilità, oppure <a href='Registration.jsp'>torna indietro</a>");
 							}
@@ -67,11 +67,11 @@
 								<%
 								// verifying if the request is empty or if there are no results
 								
-								if ((Integer)request.getAttribute("EmptyRequest")== 1){
+								if (request.getAttribute("EmptyRequest").equals(1)){
 									out.println ("Devi inserire un'abilità da ricercare.");
 								}
 								else {
-										if ((Integer)request.getAttribute("NotFoundAbility") == 1){
+										if (request.getAttribute("NotFoundAbility").equals(1)){
 											out.println ("L'abilità richiesta non esiste. Se lo desideri puoi farne richiesta.");
 											}
 								}
@@ -79,12 +79,7 @@
 								</label>
 								<div class="notification" style="border-style: groove; left: 431px; top: -3px; height: 250px; width: 359px">
 									<div class="notification-inner" style="width: 345px; height: 241px; margin-left: 5px; margin-top: 5px">
-										Abilità che si intende inserire nel profilo 
-										<%
-											// message displayed if no ability has been inserted
-											if ((Integer)request.getAttribute("AbilityListEmpty")== 1)
-												out.println("(VA AGGIUNTA ALMENO UNA ABILITA'!!!)");
-										%>
+										Abilità trovate (clicca sul nome per aggiungere alle scelte)
 										<br />
 										&nbsp;
 										<ul>
@@ -93,8 +88,7 @@
 											Iterator<Ability> i = a.iterator();
 											while (i.hasNext()){
 												Ability el = i.next();
-												out.println("<li>"+el.getName()+"<a href='AbilitySelection.html'>Rimuovi</a> <a href='AbilitySelection.html'>Sottoscrivi</a></li>");
-												out.println("<input type='hidden' name='ability' value='"+el.getName()+"'>");
+												out.println("<li><a href=/InsertAbilityServlet?ChosenAbility="+el.getName()+" <a href='AbilitySelection.html'>Sottoscrivi</a></li>");
 												out.println("<li id='description'>");
 												out.println("<textarea readonly='readonly' name='TextArea' rows='2' style='width: 285px'>"+el.getDescription()+"</textarea>");
 												out.println("</li>");
@@ -103,6 +97,29 @@
 										</ul>
 									</div>
 								</div>
+							<div class="notification" style="border-style: groove; left: -1px; top: 161px; height: 250px; width: 327px">
+								<div class="notification-inner" style="width: 300px; height: 241px; margin-left: 5px; margin-top: 5px">
+									Abilità Scelte<br />
+										&nbsp;
+										<ul>
+										<li>Nome Abilità 1 <a href="AbilitySelection.html">Rimuovi</a> <a href="AbilitySelection.html">Sottoscrivi</a></li>
+										<li id="description">
+											<textarea readonly="readonly" name="TextArea1" rows="2" style="width: 244px">Descrizione</textarea>
+										</li>
+										<li>Nome Abilità 2 <a href="AbilitySelection.html">Rimuovi</a> <a href="AbilitySelection.html">Sottoscrivi</a></li>
+										<li id="description">
+											<textarea readonly="readonly" name="TextArea2" rows="2" style="width: 241px">Descrizione</textarea>
+										</li>
+										<li>Nome Abilità 3 <a href="AbilitySelection.html">Rimuovi</a> <a href="AbilitySelection.html">Sottoscrivi</a></li>
+										<li id="description">
+											<textarea readonly="readonly" name="TextArea3" rows="2" style="width: 239px">Descrizione</textarea>
+										</li>							
+										</ul>
+								</div>
+							</div>
+							
+							
+							
 							</form>
 							<form method="post" action="../SelectAbilityRegistrationServlet" style="height: 148px">
 								<input class="absolute" name="SubmitAbilityButton" style="left: 182px; top: 81px; height: 30px; width: 129px;" type="submit" value="Inserisci" />
@@ -112,7 +129,7 @@
 								</div>
 								
 
-				<div class="absolute" style="width: 86px; left: 82px; top: 482px">
+				<div class="absolute" style="width: 86px; left: 92px; top: 753px">
 								<a href="javascript:open_win('../Popup/AbusePopup.html', 'AbusePopup');">Segnala Abuso</a>
 				</div>
 				</div>

@@ -9,16 +9,14 @@
 <script type="text/javascript" src="functionsAdmin.js"></script>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
-<jsp:useBean id="aut" scope="session" class="it.polimi.ingsw2.swim.session.administration.Authentication" />
-<jsp:useBean id="listAbility" scope="session" class="it.polimi.ingsw2.swim.session.administration.RequestManager" />
 <% 
-String user = request.getParameter("Username");
-String pass = request.getParameter("Password");
-	if (!(aut.authenticate(user, pass))){
-		response.sendRedirect(response.encodeRedirectURL("../index.jsp"));
-	}	
-	session.setAttribute("Name", user);
-	
+	// check if exists a valid session
+	String admin = (String)session.getAttribute("Username");
+		if (admin == null){
+			String url = response.encodeURL("/index.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
 %>
 
 <title>Home admin</title>
@@ -26,33 +24,48 @@ String pass = request.getParameter("Password");
 
 <body>
 
-<h3>Benvenuto <% session.getAttribute("Name"); %>! (<a href="../index.jsp">Logout</a>)</h3>
-<a href="AdminList.jsp">Lista degli admin</a><br>
-<a href="UserList.jsp">Lista degli Utenti</a><br>
-<a href="AbuseList.jsp">Gestisci abusi</a>
+<h3>Benvenuto <% out.print(session.getAttribute("Username")); %>! (<a href="<% %>">Logout</a>)</h3>
+<% 
+	// all results of well closed operations
+	try {
+	if (request.getSession().getAttribute("Inserted").equals(1)){
+		request.getSession().setAttribute("Inserted", null);
+		out.println("Errore. Password non corrispondenti");
+	}
+	} catch (NullPointerException e){
+		
+	}
+%>
+<a href="<%= response.encodeURL("../LoadAdminListServlet")%>">Lista degli admin</a><br>
+<a href="<%= response.encodeURL("../UserListServlet")%>">Lista degli Utenti</a><br>
+<a href="<%= response.encodeURL("../AbuseListServlet")%>">Gestisci abusi</a>
 <br>
 <br>
 <br>
-<a href="AbilityList.jsp">Lista delle abilità</a><br>
+<a href="<%= response.encodeURL("../AbilityListServlet")%>">Lista delle abilità</a><br>
 <a href="AbilityEditor.jsp">Aggiungi nuova abilità</a><br>
 <a href="">Aggiungi abilità come alias</a><br><br>
 <div>
 	Lista di abilità richieste:
 	<% 
-	List<Ability> a = listAbility.retriveRequestsList();
-	Iterator<Ability> i = a.iterator();
-	if (i.hasNext()){
-		out.println("<ul>");
-		while (i.hasNext()){
-			Ability el = i.next();
-			out.println("<li> Nome abilità: "+ el.getName()+"<br>");
-			out.println("Descrizione:" + el.getDescription()+"<br>");
-			out.println("Numero di sottoscrizioni:" + el.getSubscribers().size()+"<br>");
-			out.println("<a href=" + "" + ">Aggiungi</a> <a href=" +""+">Cancella</a>");
-			out.println("</li>");				
+
+		List<Ability> a = new ArrayList<Ability>();
+		a = (List<Ability>)request.getSession().getAttribute("list");
+		if (a.isEmpty())
+			out.println("Non ci sono richieste di abilità per ora.");
+		ListIterator<Ability> i = a.listIterator();
+		if (i.hasNext()){
+			out.println("<ul>");
+			while (i.hasNext()){
+				Ability el = i.next();
+				out.println("<li> Nome abilità: "+ el.getName()+"<br>");
+				out.println("Descrizione:" + el.getDescription()+"<br>");
+				out.println("Numero di sottoscrizioni:" + el.getSubscribers().size()+"<br>");
+				out.println("<a href=" + "" + ">Aggiungi</a> <a href=" +""+">Cancella</a>");
+				out.println("</li>");				
+			}
+			out.println("</ul>");
 		}
-		out.println("</ul>");
-	}
 	%>
 </div>
 

@@ -8,11 +8,15 @@
 <title>Lista Abusi</title>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
-<jsp:useBean id="listAbuse" scope="session" class="it.polimi.ingsw2.swim.session.administration.AbuseManager" />
 
-<%
-	if (session.getAttribute("Name")== null)
-		response.sendRedirect(response.encodeRedirectURL("../index.jsp"));
+<% 
+	// check if exists a valid session
+	String admin = (String)session.getAttribute("Username");
+		if (admin == null){
+			String url = response.encodeURL("/index.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
 %>
 </head>
 
@@ -21,7 +25,10 @@
 
 <%
 
-	List<Abuse> a = listAbuse.getAbuseList();
+	List<Abuse> a = new ArrayList<Abuse>();
+	a = (List<Abuse>)request.getSession().getAttribute("list");
+	if (a.isEmpty())
+		out.println("Al momento non ci sono richieste di abuso.");
 	Iterator<Abuse> i = a.iterator();
 	if (i.hasNext()){
 	out.println("<ul>");
@@ -32,9 +39,9 @@
 		%>
 		<form method="post">
 		<textarea name="TextArea1" style="width: 286px; height: 107px"></textarea><%el.getDescriprion();%><br>
-		<input name="ManagedButton" type="button" value="Letto"></form>
+		<input name="ManagedButton" type="button" value="Gestito">
+		<input name="Remove" type="submit" value="Ignora"></form>
 		<%
-		out.println("<a href=" + "ContactUser.jsp" + ">Contatta</a>");
 		out.println("</li>");				
 	}
 	out.println("</ul>");

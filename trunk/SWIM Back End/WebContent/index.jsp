@@ -6,6 +6,16 @@
 <head>
 <meta content="it" http-equiv="Content-Language">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+<%
+	String admin = (String)session.getAttribute("Username");
+		if (admin != null){
+			String url = response.encodeURL("/Pages/home.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
+%>
+
 <title>Admin pages</title>
 </head>
 
@@ -25,12 +35,10 @@
 	}
 %>
 </p>
-<form action="../admin/LoginAdminServlet" method="post">
+<form action="<%= response.encodeURL("../admin/LoginAdminServlet")%>" method="post">
 	Username: <input name="Username" type="text"><br><br>Password:
-	<input name="Password" type="text"><br><br>
+	<input name="Password" type="password"><br><br>
 	<input name="Submit1" type="submit" value="Login"></form>
-
-	<a href="../admin/LoginAdminServlet">Prova</a>
 </body>
 
 </html>
