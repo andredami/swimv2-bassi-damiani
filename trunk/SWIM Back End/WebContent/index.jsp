@@ -11,7 +11,20 @@
 
 <body>
 
-<p>Benvenuto nella sezione degli amministratori!</p>
+<p>
+<%
+	try {
+		if (request.getSession().getAttribute("LoginError").equals(1)){
+			request.getSession().setAttribute("LoginError", null);
+			out.println("Attenzione! La combinazione di email è password è errata. Ritenta ancora.");
+			
+		}
+	}
+	catch (NullPointerException e){
+		out.println("Benvenuto nella sezione degli amministratori!");
+	}
+%>
+</p>
 <form action="../admin/LoginAdminServlet" method="post">
 	Username: <input name="Username" type="text"><br><br>Password:
 	<input name="Password" type="text"><br><br>
