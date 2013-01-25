@@ -1,6 +1,7 @@
 package it.polimi.ingsw2.swim.session.administration;
 
 import it.polimi.ingsw2.swim.entities.Administrator;
+import it.polimi.ingsw2.swim.exceptions.DuplicateAdministratorException;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
@@ -56,7 +57,7 @@ public class ProfileManager implements AdministrationProfileManagerRemote {
 	
 	@Override
 	public void add(String username, String email, String password)
-			throws InvalidDataException {
+			throws InvalidDataException, DuplicateAdministratorException {
 		try {
 			em.createNamedQuery("getAdministratorByUsername")
 					.setParameter("username", username).getSingleResult();
@@ -68,9 +69,12 @@ public class ProfileManager implements AdministrationProfileManagerRemote {
 			if (validatorMessages.length > 0) {
 				throw new InvalidDataException(validatorMessages);
 			}
+			
+			em.persist(admin);
+			return;
 		}
 
-		throw new InvalidDataException();
+		throw new DuplicateAdministratorException();
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package it.polimi.ingsw2.swim.session.remote;
 
 import it.polimi.ingsw2.swim.entities.Administrator;
+import it.polimi.ingsw2.swim.exceptions.DuplicateAdministratorException;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
@@ -17,7 +18,7 @@ public interface AdministrationProfileManagerRemote {
 	Administrator retrive(String adminId) throws NoSuchUserException;
 
 	void add(String username, String email, String password)
-			throws InvalidDataException;
+			throws InvalidDataException, DuplicateAdministratorException;
 
 	void delete(String adminId) throws NoSuchUserException;
 
