@@ -38,9 +38,9 @@ public class UserListServlet extends HttpServlet {
 			Object ref = jndiContext.lookup("UserManager/remote");
 			UserManagerRemote a = (UserManagerRemote) ref;
 			
-			List<User> list = a.retriveUserList();
-			System.err.println("Lista tot: " + list.size() + "elementi");
-			request.getSession().setAttribute("list", list);
+			List<User> userList = a.retriveUserList();
+			System.err.println("Lista tot: " + userList.size() + "elementi");
+			request.getSession().setAttribute("userList", userList);
 			String url = response.encodeURL("/Pages/UserList.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;

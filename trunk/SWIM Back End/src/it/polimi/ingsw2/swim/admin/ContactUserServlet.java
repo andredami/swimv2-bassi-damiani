@@ -49,11 +49,20 @@ public class ContactUserServlet extends HttpServlet {
 			UserManagerRemote b = (UserManagerRemote)ref2;
 			
 			// retrieve data from the form
-			String sender = (String) request.getSession().getAttribute("Username");
-			String addressee = request.getParameter("Addressee");
-			String message = request.getParameter("Message");
+			String senderId = (String) request.getSession().getAttribute("Id");
+			String addresseeId = request.getParameter("Addressee");
+			String text = request.getParameter("Message");
+			String userId = request.getParameter ("User");
 			
-			b.sendMessage(userId, text);
+			
+			try {
+				b.sendMessage(userId, text);
+			} catch (NoSuchUserException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
 			try {
 				a.sendMessage(senderId, addresseeId, text);
 			} catch (NoSuchUserException e) {

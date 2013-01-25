@@ -26,7 +26,7 @@
 <%
 try{
 	List<User> a = new ArrayList<User>();
-	a = (List<User>)request.getSession().getAttribute("list");
+	a = (List<User>)request.getSession().getAttribute("userList");
 	if (a.isEmpty())
 		out.println("Non sono presenti utenti registrati nel database.");
 	Iterator<User> i = a.iterator();

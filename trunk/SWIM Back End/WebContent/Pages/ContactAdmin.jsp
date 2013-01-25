@@ -31,15 +31,15 @@
 	}
 
 %></h3>
-<form action="<%= response.encodeURL("../ContactUserServlet")%>" method="post">
-	<% String count = (String)request.getParameter("Count"); %>
+<% String count = (String)request.getParameter("Count"); 
+	request.getSession().setAttribute("id", request.getSession().getAttribute("adminId"+count));
+	%>
+<form action="<%= response.encodeURL("../ContactAdminServlet?id="+request.getSession().getAttribute("id"))%>" method="post">
+
 	Destinatario: <input name="Addressee" type="text" disabled="disabled" value="
 	<% // select a differente addressee, depending on who requests this page
-	if (request.getSession().getAttribute("to").equals("administrator")) 
 		out.println(request.getSession().getAttribute("admin"+count));
-	else
-		out.println(request.getSession().getAttribute("user"));
-		%>">
+	%>">
 		<br><br>Messaggio:<br>
 	<textarea name="Message" style="width: 278px; height: 117px"></textarea><br>
 	<br><input name="Submit" type="submit" value="Invia">

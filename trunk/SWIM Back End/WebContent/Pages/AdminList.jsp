@@ -35,13 +35,14 @@
 		while (i.hasNext()){
 			Administrator el = i.next();
 			String addr = el.getUsername();
+			Long adminId = el.getId();
 			request.getSession().setAttribute("admin"+count, addr);
-			request.getSession().setAttribute("to", "administrator");
+			request.getSession().setAttribute("adminId"+count, adminId.toString());
 			out.println("<li>");
 			out.println("Username: "+ el.getUsername()+"<br>");
 			out.println("Email: " + el.getEmail()+"<br>");
 %>
-			<a href="<%=response.encodeURL("../Pages/ContactUser.jsp?Count="+count)%>">Contatta</a>
+			<a href="<%=response.encodeURL("../Pages/ContactAdmin.jsp?Count="+count)%>">Contatta</a>
 <% 
 			out.println("</li>");	
 			count++;

@@ -185,4 +185,24 @@
     <servlet-name>AbilityCreatorServlet</servlet-name>
     <url-pattern>/AbilityCreatorServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ContactAdminServlet</display-name>
+    <servlet-name>ContactAdminServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.ContactAdminServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ContactAdminServlet</servlet-name>
+    <url-pattern>/ContactAdminServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CancelAbilityServlet</display-name>
+    <servlet-name>CancelAbilityServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.CancelAbilityServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CancelAbilityServlet</servlet-name>
+    <url-pattern>/CancelAbilityServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

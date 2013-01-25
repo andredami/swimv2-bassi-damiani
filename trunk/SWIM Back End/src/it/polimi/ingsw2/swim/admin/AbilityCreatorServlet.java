@@ -1,7 +1,10 @@
 package it.polimi.ingsw2.swim.admin;
 
 import it.polimi.ingsw2.swim.entities.Ability;
+import it.polimi.ingsw2.swim.exceptions.DuplicateAbilityException;
+import it.polimi.ingsw2.swim.exceptions.DuplicateAliasException;
 import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
+import it.polimi.ingsw2.swim.session.remote.RequestManagerRemote;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +34,7 @@ public class AbilityCreatorServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 	}
 
 	/**
@@ -41,13 +44,23 @@ public class AbilityCreatorServlet extends HttpServlet {
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("AbilityManager/remote");
-			AbilityManagerRemote a = (AbilityManagerRemote) ref;
+			Object ref = jndiContext.lookup("RequestManager/remote");
+			RequestManagerRemote a = (RequestManagerRemote) ref;
 			
-			List<Ability> list = a.retriveAbilityList();
-			System.err.println("Lista tot: " + list.size() + "elementi");
-			request.getSession().setAttribute("list", list);
-			String url = response.encodeURL("/Pages/AbilityList.jsp");
+			String name = request.getParameter("Name");
+			String description = request.getParameter("Description");
+			try {
+				a.addNewAbility(name, description, null, null);
+			} catch (DuplicateAliasException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DuplicateAbilityException e) {
+				request.getSession().setAttribute("Duplicate", 1);
+				String url = response.encodeURL("/Pages/AbilityCreation.jsp");
+				response.sendRedirect(request.getContextPath() + url);
+				return;
+			}
+			String url = response.encodeURL("/Pages/AbilityCreation.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			
