@@ -1,11 +1,11 @@
 package it.polimi.ingsw2.swim.session.remote;
 
-import java.util.List;
-import java.util.Set;
-
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.exceptions.DuplicateAbilityException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchAbilityException;
+
+import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Remote;
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw2.swim.session;
 
+import it.polimi.ingsw2.swim.session.local.MailerLocal;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,8 +23,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
-import it.polimi.ingsw2.swim.session.local.MailerLocal;
 
 /**
  * Session Bean implementation class Mailer

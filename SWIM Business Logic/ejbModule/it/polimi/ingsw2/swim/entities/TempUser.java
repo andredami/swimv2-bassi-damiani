@@ -5,7 +5,7 @@ import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.util.Digester;
 import it.polimi.ingsw2.swim.validation.OfAge;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -37,7 +37,7 @@ public class TempUser {
 	@Temporal(TemporalType.DATE)
 	@OfAge
 	@NotNull
-	private Date birthdate;
+	private Calendar birthdate;
 
 	@Enumerated
 	@NotNull
@@ -47,7 +47,7 @@ public class TempUser {
 		super();
 	}
 	
-	public TempUser(String password, String email, FullName name, Date birthdate,
+	public TempUser(String password, String email, FullName name, Calendar birthdate,
 			Gender gender) {
 		super();
 		this.setPassword(password);
@@ -61,7 +61,10 @@ public class TempUser {
 		this.password = new String(tempUser.password);
 		this.email = new String(tempUser.email.toLowerCase());
 		this.name = new FullName(new String(tempUser.name.getFirstname()), new String(tempUser.name.getSurname()));
-		this.birthdate = new Date(tempUser.birthdate.getTime());
+		Calendar birthdate = Calendar.getInstance();
+		birthdate.clear();
+		birthdate.set(tempUser.birthdate.get(Calendar.YEAR), tempUser.birthdate.get(Calendar.MONTH), tempUser.birthdate.get(Calendar.DAY_OF_MONTH));
+		this.birthdate = birthdate;
 		this.gender = tempUser.gender;
 	}
 
@@ -116,7 +119,7 @@ public class TempUser {
 	/**
 	 * @return the birthdate
 	 */
-	public Date getBirthdate() {
+	public Calendar getBirthdate() {
 		return birthdate;
 	}
 
