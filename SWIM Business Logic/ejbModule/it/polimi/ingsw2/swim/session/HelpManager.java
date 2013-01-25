@@ -36,6 +36,7 @@ public class HelpManager implements HelpManagerRemote {
 		super();
 	}
 
+	@Override
 	public void registerHelpRequest(String addresseeId, String senderId,
 			String abilityName, String text) throws InvalidDataException,
 			NoSuchUserException {
@@ -60,7 +61,8 @@ public class HelpManager implements HelpManagerRemote {
 				addressee.getId().toString(), "L'utente " + sender.getName()
 						+ " ti ha chiesto aiuto.");
 	}
-
+	
+	@Override
 	public void forwardReplyMessage(String senderId, String helpId, String text)
 			throws InvalidDataException, NoSuchUserException {
 		User sender = em.find(User.class, Long.parseLong(senderId));
@@ -103,6 +105,7 @@ public class HelpManager implements HelpManagerRemote {
 		em.merge(help);
 	}
 
+	@Override
 	public void editHelpRelationStatus(String helpId, State status)
 			throws InvalidDataException {
 		Help help = em.find(Help.class, Long.parseLong(helpId));
@@ -127,6 +130,7 @@ public class HelpManager implements HelpManagerRemote {
 		em.merge(help);
 	}
 
+	@Override
 	public void denyHelp(String helpId) throws InvalidDataException {
 		Help help = em.find(Help.class, Long.parseLong(helpId));
 		if (help == null) {
@@ -146,6 +150,7 @@ public class HelpManager implements HelpManagerRemote {
 		}
 	}
 
+	@Override
 	public List<Message> retriveConversationByHelpRelationship(String helpId)
 			throws InvalidDataException {
 		Help help;
@@ -162,6 +167,7 @@ public class HelpManager implements HelpManagerRemote {
 		return help.getConversation();
 	}
 
+	@Override
 	public void registerFeedback(String helpId, String userId, int feedback)
 			throws InvalidDataException, NoSuchUserException {
 		if (feedback < -5 || feedback > 5) {

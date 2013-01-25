@@ -28,6 +28,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
         super();
     }
 
+    @Override
     public void ask(String addresseeId, String senderId) throws NoSuchUserException{
     	if(addresseeId.equals(senderId)){
     		return;
@@ -57,6 +58,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
 		}
     }
     
+    @Override
     public void confirm(String userId, String friendshipId) throws InvalidDataException{
     	FriendshipRequest request = em.find(FriendshipRequest.class, Long.parseLong(friendshipId));
     	if(request == null){
@@ -84,6 +86,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
     	}
     }
     
+    @Override
     public void deny(String userId, String friendshipId) throws InvalidDataException{
     	FriendshipRequest request = em.find(FriendshipRequest.class, Long.parseLong(friendshipId));
     	if(request == null){
@@ -106,6 +109,7 @@ public class FriendshipManager implements FriendshipManagerRemote {
     	}
     }
     
+    @Override
     public void remove(String userId, String friendToBeRemovedId) throws NoSuchUserException{
     	if(userId.equals(friendToBeRemovedId)){
     		return;

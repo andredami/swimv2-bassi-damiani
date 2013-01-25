@@ -55,6 +55,7 @@ public class Authentication implements AuthenticationRemote {
 		return user;
 	}
 
+	@Override
 	public void generateTemporaryPassword(String email)
 			throws NoSuchUserException {
 		User user;
