@@ -29,7 +29,7 @@ Filtra abilità:
 	<%
 
 	List<Ability> a = new ArrayList<Ability>();
-	a = (List<Ability>)request.getSession().getAttribute("list");
+	a = (List<Ability>)request.getSession().getAttribute("abilityList");
 	if (a.isEmpty()){
 		out.println("Non ci sono abilità registrate nel database.");
 		%>
@@ -54,7 +54,7 @@ Filtra abilità:
 		%>
 		<form method="post">
 		<textarea name="TextArea" style="width: 276px; height: 100px"><%out.print(desc);%></textarea></form>
-		<br><a href="<%= response.encodeURL("../Pages/AbilityEditor.jsp?Count="+count)%>">Modifica</a> <a href="">Cancella</a>
+		<br><a href="<%= response.encodeURL("../Pages/AbilityEditor.jsp?Count="+count)%>">Modifica</a> <a href="<%= response.encodeURL("../Pages/AbilityEditor.jsp?name="+name)%>">Cancella</a>
 		<%
 		out.println("</li>");
 		count++;

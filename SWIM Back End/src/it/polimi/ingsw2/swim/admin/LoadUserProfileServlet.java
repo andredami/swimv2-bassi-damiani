@@ -40,7 +40,9 @@ public class LoadUserProfileServlet extends HttpServlet {
 			UserManagerRemote a = (UserManagerRemote) ref;
 			
 			// come ottengo lo userID?
+			
 			User user = a.retriveUserProfile(userId);
+			
 			request.getSession().setAttribute("Name", user.getName().getFirstname());
 			request.getSession().setAttribute("Surname", user.getName().getSurname());
 			request.getSession().setAttribute("Gender", user.getGender());

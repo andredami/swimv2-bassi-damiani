@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.admin;
 
+import it.polimi.ingsw2.swim.exceptions.DuplicateAdministratorException;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
 
@@ -57,6 +58,7 @@ public class AddNewAdminServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + url);
 				return;
 			}
+			
 			try {
 				a.add(user, email, password);
 			} catch (InvalidDataException e) {
@@ -67,6 +69,9 @@ public class AddNewAdminServlet extends HttpServlet {
 				String url = response.encodeURL("/Pages/AddNewAdmin.jsp");
 				response.sendRedirect(request.getContextPath() + url);
 				return;
+			} catch (DuplicateAdministratorException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			request.getSession().setAttribute("Inserted", 1);
 			String url = response.encodeURL("/Pages/AdminList.jsp");

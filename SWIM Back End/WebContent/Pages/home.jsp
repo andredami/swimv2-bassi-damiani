@@ -36,6 +36,16 @@
 	} catch (NullPointerException e){
 		
 	}
+	// message to admin sent
+	try {
+	if (request.getSession().getAttribute("Send").equals(1)){
+		request.getSession().setAttribute("Send", null);
+		out.println("Messaggio inviato correttamente.");
+		out.println("<br>");
+	}
+	} catch (NullPointerException e){
+		
+	}
 
 %>
 <a href="<%= response.encodeURL("../LoadAdminListServlet")%>">Lista degli admin</a><br>
@@ -45,7 +55,7 @@
 <br>
 <br>
 <a href="<%= response.encodeURL("../AbilityListServlet")%>">Lista delle abilità</a><br>
-<a href="<%= response.encodeURL("../AbilityCreatorServlet")%>">Aggiungi nuova abilità</a><br>
+<a href="<%= response.encodeURL("../Pages/AbilityCreation.jsp")%>">Aggiungi nuova abilità</a><br>
 <a href="">Aggiungi abilità come alias</a><br><br>
 <div>
 	Lista di abilità richieste:

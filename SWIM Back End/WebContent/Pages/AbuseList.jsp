@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<h3>Lista abusi (<a href="<%= response.encodeURL("../LoadHomePageServlet")%>">Torna alla home</a>)</h3>
+<h3>Lista abusi</h3>
 
 <%
 
@@ -34,11 +34,11 @@
 	out.println("<ul>");
 	while (i.hasNext()){
 		Abuse el = i.next();
-		out.println("<li>Mittente:"+el.getEmail()+" <br>");
+		out.println("<li>Mittente: "+el.getEmail()+" <br>");
 		out.println("Descrizione abuso:<br>");
 		%>
 		<form method="post">
-		<textarea name="TextArea1" style="width: 286px; height: 107px"></textarea><%el.getDescriprion();%><br>
+		<textarea name="TextArea1" style="width: 286px; height: 107px"><%out.print (el.getDescriprion());%></textarea><br>
 		<input name="ManagedButton" type="button" value="Gestito">
 		<input name="Remove" type="submit" value="Ignora"></form>
 		<%
@@ -46,8 +46,9 @@
 	}
 	out.println("</ul>");
 	}
-
+	
 		%>
+		<a href="<%= response.encodeURL("../LoadHomePageServlet")%>">Torna alla home</a>
 </body>
 
 </html>

@@ -37,9 +37,9 @@ public class AbuseListServlet extends HttpServlet {
 			Object ref = jndiContext.lookup("AbuseManager/remote");
 			AbuseManagerRemote a = (AbuseManagerRemote) ref;
 			
-			List<Abuse> list = a.getAbuseList();
-			System.err.println("Lista tot: " + list.size() + "elementi");
-			request.getSession().setAttribute("list", list);
+			List<Abuse> abuseList = a.getAbuseList();
+			System.err.println("Lista tot: " + abuseList.size() + "elementi");
+			request.getSession().setAttribute("abuseList", abuseList);
 			String url = response.encodeURL("/Pages/AbuseList.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
