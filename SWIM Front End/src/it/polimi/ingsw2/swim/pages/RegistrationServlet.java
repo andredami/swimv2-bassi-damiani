@@ -6,7 +6,7 @@ import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Calendar;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -33,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@SuppressWarnings("deprecation")
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
@@ -56,14 +56,9 @@ public class RegistrationServlet extends HttpServlet {
 			// assignment
 			String name = request.getParameter("TextName");
 			String surname = request.getParameter("TextSurname");
-			Date birthdate = new Date();
-			//if ((request.getParameter("Day").equals("")) || (request.getParameter("Month").equals("")) || (request.getParameter("Year").equals("")))
-			int day = Integer.parseInt(request.getParameter("Day"));
-			int month = Integer.parseInt(request.getParameter("Month"));
-			int year = Integer.parseInt(request.getParameter("Year"));
-			birthdate.setDate(day);
-			birthdate.setMonth(month);
-			birthdate.setYear(year);
+			Calendar birthdate = Calendar.getInstance();
+			birthdate.clear();
+			birthdate.set(Integer.parseInt(request.getParameter("Year")), Integer.parseInt(request.getParameter("Month")) - 1, Integer.parseInt(request.getParameter("Day")));
 			Gender gender = Gender.valueOf(request.getParameter("Gender"));
 			try {
 				r.createUser(password, email, name, surname, birthdate, gender);

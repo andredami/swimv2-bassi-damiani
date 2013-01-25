@@ -97,19 +97,25 @@ $(document).load(function () {
 								<input class="absolute" name="TextName" style="border-style: outset; left: 212px; top: 7px; right: 128px;" type="text" ><br />
 								<select name="Month" class="absolute" style="left: 266px; top: 65px; width: 45px;">
 								<%
+								Calendar c = Calendar.getInstance();
+								int thisMonth = c.get(Calendar.MONTH) + 1;
 								out.println("<option></option>");
 								for (int m=1; m <= 12; m++){
-									out.println("<option>"+m+"</option>");
+									if(m == thisMonth){
+										out.println("<option selected>"+m+"</option>");
+									} else {
+										out.println("<option>"+m+"</option>");
+									}
 								}
 								%>
 								</select><select name="Year" class="absolute" style="left: 318px; top: 65px; width: 58px; right: 84px;">
 								<%
-								Calendar c = Calendar.getInstance();
 								int thisYear = c.get(Calendar.YEAR);
 								out.println("<option></option>");
-								for (int y=1920; y <= thisYear; y++){
+								for (int y=1920; y < thisYear; y++){
 									out.println("<option>"+y+"</option>");
 								}
+								out.println("<option selected>"+thisYear+"</option>");
 								%>
 								
 								</select><select name="Gender" class="absolute" style="left: 212px; top: 98px; width: 45px;">
@@ -118,9 +124,14 @@ $(document).load(function () {
 								</select>
 								<select name="Day" class="absolute" style="left: 212px; top: 65px; width: 45px;">
 								<%
+								int thisDay = c.get(Calendar.DAY_OF_MONTH);
 								out.println("<option></option>");
 								for (int d=1; d <= 31; d++){
+									if(d == thisDay){
+										out.println("<option selected>"+d+"</option>");
+									} else {
 									out.println("<option>"+d+"</option>");
+									}
 								}
 								%>
 								</select>
