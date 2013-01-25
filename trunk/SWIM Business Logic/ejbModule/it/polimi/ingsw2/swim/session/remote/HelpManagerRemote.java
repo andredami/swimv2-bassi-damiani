@@ -1,11 +1,11 @@
 package it.polimi.ingsw2.swim.session.remote;
 
-import java.util.List;
-
 import it.polimi.ingsw2.swim.entities.Help.State;
 import it.polimi.ingsw2.swim.entities.Message;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
+
+import java.util.List;
 
 public interface HelpManagerRemote {
 

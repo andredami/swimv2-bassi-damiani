@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.security.SecureRandom;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 
@@ -110,7 +110,7 @@ public class User extends TempUser implements Serializable {
 		this.activationCode = new BigInteger(130, random).toString(32);
 	}
 
-	public User(String password, String email, FullName name, Date birthdate,
+	public User(String password, String email, FullName name, Calendar birthdate,
 			Gender gender, Set<Ability> abilities) {
 		super(password, email, name, birthdate, gender);
 		this.abilities = abilities;

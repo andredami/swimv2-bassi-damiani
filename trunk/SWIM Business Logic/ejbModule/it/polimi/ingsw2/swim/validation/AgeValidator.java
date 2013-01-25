@@ -4,7 +4,6 @@
 package it.polimi.ingsw2.swim.validation;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.hibernate.mapping.Property;
 import org.hibernate.validator.PropertyConstraint;
@@ -19,6 +18,7 @@ public class AgeValidator implements Validator<OfAge>, PropertyConstraint {
 	private Calendar now;
 	private int minAge;
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -51,10 +51,7 @@ public class AgeValidator implements Validator<OfAge>, PropertyConstraint {
 	@Override
 	public boolean isValid(Object arg0) {
 		Calendar arg;
-		if (arg0 instanceof Date) {
-			arg = Calendar.getInstance();
-			arg.setTime((Date) arg0);
-		} else if (arg0 instanceof Calendar) {
+		if (arg0 instanceof Calendar) {
 			arg = (Calendar) arg0;
 		} else {
 			return false;
@@ -79,5 +76,4 @@ public class AgeValidator implements Validator<OfAge>, PropertyConstraint {
 
 		return false;
 	}
-
 }

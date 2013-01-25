@@ -5,7 +5,6 @@ package it.polimi.ingsw2.swim.entities;
 
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +42,7 @@ public class Notification implements Serializable {
 	private String description;
 
 	@Temporal(TemporalType.DATE)
-	private Date timestamp = Calendar.getInstance().getTime();
+	private Calendar timestamp = Calendar.getInstance();
 
 	private Boolean readByUser = false;
 
@@ -93,7 +92,7 @@ public class Notification implements Serializable {
 	/**
 	 * @return the timestamp
 	 */
-	public Date getTimestamp() {
+	public Calendar getTimestamp() {
 		return timestamp;
 	}
 

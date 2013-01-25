@@ -9,7 +9,7 @@ import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
 import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -58,7 +58,7 @@ public class Registration implements RegistrationRemote {
 
 	@Override
 	public void createUser(String password, String email, String firstname,
-			String surname, Date birthdate, Gender gender)
+			String surname, Calendar birthdate, Gender gender)
 			throws InvalidDataException, UserAlreadyExistsException {
 		email = email.toLowerCase();
 		if (state != State.INIT) {
