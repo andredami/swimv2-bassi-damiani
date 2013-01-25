@@ -101,7 +101,7 @@ public class AbilityManager implements AbilityManagerRemote {
 	@Override
 	public List<Ability> retriveAbilityList(String searchKey){
 		searchKey = "%" + searchKey + "%";
-		return em.createQuery("SELECT b FROM Ability b WHERE b.name LIKE ':key' AND b.isStub = FALSE").setParameter("key", searchKey).getResultList();
+		return em.createQuery("SELECT b FROM Ability b WHERE b.name LIKE :key AND b.isStub = FALSE").setParameter("key", searchKey).getResultList();
 	}
 	
 	@Override
