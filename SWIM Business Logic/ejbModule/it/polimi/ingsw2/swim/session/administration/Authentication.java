@@ -1,6 +1,7 @@
 package it.polimi.ingsw2.swim.session.administration;
 
 import it.polimi.ingsw2.swim.entities.Administrator;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.AdministrationAuthenticationRemote;
 
 import javax.ejb.Remote;
