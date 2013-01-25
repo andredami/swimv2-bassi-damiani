@@ -21,6 +21,10 @@ public class Address implements Serializable {
 	private String zip;
 	private String city;
 	private String province;
+	
+	public Address(){
+		super();
+	}
 
 	Address(String street, String streetNumber, String zip, String city,
 			String province) {

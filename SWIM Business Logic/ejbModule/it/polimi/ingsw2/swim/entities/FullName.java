@@ -26,6 +26,10 @@ public class FullName implements Serializable {
 	@NotNull
 	@NotEmpty
 	private String surname;
+	
+	public FullName(){
+		super();
+	}
 
 	public FullName(String firstname, String surname) {
 		super();
