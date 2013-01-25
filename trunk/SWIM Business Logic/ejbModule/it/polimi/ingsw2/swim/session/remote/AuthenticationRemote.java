@@ -1,7 +1,10 @@
 package it.polimi.ingsw2.swim.session.remote;
 
+import it.polimi.ingsw2.swim.entities.User;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
+
 public interface AuthenticationRemote {
 
-	public boolean authenticate(String email, String password);
+	public User authenticate(String email, String password) throws NoSuchUserException;
 	
 }
