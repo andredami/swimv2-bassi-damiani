@@ -155,4 +155,34 @@
     <servlet-name>BanUserServlet</servlet-name>
     <url-pattern>/BanUserServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AbilityEditorServlet</display-name>
+    <servlet-name>AbilityEditorServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.AbilityEditorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AbilityEditorServlet</servlet-name>
+    <url-pattern>/AbilityEditorServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LogOutServlet</display-name>
+    <servlet-name>LogOutServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.LogOutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogOutServlet</servlet-name>
+    <url-pattern>/LogOutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>AbilityCreatorServlet</display-name>
+    <servlet-name>AbilityCreatorServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.AbilityCreatorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AbilityCreatorServlet</servlet-name>
+    <url-pattern>/AbilityCreatorServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

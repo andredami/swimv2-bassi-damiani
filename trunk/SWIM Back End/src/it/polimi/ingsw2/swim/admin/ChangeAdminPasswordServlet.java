@@ -48,9 +48,9 @@ public class ChangeAdminPasswordServlet extends HttpServlet {
 			// retrieve data from the form
 			String oldpsw = request.getParameter("OldPassword");
 			String newpsw = request.getParameter("NewPassword");
-			String confPassword = request.getParameter("ConfirmNewPassword");
+			String idAdmin = request.getParameter("IdAdmin");
 			
-			if (!(confPassword.equals(newpsw))){
+			if (oldpsw.equals(newpsw)){
 				request.getSession().setAttribute("PasswordError", 1);
 				String url = response.encodeURL("/Pages/ChangePassword.jsp");
 				response.sendRedirect(request.getContextPath() + url);
@@ -58,21 +58,21 @@ public class ChangeAdminPasswordServlet extends HttpServlet {
 			}
 				// è sbagliato, non c'è l'adminID
 				try {
-					a.insertNewPassword(confPassword, oldpsw, newpsw);
+					a.insertNewPassword(idAdmin, oldpsw, newpsw);
 				} catch (InvalidPasswordException e) {
-					request.getSession().setAttribute("PasswordError", 1);
+					request.getSession().setAttribute("PasswordWrong", 1);
 					String url = response.encodeURL("/Pages/ChangePassword.jsp");
 					response.sendRedirect(request.getContextPath() + url);
 					return;
 				} catch (NoSuchUserException e) {
-					request.getSession().setAttribute("PasswordError", 1);
+					request.getSession().setAttribute("idError", 1);
 					String url = response.encodeURL("/Pages/ChangePassword.jsp");
 					response.sendRedirect(request.getContextPath() + url);
 					return;
 				}
 			
 			request.getSession().setAttribute("PasswordChanged", 1);
-			String url = response.encodeURL("/Pages/AdminList.jsp");
+			String url = response.encodeURL("/LoadHomePageServlet");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			

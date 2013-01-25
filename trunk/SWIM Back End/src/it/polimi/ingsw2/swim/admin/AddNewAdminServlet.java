@@ -60,10 +60,9 @@ public class AddNewAdminServlet extends HttpServlet {
 			try {
 				a.add(user, email, password);
 			} catch (InvalidDataException e) {
-				System.err.println("Errore nella validazione dei dati");
-				if (e.invalidFields!=null){
+				System.err.println("Errore nella validazione dei dati");	
 				for(String s : e.invalidFields){
-				System.err.println("* " + s);}}
+				System.err.println("* " + s);}
 				request.getSession().setAttribute("DataError", 1);
 				String url = response.encodeURL("/Pages/AddNewAdmin.jsp");
 				response.sendRedirect(request.getContextPath() + url);

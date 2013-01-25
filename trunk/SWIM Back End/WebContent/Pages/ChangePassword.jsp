@@ -9,7 +9,7 @@
 <%
 
 //check if exists a valid session
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin == null){
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
@@ -26,18 +26,32 @@
 	try{
 	if (request.getSession().getAttribute("PasswordError").equals(1)){
 		request.getSession().setAttribute("PasswordError", null);
-		out.println("Errore. Password non corrispondenti <br>");
+		out.println("Errore. La password è identica alla precedente. Scegliere un valore differente <br>");
 	}
 	} catch (NullPointerException e){
 		
 	}
-
+	try{
+	if (request.getSession().getAttribute("idError").equals(1)){
+		request.getSession().setAttribute("idError", null);
+		out.println("Errore. Non esiste uno user con l'id scelto. <br>");
+	}
+	}catch (NullPointerException e){}
+	
+	try{
+		if (request.getSession().getAttribute("PasswordWrong").equals(1)){
+			request.getSession().setAttribute("PasswordWrong", null);
+			out.println("Errore. La password dell'admin scelto non è quella corrente. <br>");
+		}
+		}catch (NullPointerException e){}
+	
 %></h3>
 <form method="post" action="<%= response.encodeURL("../ChangeAdminPasswordServlet")%>" >
-	Vecchia Password:<input name="OldPassword" type="password"><br><br>Nuova 
-	Password:<input name="NewPassword" type="password"><br><br>Conferma Nuova 
-	Password: <input name="ConfirmNewPassword" type="password"><br><br>
-	<input name="Confirm" type="submit" value="Conferma"><input name="Cancel" type="button" value="Cancella"></form>
+	Id:<input name="IdAdmin" type="password"><br><br>
+	Vecchia Password:<input name="OldPassword" type="password"><br><br>
+	Nuova Password: <input name="NewPassword" type="password"><br><br>
+	<input name="Confirm" type="submit" value="Conferma">
+	<a href="<%= response.encodeURL("../LoadAdminListServlet")%>">Torna alla lista</a></form>
 </body>
 
 </html>
