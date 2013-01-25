@@ -77,8 +77,8 @@ public class Registration implements RegistrationRemote {
 		}
 
 		Query users = em.createQuery("SELECT u" + "FROM User u"
-				+ "WHERE u.email = :email");
-		users.setParameter("email", email);
+				+ "WHERE u.email = :mail");
+		users.setParameter("mail", email);
 
 		if (users.getResultList().isEmpty()) {
 			state = State.USER_CREATED;
