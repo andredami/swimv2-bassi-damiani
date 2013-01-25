@@ -66,7 +66,7 @@ public class ProfileManager implements AdministrationProfileManagerRemote {
 					.getInvalidValues(admin);
 
 			if (validatorMessages.length > 0) {
-				throw new InvalidDataException();
+				throw new InvalidDataException(validatorMessages);
 			}
 		}
 
