@@ -18,6 +18,19 @@
 	margin-top: 0px;
 }
 </style>
+
+<%
+	Long user = (Long)session.getAttribute("Id");
+		if (user != null){
+			String url = response.encodeURL("/Pages/HomePage.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
+%>
+
+
+
+
 </head>
 <body class="absolute" style="width: 1250px; height: 684px; left: 180px; top: 0px; margin-left: 106; margin-top: 0">
 			
@@ -58,7 +71,7 @@
 				</div>
 				<div class="welcome">
 					<div class="entry"> &nbsp;<div id="layer6" style="position: absolute; width: 249px; height: 106px; z-index: 1; left: 696px; top: 22px">
-							<form method="post" action="/swim/LoginServlet" style="width: 246px; height: 102px; position: absolute; left: 1px; top: 3px;">
+							<form method="post" action="<%= response.encodeURL("../swim/LoginServlet")%>" style="width: 246px; height: 102px; position: absolute; left: 1px; top: 3px;">
 								<input name="emailText" type="text" class="auto-style2" style="position: absolute; left: 65px; top: 3px; width: 130px;" />
 								<label id="labelUser" class="headerText" style="position: absolute; left: -2px; top: 6px; height: 18px; right: 216px;">Email</label>
 								<br />
@@ -71,7 +84,7 @@
 								Resta collegato
 								<input name="submitLogin" style="height: 20px; left: 121px; top: 69px" type="submit" value="Accedi" /><br />
 								Non hai un account?
-								<a href="Pages/Registration.jsp">Registrati</a> </span></form>
+								<a href="<%= response.encodeURL("../swim/Pages/Registration.jsp")%>">Registrati</a> </span></form>
 						</div>
 					</div>
 				</div>

@@ -22,6 +22,7 @@ $(document).load(function () {
 	margin-top: 0;
 }
 </style>
+
 </head>
 <%@ page language="java" import="java.util.*, java.lang.System" %>
 
@@ -68,7 +69,7 @@ $(document).load(function () {
 					</div>
 				</div>
 				<div id="layer6" style="position: absolute; width: 476px; height: 356px; z-index: 1; left: 75px; top: 330px" class="headerTextForm">
-							<form method="post" action="../RegistrationServlet" style="border-style: ridge; width: 460px; height: 339px; position: absolute; left: 1px; top: 4px;">
+							<form method="post" action="<%= response.encodeURL("../RegistrationServlet")%>" style="border-style: ridge; width: 460px; height: 339px; position: absolute; left: 1px; top: 4px;">
 								<input class="absolute" id="prosegui" name="submitAndGoOn" disabled="disabled" style="height: 21px; top: 312px; left: 193px;" type="submit" value="Prosegui" />
 								<label id="LabelName" class="absolute" style="left: 10px; top: 9px; width: 46px">
 								Nome</label>

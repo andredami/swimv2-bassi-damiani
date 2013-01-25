@@ -19,6 +19,16 @@
 	margin-top: 0;
 }
 </style>
+
+<%
+	String email = (String)request.getSession().getAttribute("TextEmail");
+		if (email == null){
+			String url = response.encodeURL("/index.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
+%>
+
 </head>
 <body class="absolute" style="width: 1250px; height: 684px; left: 180px; top: 0px; margin-left: 106; margin-top: 0">
 					
@@ -41,7 +51,7 @@
 					<p>
 						<%
 							try{
-							if (request.getAttribute("Registration").equals(1)){
+							if (request.getSession().getAttribute("Registration").equals(1)){
 								out.println ("La prima fase della registrazione è andata a buon fine!");
 								out.println ("Ora serve che tu inserisca almeno un abilità, oppure <a href='Registration.jsp'>torna indietro</a>");
 							}
@@ -66,14 +76,17 @@
 								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">
 								<%
 								// verifying if the request is empty or if there are no results
-								
-								if (request.getAttribute("EmptyRequest").equals(1)){
+								try{
+								if (request.getSession().getAttribute("EmptyRequest").equals(1)){
 									out.println ("Devi inserire un'abilità da ricercare.");
 								}
 								else {
-										if (request.getAttribute("NotFoundAbility").equals(1)){
+										if (request.getSession().getAttribute("NotFoundAbility").equals(1)){
 											out.println ("L'abilità richiesta non esiste. Se lo desideri puoi farne richiesta.");
 											}
+								}
+								}catch (NullPointerException e){
+									e.printStackTrace();
 								}
 								%>
 								</label>
@@ -82,44 +95,28 @@
 										Abilità trovate (clicca sul nome per aggiungere alle scelte)
 										<br />
 										&nbsp;
-										<ul>
+										<ul> 
 										<%
-											List<Ability> a = (List<Ability>)request.getAttribute("AbilityList");
+											try{
+											List<Ability> a = new ArrayList<Ability>();
+											a = (List<Ability>)request.getSession().getAttribute("abilityList");
 											Iterator<Ability> i = a.iterator();
 											while (i.hasNext()){
 												Ability el = i.next();
-												out.println("<li><a href=/InsertAbilityServlet?ChosenAbility="+el.getName()+" <a href='AbilitySelection.html'>Sottoscrivi</a></li>");
-												out.println("<li id='description'>");
-												out.println("<textarea readonly='readonly' name='TextArea' rows='2' style='width: 285px'>"+el.getDescription()+"</textarea>");
-												out.println("</li>");
-											}			
+												%>
+												<li><a href="<%=response.encodeURL("InsertAbilityServlet?ChosenAbility="+el.getName())%>"><% out.print(el.getName()); %></a></li>
+												<li id='description'>
+												<textarea readonly='readonly' name='TextArea' rows='2' style='width: 285px'><% out.print(el.getDescription()); %></textarea>
+												</li>
+											<%
+											}
+											}catch(NullPointerException e){			
+												out.println("Non ci sono abilità registrate nel database.");
+											}
 										%>							
 										</ul>
 									</div>
 								</div>
-							<div class="notification" style="border-style: groove; left: -1px; top: 161px; height: 250px; width: 327px">
-								<div class="notification-inner" style="width: 300px; height: 241px; margin-left: 5px; margin-top: 5px">
-									Abilità Scelte<br />
-										&nbsp;
-										<ul>
-										<li>Nome Abilità 1 <a href="AbilitySelection.html">Rimuovi</a> <a href="AbilitySelection.html">Sottoscrivi</a></li>
-										<li id="description">
-											<textarea readonly="readonly" name="TextArea1" rows="2" style="width: 244px">Descrizione</textarea>
-										</li>
-										<li>Nome Abilità 2 <a href="AbilitySelection.html">Rimuovi</a> <a href="AbilitySelection.html">Sottoscrivi</a></li>
-										<li id="description">
-											<textarea readonly="readonly" name="TextArea2" rows="2" style="width: 241px">Descrizione</textarea>
-										</li>
-										<li>Nome Abilità 3 <a href="AbilitySelection.html">Rimuovi</a> <a href="AbilitySelection.html">Sottoscrivi</a></li>
-										<li id="description">
-											<textarea readonly="readonly" name="TextArea3" rows="2" style="width: 239px">Descrizione</textarea>
-										</li>							
-										</ul>
-								</div>
-							</div>
-							
-							
-							
 							</form>
 							<form method="post" action="../SelectAbilityRegistrationServlet" style="height: 148px">
 								<input class="absolute" name="SubmitAbilityButton" style="left: 182px; top: 81px; height: 30px; width: 129px;" type="submit" value="Inserisci" />

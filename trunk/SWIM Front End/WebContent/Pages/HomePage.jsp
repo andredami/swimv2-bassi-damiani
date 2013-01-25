@@ -8,7 +8,7 @@
 <%
 	HttpSession s = request.getSession();
 	if (s.getAttribute("emailText")== null)
-		response.sendRedirect("../Pages/index.jsp");
+		response.sendRedirect("../index.jsp");
 %>
 <title>Swim</title>
 
