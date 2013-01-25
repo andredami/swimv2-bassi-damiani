@@ -1,6 +1,9 @@
 package it.polimi.ingsw2.swim.admin;
 
 import it.polimi.ingsw2.swim.entities.Ability;
+import it.polimi.ingsw2.swim.entities.Administrator;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
+import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
 import it.polimi.ingsw2.swim.session.remote.RequestManagerRemote;
 import java.io.IOException;
 import java.util.List;
@@ -30,7 +33,35 @@ public class LoadHomePageServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		try {
+			// create the context
+			InitialContext jndiContext = new InitialContext();
+			Object ref = jndiContext.lookup("RequestManager/remote");
+			Object ref2 = jndiContext.lookup("AdministrationProfileManager/remote");
+			RequestManagerRemote a = (RequestManagerRemote) ref;
+			AdministrationProfileManagerRemote b = (AdministrationProfileManagerRemote) ref2;
+			
+			
+			List<Ability> list = a.retriveRequestsList();
+			// find the admin associated with the id of the current session
+			try {
+				Administrator admin = b.retrive(request.getSession().getAttribute("Id").toString());
+				request.getSession().setAttribute("Username", admin);
+			} catch (NoSuchUserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			request.getSession().setAttribute("list", list);
+			String url = response.encodeURL("/Pages/home.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+			
+		} catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
@@ -42,9 +73,21 @@ public class LoadHomePageServlet extends HttpServlet {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
 			Object ref = jndiContext.lookup("RequestManager/remote");
+			Object ref2 = jndiContext.lookup("AdministrationProfileManager/remote");
 			RequestManagerRemote a = (RequestManagerRemote) ref;
+			AdministrationProfileManagerRemote b = (AdministrationProfileManagerRemote) ref2;
+			
 			
 			List<Ability> list = a.retriveRequestsList();
+			// find the admin associated with the id of the current session
+			try {
+				Administrator admin = b.retrive(request.getSession().getAttribute("Id").toString());
+				request.getSession().setAttribute("Username", admin);
+			} catch (NoSuchUserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			request.getSession().setAttribute("list", list);
 			String url = response.encodeURL("/Pages/home.jsp");
 			response.sendRedirect(request.getContextPath() + url);

@@ -8,7 +8,7 @@
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 
 <%
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin != null){
 			String url = response.encodeURL("/Pages/home.jsp");
 			response.sendRedirect(request.getContextPath() + url);

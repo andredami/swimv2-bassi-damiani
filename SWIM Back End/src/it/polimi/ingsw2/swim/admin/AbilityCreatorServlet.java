@@ -1,10 +1,10 @@
 package it.polimi.ingsw2.swim.admin;
 
-import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
-import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
-import it.polimi.ingsw2.swim.session.remote.UserManagerRemote;
+import it.polimi.ingsw2.swim.entities.Ability;
+import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,15 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ContactUserServlet
+ * Servlet implementation class AbilityCreatorServlet
  */
-public class ContactUserServlet extends HttpServlet {
+public class AbilityCreatorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ContactUserServlet() {
+    public AbilityCreatorServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,31 +38,16 @@ public class ContactUserServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("AdministrationProfileManager/remote");
-			Object ref2 = jndiContext.lookup("UserManager/remote");
-			AdministrationProfileManagerRemote a = (AdministrationProfileManagerRemote) ref;
-			UserManagerRemote b = (UserManagerRemote)ref2;
+			Object ref = jndiContext.lookup("AbilityManager/remote");
+			AbilityManagerRemote a = (AbilityManagerRemote) ref;
 			
-			// retrieve data from the form
-			String sender = (String) request.getSession().getAttribute("Username");
-			String addressee = request.getParameter("Addressee");
-			String message = request.getParameter("Message");
-			
-			b.sendMessage(userId, text);
-			try {
-				a.sendMessage(senderId, addresseeId, text);
-			} catch (NoSuchUserException e) {
-				request.getSession().setAttribute("DataError", 1);
-				String url = response.encodeURL("/Pages/ContactUser.jsp");
-				response.sendRedirect(request.getContextPath() + url);
-			}
-			request.getSession().setAttribute("Send", 1);
-			String url = response.encodeURL("/Pages/AdminList.jsp");
+			List<Ability> list = a.retriveAbilityList();
+			System.err.println("Lista tot: " + list.size() + "elementi");
+			request.getSession().setAttribute("list", list);
+			String url = response.encodeURL("/Pages/AbilityList.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			
@@ -71,6 +56,5 @@ public class ContactUserServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-
 
 }

@@ -6,7 +6,7 @@
 <head>
 <meta content="it" http-equiv="Content-Language">
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-<title>Modifica abilità</title>
+<title>Modifica/Aggiunta abilità</title>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
 
@@ -23,10 +23,9 @@
 
 <body>
 
-<p>Modifica abilità</p>
-<form action="<%= response.encodeURL("../AbilityEditorServlet")%>" method="post">
-	<% String count = (String)request.getParameter("Count"); %>
-	Nome: <input name="Name" type="text" value="<% out.print(request.getSession().getAttribute("Name"+count));%>"><br><br>Descrizione:<br>&nbsp;<textarea name="Description" style="width: 308px; height: 134px"><%out.print(request.getSession().getAttribute("Desc"+count));%></textarea><br>
+<p>Aggiunta abilità</p>
+<form action="<%= response.encodeURL("../AbilityCreatorServlet")%>" method="post">
+	Nome: <input name="Name" type="text"><br><br>Descrizione:<br>&nbsp;<textarea name="Description" style="width: 308px; height: 134px"></textarea><br>
 	<br>Alias:<input name="Text2" type="text"><input name="Button1" type="button" value="Assegna"><br>
 	<br>Lista di alias:
 	<br><br>

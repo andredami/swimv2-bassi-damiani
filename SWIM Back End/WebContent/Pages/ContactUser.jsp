@@ -5,10 +5,10 @@
 
 <head>
 <meta content="text/html;" http-equiv="Content-Type">
-<title>Contatta Admin</title>
+<title>Manda un messaggio</title>
 <%
 //check if exists a valid session
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin == null){
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
@@ -32,9 +32,18 @@
 
 %></h3>
 <form action="<%= response.encodeURL("../ContactUserServlet")%>" method="post">
-	Mittente: <input name="Addressee" type="text"><br><br>Messaggio:<br>
+	<% String count = (String)request.getParameter("Count"); %>
+	Mittente: <input name="Addressee" type="text" disabled="disabled" value="
+	<% // select a differente addressee, depending on who requests this page
+	if (request.getSession().getAttribute("to").equals("administrator")) 
+		out.println(request.getSession().getAttribute("admin"+count));
+	else
+		out.println(request.getSession().getAttribute("user"));
+		%>">
+		<br><br>Messaggio:<br>
 	<textarea name="Message" style="width: 278px; height: 117px"></textarea><br>
-	<br><input name="Submit" type="submit" value="Invia"><input name="Cancel" type="button" value="Cancella"></form>
+	<br><input name="Submit" type="submit" value="Invia">
+	<a href="<%= response.encodeURL("../LoadAdminListServlet")%>">Torna alla lista</a></form>
 
 </body>
 

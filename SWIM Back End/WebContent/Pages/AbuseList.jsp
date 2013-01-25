@@ -11,7 +11,7 @@
 
 <% 
 	// check if exists a valid session
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin == null){
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
@@ -21,7 +21,7 @@
 </head>
 
 <body>
-<h3>Lista abusi (<a href="../index.jsp">Torna alla home</a>)</h3>
+<h3>Lista abusi (<a href="<%= response.encodeURL("../LoadHomePageServlet")%>">Torna alla home</a>)</h3>
 
 <%
 

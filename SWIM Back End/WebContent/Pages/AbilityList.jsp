@@ -11,7 +11,7 @@
 
 <%
 //check if exists a valid session
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin == null){
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
@@ -30,26 +30,40 @@ Filtra abilità:
 
 	List<Ability> a = new ArrayList<Ability>();
 	a = (List<Ability>)request.getSession().getAttribute("list");
-	if (a.isEmpty())
+	if (a.isEmpty()){
 		out.println("Non ci sono abilità registrate nel database.");
+		%>
+		<a href="<%= response.encodeURL("../AbilityListServlet")%>">Torna indietro</a>
+		<%
+	}
+	
+	
+
 	Iterator<Ability> i = a.iterator();
+	int count=0;
 	if (i.hasNext()){
 	out.println("<ul>");
 	while (i.hasNext()){
 		Ability el = i.next();
-		out.println("<li>Nome:"+el.getName()+" <br>");
+		String name = el.getName();
+		String desc = el.getDescription();
+		request.getSession().setAttribute("Name"+count, name);
+		request.getSession().setAttribute("Desc"+count, desc);
+		out.println("<li>Nome: "+name+" <br>");
 		out.println("Descrizione:<br>");
 		%>
 		<form method="post">
-		<textarea name="TextArea" style="width: 276px; height: 100px"><%el.getDescription();%></textarea></form>
-		<br><a href="AbilityEditor.jsp">Modifica</a> <a href="">Cancella</a>
+		<textarea name="TextArea" style="width: 276px; height: 100px"><%out.print(desc);%></textarea></form>
+		<br><a href="<%= response.encodeURL("../Pages/AbilityEditor.jsp?Count="+count)%>">Modifica</a> <a href="">Cancella</a>
 		<%
 		out.println("</li>");
+		count++;
 	}
 	out.println("</ul>");
 	}
 
 		%>
+		<a href="<%= response.encodeURL("../LoadHomePageServlet")%>">Torna alla home</a>
 </div>
 </body>
 

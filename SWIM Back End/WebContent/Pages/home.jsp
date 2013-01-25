@@ -4,14 +4,14 @@
 <html>
 <head>
 <meta content="it" http-equiv="Content-Language">
-<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+<meta content="text/html;" http-equiv="Content-Type">
 <script type="text/javascript" src="../jquery/jquery-1.9.0.js"></script>
 <script type="text/javascript" src="functionsAdmin.js"></script>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
 <% 
 	// check if exists a valid session
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin == null){
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
@@ -24,17 +24,19 @@
 
 <body>
 
-<h3>Benvenuto <% out.print(session.getAttribute("Username")); %>! (<a href="<% %>">Logout</a>)</h3>
+<h3>Benvenuto <% out.print(request.getSession().getAttribute("Admin")); %>! (<a href="<%= response.encodeURL("../LogOutServlet") %>">Logout</a>)</h3>
 <% 
 	// all results of well closed operations
 	try {
-	if (request.getSession().getAttribute("Inserted").equals(1)){
-		request.getSession().setAttribute("Inserted", null);
-		out.println("Errore. Password non corrispondenti");
+	if (request.getSession().getAttribute("PasswordChanged").equals(1)){
+		request.getSession().setAttribute("PasswordChanged", null);
+		out.println("La password è stata aggiornata correttamente!");
+		out.println("<br>");
 	}
 	} catch (NullPointerException e){
 		
 	}
+
 %>
 <a href="<%= response.encodeURL("../LoadAdminListServlet")%>">Lista degli admin</a><br>
 <a href="<%= response.encodeURL("../UserListServlet")%>">Lista degli Utenti</a><br>
@@ -43,7 +45,7 @@
 <br>
 <br>
 <a href="<%= response.encodeURL("../AbilityListServlet")%>">Lista delle abilità</a><br>
-<a href="AbilityEditor.jsp">Aggiungi nuova abilità</a><br>
+<a href="<%= response.encodeURL("../AbilityCreatorServlet")%>">Aggiungi nuova abilità</a><br>
 <a href="">Aggiungi abilità come alias</a><br><br>
 <div>
 	Lista di abilità richieste:

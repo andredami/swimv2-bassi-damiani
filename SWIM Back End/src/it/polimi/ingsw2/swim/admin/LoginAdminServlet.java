@@ -1,6 +1,10 @@
 package it.polimi.ingsw2.swim.admin;
 
+import it.polimi.ingsw2.swim.entities.Administrator;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.AdministrationAuthenticationRemote;
+import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
+
 import java.io.IOException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -43,21 +47,31 @@ public class LoginAdminServlet extends HttpServlet {
 			InitialContext jndiContext = new InitialContext();
 			Object ref = jndiContext.lookup("AdministrationAuthentication/remote");
 			AdministrationAuthenticationRemote a = (AdministrationAuthenticationRemote) ref;
+
 		
 			// acquire the login parameters
 			String username = request.getParameter("Username");
 			String password = request.getParameter("Password");
-			
+
 			// if the login is not corrected, redirect to the home page
-			if (!a.authenticate(username, password)){
+			
+			Administrator admin;
+			try {
+				admin = a.authenticate(username, password);
+			} catch (NoSuchUserException e) {
 				request.getSession().setAttribute("LoginError", 1);
 				response.sendRedirect(request.getContextPath() + "/index.jsp");
 				return;
 			}
 			
+			// obtain the Id of the admin
+			Long Id = admin.getId();
+			String name = admin.getUsername();
+			System.err.println("ID: " + Id );
+			System.err.println("user: " + name );
 			// login session created, forward to the servlet that creates the home page
-			HttpSession s = request.getSession();
-			s.setAttribute("Username", username);
+			request.getSession().setAttribute("Admin", name);
+			request.getSession().setAttribute("Id", Id);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/LoadHomePageServlet");
 			dispatcher.forward(request, response);
 			return;

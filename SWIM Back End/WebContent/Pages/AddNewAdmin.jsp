@@ -8,7 +8,7 @@
 <title>Aggiungi Nuovo Amministratore</title>
 <%
 //check if exists a valid session
-	String admin = (String)session.getAttribute("Username");
+	Long admin = (Long)session.getAttribute("Id");
 		if (admin == null){
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
@@ -46,7 +46,7 @@
 	<input name="Password" type="password"><br><br>Conferma Password:
 	<input name="ConfirmPassword" type="password"><br><br>
 	<input name="Confirm" type="submit" value="Conferma">
-	<input name="Cancel" type="button" onclick="/Pages/home.jsp" value="Cancella"></form>
+	<a href="<%= response.encodeURL("../LoadAdminListServlet")%>">Torna alla lista</a></form>
 </body>
 
 </html>
