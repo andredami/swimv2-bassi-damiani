@@ -32,27 +32,27 @@ public class Authentication implements AuthenticationRemote {
 		super();
 	}
 
-	public boolean authenticate(String email, String password) {
+	public User authenticate(String email, String password) throws NoSuchUserException {
 		User user;
 		try {
 			user = (User) em.createNamedQuery("getUserByEmail")
 					.setParameter("email", email).getSingleResult();
 		} catch (NoResultException e) {
-			return false;
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			throw new RuntimeException();
 		}
 
 		if (user.getStatus() != User.Status.REGISTERED) {
-			return false;
+			throw new NoSuchUserException();
 		}
 
 		if (!user.checkPassword(password)) {
 			em.merge(user);
-			return false;
+			throw new NoSuchUserException();
 		}
 
-		return true;
+		return user;
 	}
 
 	public void generateTemporaryPassword(String email)
