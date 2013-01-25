@@ -135,9 +135,9 @@ public class RequestManager implements RequestManagerRemote {
 					try {
 						nf.sendNotification(
 								user.getId().toString(),
-								"L'abilit‡ "
+								"L'abilit√† "
 										+ stub.getName()
-										+ " che avevi richiesto Ë stata accetta e aggiunta automaticamente al tuo profilo con il nome "
+										+ " che avevi richiesto √® stata accetta e aggiunta automaticamente al tuo profilo con il nome "
 										+ ability.getName());
 					} catch (NoSuchUserException e) {
 						throw new RuntimeException();
@@ -162,14 +162,14 @@ public class RequestManager implements RequestManagerRemote {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Ability> retriveRequestsList(){
-		return em.createQuery("SELECT r FROM Ability r WHERE r.isStub = TRUE").getResultList();
+		return em.createQuery("SELECT r FROM Ability r JOIN FETCH r.subscribers WHERE r.isStub = TRUE").getResultList();
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Ability> retriveRequestsList(String searchKey){
 		searchKey = "%" + searchKey + "%";
-		return em.createQuery("SELECT r FROM Ability r WHERE r.name LIKE ':key' AND r.isStub = TRUE").setParameter("key", searchKey).getResultList();
+		return em.createQuery("SELECT r FROM Ability r  JOIN FETCH r.subscribers WHERE r.name LIKE ':key' AND r.isStub = TRUE").setParameter("key", searchKey).getResultList();
 	}
 
 }
