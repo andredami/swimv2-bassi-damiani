@@ -76,7 +76,7 @@ public class Registration implements RegistrationRemote {
 			throw new InvalidDataException(validationMessages);
 		}
 
-		Query users = em.createQuery("SELECT u" + "FROM User u"
+		Query users = em.createQuery("SELECT u " + "FROM User u "
 				+ "WHERE u.email =:mail");
 		users.setParameter("mail", email);
 
