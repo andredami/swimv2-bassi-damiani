@@ -28,21 +28,21 @@ public class Authentication implements AdministrationAuthenticationRemote {
     }
 
     @Override
-    public boolean authenticate(String username, String password) {
+    public Administrator authenticate(String username, String password) throws NoSuchUserException {
 		Administrator user;
 		try {
 			user = (Administrator) em.createNamedQuery("getAdministratorByUsername")
 					.setParameter("username", username).getSingleResult();
 		} catch (NoResultException e) {
-			return false;
+			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
 			throw new RuntimeException();
 		}
 
 		if (!user.checkPassword(password)) {
-			return false;
+		 		throw new NoSuchUserException();
 		}
 
-		return true;
+		return user;
 	}
 }
