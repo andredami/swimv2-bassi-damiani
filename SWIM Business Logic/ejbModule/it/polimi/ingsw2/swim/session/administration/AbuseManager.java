@@ -31,7 +31,7 @@ public class AbuseManager implements AbuseManagerRemote {
     @SuppressWarnings("unchecked")
     @Override
 	public List<Abuse> getAbuseList(){
-    	return em.createQuery("SELECT b FROM Abuse ORDER BY b.handled ASC").getResultList();
+    	return em.createQuery("SELECT b FROM Abuse b ORDER BY b.handled ASC").getResultList();
     }
     
     @Override
