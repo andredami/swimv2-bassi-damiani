@@ -56,7 +56,7 @@ public class RequestManager implements RequestManagerRemote {
 		Ability ability;
 		try {
 			ability = (Ability) em.createNamedQuery("getAbilityWithAlias")
-					.setParameter("ability", name);
+					.setParameter("ability", name).getSingleResult();
 			if (!ability.isStub()) {
 				throw new DuplicateAbilityException();
 			}
@@ -88,7 +88,7 @@ public class RequestManager implements RequestManagerRemote {
     	Ability ability;
 		try {
 			ability = (Ability) em.createNamedQuery("getAbilityWithAlias")
-					.setParameter("ability", abilityId);
+					.setParameter("ability", abilityId).getSingleResult();
 		} catch (NoResultException e1) {
 			throw new NoSuchAbilityException();
 		}
