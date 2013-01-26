@@ -63,7 +63,6 @@ public class LoadAdminListServlet extends HttpServlet {
 			AdministrationProfileManagerRemote a = (AdministrationProfileManagerRemote) ref;
 			
 			List<Administrator> list = a.retriveList();
-			System.err.println("Lista tot: " + list.size() + "elementi");
 			request.getSession().setAttribute(Attribute.LIST.toString(), list);
 			String url = response.encodeURL("/Pages/AdminList.jsp");
 			response.sendRedirect(request.getContextPath() + url);

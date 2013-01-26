@@ -215,4 +215,14 @@
     <servlet-name>DeleteAdmin</servlet-name>
     <url-pattern>/DeleteAdmin</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ManageAbuseServlet</display-name>
+    <servlet-name>ManageAbuseServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.ManageAbuseServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ManageAbuseServlet</servlet-name>
+    <url-pattern>/ManageAbuseServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
