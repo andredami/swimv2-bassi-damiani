@@ -33,7 +33,7 @@ public class LoadAbilityEditorServlet extends HttpServlet {
     public enum Attribute {
     	LIST("aliasList");
     	
-    	private static final String componentName = "LoadAdminListServlet";
+    	private static final String componentName = "LoadAbilityEditorServlet";
     	private final String name;
     	
     	private Attribute(String name){

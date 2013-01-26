@@ -59,16 +59,14 @@ public class LoginServlet extends HttpServlet {
 			return;
 		}
 			
-		// obtain the Id of the admin
+		// obtain the Id of the user
 		Long Id = user.getId();
-		String name = user.getName().getFirstname();
 		System.err.println("ID: " + Id );
-		System.err.println("user: " + name );
 		// login session created, forward to the servlet that creates the home page
-		request.getSession().setAttribute("user", name);
 		request.getSession().setAttribute("Id", Id);		
-		// if the authentication is correct, start the session and redirect the user to the home page
-		response.sendRedirect(request.getContextPath() + "/Pages/HomePage.jsp");
+		// if the authentication is correct, start the session and redirect the user to the servlet that creates the home page
+		String url = response.encodeURL("/CreateHomePageServlet");
+		response.sendRedirect(request.getContextPath() + url);
 		return;
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block

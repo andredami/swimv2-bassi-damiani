@@ -33,7 +33,7 @@ public class AbuseListServlet extends HttpServlet {
     	MANAGED("abuseManaged"),
     	CANCELED("abuseCanceled");
    	
-    	private static final String componentName = "ManageAbuseServlet";
+    	private static final String componentName = "AbuseListServlet";
     	private final String name;
     	
     	private Attribute(String name){
