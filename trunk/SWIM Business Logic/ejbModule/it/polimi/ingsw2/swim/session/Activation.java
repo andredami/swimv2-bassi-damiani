@@ -5,6 +5,7 @@ import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.Mailer.MessageType;
+import it.polimi.ingsw2.swim.session.local.MailerLocal;
 import it.polimi.ingsw2.swim.session.remote.ActivationRemote;
 
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import java.util.Map;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -48,13 +51,18 @@ public class Activation implements ActivationRemote {
 			return;
 		}
 
-		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("id", user.getId().toString());
-		parameters.put("userFirstname", user.getName().toString());
-		parameters.put("activationToken", user.getActivationCode());
-
-		Mailer mailer = new Mailer();
-		mailer.sendApplicationEmail(user.getEmail(),
-				MessageType.REGISTRATION_CONFIRMATION, parameters);
+		InitialContext ctx;
+		try {
+			ctx = new InitialContext();
+			MailerLocal mailer = (MailerLocal) ctx.lookup("Mailer/local");
+			Map<String, String> parameters = new HashMap<String, String>();
+			parameters.put("id", user.getId().toString());
+			parameters.put("userFirstname", user.getName().toString());
+			parameters.put("activationToken", user.getActivationCode());
+			mailer.sendApplicationEmail(user.getEmail(),
+					MessageType.REGISTRATION_CONFIRMATION, parameters);
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 	}
 }
