@@ -23,7 +23,7 @@ public class ChangeAdminPasswordServlet extends HttpServlet {
 		PASSWORD_ERROR("passwordError"), PASSWORD_WRONG("passwordWrong"), NOT_MATCHIN_PASSWORD("notMatchingPassword"), NO_USER(
 				"noUser"), EDITED("edited");
 
-		private static final String componentName = "LoadAdminListServlet";
+		private static final String componentName = "ChangeAdminPasswordServlet";
 		private final String name;
 
 		private Attribute(String name) {
