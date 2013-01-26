@@ -84,7 +84,7 @@ public class Abuse implements Serializable {
 		return email;
 	}
 
-	Boolean isHandled() {
+	public Boolean isHandled() {
 		return handled;
 	}
 
