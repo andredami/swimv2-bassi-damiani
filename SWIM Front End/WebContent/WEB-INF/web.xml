@@ -143,4 +143,14 @@
     <servlet-name>ProfileServlet</servlet-name>
     <url-pattern>/ProfileServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RequestHelpServlet</display-name>
+    <servlet-name>RequestHelpServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.RequestHelpServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RequestHelpServlet</servlet-name>
+    <url-pattern>/RequestHelpServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

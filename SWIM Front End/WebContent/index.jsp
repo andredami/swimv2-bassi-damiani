@@ -53,7 +53,7 @@
 					
 					<div class="entry"> &nbsp;<div>
 						<p>
-						
+						<a href="../Pages/RequestForHelp">Ricerca aiuto anche se non possiedi un account!</a>
 						<%
 							try {
 								if (request.getSession().getAttribute("ErrorLogin").equals(1)){

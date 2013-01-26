@@ -10,6 +10,7 @@ import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -82,7 +83,7 @@ public class AbilityEditorServlet extends HttpServlet {
 			String desc = request.getParameter("Description");
 			String oldName = request.getParameter("oldName");
 			String oldDesc = request.getParameter("oldDesc");
-			Set<String> alias ;
+			Set<String> alias = new HashSet<String>();
 			alias.add(request.getParameter("Alias"));	
 						
 			// insertion 

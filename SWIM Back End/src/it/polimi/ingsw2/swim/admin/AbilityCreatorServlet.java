@@ -7,6 +7,7 @@ import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
 import it.polimi.ingsw2.swim.session.remote.RequestManagerRemote;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -50,8 +51,8 @@ public class AbilityCreatorServlet extends HttpServlet {
 			
 			String name = request.getParameter("Name");
 			String description = request.getParameter("Description");
-			Set<String> alias;
-			Set<String> stub;
+			Set<String> alias = null;
+			Set<String> stub = new HashSet<String>();
 			try {
 				a.addNewAbility(name, description, alias, stub);
 			} catch (DuplicateAliasException e) {

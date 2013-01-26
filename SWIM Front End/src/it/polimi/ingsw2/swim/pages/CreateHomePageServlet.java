@@ -63,7 +63,31 @@ public class CreateHomePageServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		attributesReset(request);
+			attributesReset(request);
+
+			// create the context
+			InitialContext jndiContext = null;
+			try {
+				jndiContext = new InitialContext();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Object ref = null;
+			try {
+				ref = jndiContext.lookup("NotificationManager/remote");
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			NotificationManagerRemote a = (NotificationManagerRemote) ref;
+
+			String url = response.encodeURL("/Pages/HomePage.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+			
+
+
 	}
 
 	/**
@@ -99,6 +123,7 @@ public class CreateHomePageServlet extends HttpServlet {
 		} catch (NoSuchUserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 
