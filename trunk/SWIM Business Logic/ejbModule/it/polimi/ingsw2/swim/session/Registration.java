@@ -89,7 +89,7 @@ public class Registration implements RegistrationRemote {
 	}
 
 	@Override
-	public void registerUser(String[] entries) throws InvalidDataException,
+	public User registerUser(String[] entries) throws InvalidDataException,
 			UserAlreadyExistsException {
 		if (state != State.USER_CREATED) {
 			throw new IllegalStateException();
@@ -123,11 +123,13 @@ public class Registration implements RegistrationRemote {
 
 			try {
 				em.persist(user);
+				state = State.USER_FINALIZED;
+				return user;
 			} catch (EntityExistsException e) {
 				throw new UserAlreadyExistsException();
 			}
 
-			state = State.USER_FINALIZED;
+			
 
 		} else {
 			throw new InvalidDataException();

@@ -69,11 +69,8 @@ if(session.getAttribute("Id")==null && session.getAttribute(Attribute.IN_REGISTR
 				
 							
 				<div id="layer6" style="position: absolute; width: 343px; height: 147px; z-index: 1; left: 77px; top: 314px" class="headerTextForm">
-							<form method="post" action="../SelectAbilityRegistration" style="border-style: ridge; width: 328px; height: 143px; position: absolute; left: 1px; top: 4px; right: 6px;">
 								Ricerca l'abilità<br />
-								<input name="AbilitySelection.jsp/search" type="hidden" value="TRUE">
-								<input class="absolute" id="cerca" name="Cerca" style="left: 520px; top: 283px; height: 27px; width: 262px;" type="submit" value="Cerca" />
-								&nbsp;
+							<form method="post" action="../SelectAbilityRegistrationServlet" style="height: 148px">
 								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">
 								<%
 								// verifying if the request is empty or if there are no results
@@ -126,12 +123,13 @@ if(session.getAttribute("Id")==null && session.getAttribute(Attribute.IN_REGISTR
 										</ul>
 									</div>
 								</div>
-							</form>
-							<form method="post" action="../SelectAbilityRegistrationServlet" style="height: 148px">
-								<input class="absolute" name="SubmitAbilityButton" style="left: 182px; top: 81px; height: 30px; width: 129px;" type="submit" value="Inserisci" />
+							
+								<input name="AbilitySelection.jsp/search" type="hidden" value="TRUE">
+								<input class="absolute" name="SubmitAbilityButton" style="left: 182px; top: 81px; height: 30px; width: 129px;" type="submit" value="Cerca" />
 								<input class="absolute" name="TextAbility" style="border-style: outset; left: 25px; top: 49px; width: 205px;" type="text" />
-							</form>
 								<input class="absolute" name="RequestAbilityButton" type="button" value="Richiedi Nuova Abilità" onclick="open_win('../Popup/RequestAbilityPopup.html','RequestAbilityPopup');" style="left: 26px; top: 81px; width: 143px; height:31px;"/>
+							</form>
+								
 								</div>
 								
 

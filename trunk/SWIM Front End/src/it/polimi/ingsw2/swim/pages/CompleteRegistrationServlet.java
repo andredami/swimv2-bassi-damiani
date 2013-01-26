@@ -6,8 +6,6 @@ import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -66,14 +64,11 @@ public class CompleteRegistrationServlet extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 		}
-		
-		try {
-			InitialContext ctx = new InitialContext();
-			RegistrationRemote registrationController = (RegistrationRemote) ctx.lookup("Registration/remote");
+			RegistrationRemote registrationController = (RegistrationRemote) request.getSession().getAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString());
 			String[] entry = { request.getParameter("ChosenAbility") };
 			try {
 				registrationController.registerUser(entry);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), 0);
+				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), null);
 				request.getSession().setAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString(), 1);
 				registrationController.sendActivationEmail();
 				String url = response.encodeURL("/Pages/RegistrationConfirmation.jsp");
@@ -84,23 +79,17 @@ public class CompleteRegistrationServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + url);
 			} catch (UserAlreadyExistsException e) {
 				request.getSession().setAttribute(RegistrationServlet.Attribute.ALREADY_EXISTS.toString(), 1);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), 0);
+				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), null);
 				registrationController.abort();
 				String url = response.encodeURL("/Pages/Registration.jsp");
 				response.sendRedirect(request.getContextPath() + url);
 			} catch (IllegalStateException e){
 				request.getSession().setAttribute(RegistrationServlet.Attribute.TIMEOUT.toString(), 1);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), 0);
+				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), null);
 				registrationController.abort();
 				String url = response.encodeURL("/Pages/Registration.jsp");
 				response.sendRedirect(request.getContextPath() + url);
-			}
-		} catch (NamingException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-		
-		
+			}		
 	}
 
 }

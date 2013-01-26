@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.session.remote;
 
+import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Gender;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
@@ -14,7 +15,7 @@ public interface RegistrationRemote {
 			String surname, Calendar birthdate, Gender gender)
 			throws InvalidDataException, UserAlreadyExistsException;
 
-	void registerUser(String[] entries) throws InvalidDataException,
+	User registerUser(String[] entries) throws InvalidDataException,
 			UserAlreadyExistsException;
 
 	void sendActivationEmail();

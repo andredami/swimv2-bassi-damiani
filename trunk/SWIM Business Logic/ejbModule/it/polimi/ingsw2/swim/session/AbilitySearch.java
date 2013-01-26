@@ -31,9 +31,13 @@ public class AbilitySearch implements AbilitySearchRemote {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Ability> findAbility(String name) {
-		Query query = em.createQuery("SELECT a FROM Ability a, IN (a.alias) AS al WHERE a.name LIKE :namePattern OR al.name LIKE :namePattern");
-		
+		Query query;
+		if(name == null || name.isEmpty()){
+			query = em.createQuery("SELECT b FROM Ability b");
+		} else {
+		query = em.createQuery("SELECT b FROM Ability b JOIN FETCH b.alias c WHERE b.name LIKE ':namePattern' OR c.name LIKE ':namePattern'");
 		query.setParameter("namePattern", "%" + name + "%");
+		}
 		return query.getResultList();
 	}
 

@@ -174,7 +174,7 @@ $(document).load(function () {
 								<input class="absolute" name="TextConfirmEmail" style="border-style: outset; left: 212px; top: 156px; right: 115px;" type="text" >
 								<input class="absolute" name="TextPassword" style="border-style: outset; left: 212px; top: 191px; right: 116px;" type="password" >
 								<input class="absolute" name="TextConfirmPassword" style="border-style: outset; left: 212px; top: 225px; right: 116px;" type="password" >
-								<input class="absolute" id="prosegui" name="CheckboxConfirm" onclick="javascript:goingOn();" style="left: 15px; top: 288px; width: 30px; right: 415px" type="checkbox">
+								<input class="absolute" name="CheckboxConfirm" onclick="javascript:goingOn();" style="left: 15px; top: 288px; width: 30px; right: 415px" type="checkbox">
 								<input class="absolute" id="prosegui" name="submitAndGoOn" disabled="disabled" style="height: 21px; top: 312px; left: 193px;" type="submit" value="Prosegui" />
 								</form>
 						</div>

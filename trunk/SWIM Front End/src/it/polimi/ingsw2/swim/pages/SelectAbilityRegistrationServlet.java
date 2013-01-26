@@ -64,11 +64,13 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 			
 			List<Ability> abilityList = null;
 			if(request.getParameter("AbilitySelection.jsp/search")!=null){
-				String searchKey = request.getParameter("Cerca");
+				String searchKey = request.getParameter("TextAbility");
 				if(searchKey == null || searchKey.isEmpty()){
+					System.err.println("non trovo TextAbility");
 					request.getSession().setAttribute(Attribute.EMPTY_SEARCH.toString(), 1);
 					abilityList = a.findAbility("");
 				} else {
+					System.err.println("trovo TextAbility e filtro per "+searchKey);
 					request.getSession().setAttribute(Attribute.SEARCH_KEY.toString(), searchKey);
 					abilityList = a.findAbility(searchKey);
 				}
@@ -77,7 +79,7 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 			}
 			
 			
-			
+			System.err.println("lista lunga: "+abilityList.size());
 			request.getSession().setAttribute(Attribute.LIST.toString(), abilityList);
 			String url = response.encodeURL("/Pages/AbilitySelection.jsp");
 			response.sendRedirect(request.getContextPath() + url);
