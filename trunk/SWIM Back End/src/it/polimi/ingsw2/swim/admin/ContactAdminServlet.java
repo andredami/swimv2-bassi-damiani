@@ -1,8 +1,6 @@
 package it.polimi.ingsw2.swim.admin;
 
-import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
-import it.polimi.ingsw2.swim.session.remote.UserManagerRemote;
 
 import java.io.IOException;
 
@@ -18,7 +16,30 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class ContactAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+    
+	 public enum Attribute {
+	    	SENDER_ERROR("senderError"), ADDRESSEE_ERROR("addresseeError"), DATA_ERROR("textError"), SENT("sent");
+	    	
+	    	private static final String componentName = "LoadAdminListServlet";
+	    	private final String name;
+	    	
+	    	private Attribute(String name){
+	    		this.name = name;
+	    	}
+	    	
+	    	@Override
+	    	public String toString(){
+	    		return componentName+"/"+name;
+	    	}
+	    }
+	    
+	    private void attributesReset(HttpServletRequest request){
+	    	for(Attribute a : Attribute.values()){
+	    		request.getSession().setAttribute(a.toString(), null);
+	    	}
+	    }
+	
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -31,7 +52,7 @@ public class ContactAdminServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		attributesReset(request);
 	}
 
 	/**
@@ -39,6 +60,8 @@ public class ContactAdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		attributesReset(request);
+		
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
@@ -46,25 +69,42 @@ public class ContactAdminServlet extends HttpServlet {
 			AdministrationProfileManagerRemote a = (AdministrationProfileManagerRemote) ref;
 			
 			// retrieve data from the form
-			String senderId = request.getSession().getAttribute("Id").toString();
-			String addresseeId = request.getParameter("id");
+			String senderId;
+			try {
+				senderId = request.getSession().getAttribute("Id").toString();
+			} catch (NullPointerException e1) {
+				request.getSession().setAttribute(Attribute.SENDER_ERROR.toString(), 1);
+				String url = response.encodeURL("/Pages/ContactAdmin.jsp");
+				response.sendRedirect(request.getContextPath() + url);
+				return;
+			}
+			
+			String addresseeId = request.getParameter("AddresseeId");
 			String text = request.getParameter("Message");
+			
+			if(text.isEmpty()){
+				request.getSession().setAttribute(Attribute.DATA_ERROR.toString(), 1);
+				String url = response.encodeURL("/Pages/ContactAdmin.jsp");
+				response.sendRedirect(request.getContextPath() + url);
+				return;
+			}
 			
 			try {
 				a.sendMessage(senderId, addresseeId, text);
-			} catch (NoSuchUserException e) {
-				request.getSession().setAttribute("DataError", 1);
-				String url = response.encodeURL("/Pages/ContactUser.jsp");
+			} catch (Throwable e) {
+				request.getSession().setAttribute(Attribute.ADDRESSEE_ERROR.toString(), 1);
+				String url = response.encodeURL("/Pages/ContactAdmin.jsp");
 				response.sendRedirect(request.getContextPath() + url);
+				return;
 			}
-			request.getSession().setAttribute("Send", 1);
-			String url = response.encodeURL("/Pages/home.jsp");
+			request.getSession().setAttribute(Attribute.SENT.toString(), 1);
+			String url = response.encodeURL("/Pages/ContactAdmin.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 

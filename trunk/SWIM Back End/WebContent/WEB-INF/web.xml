@@ -205,4 +205,14 @@
     <servlet-name>CancelAbilityServlet</servlet-name>
     <url-pattern>/CancelAbilityServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>DeleteAdmin</display-name>
+    <servlet-name>DeleteAdmin</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.DeleteAdmin</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteAdmin</servlet-name>
+    <url-pattern>/DeleteAdmin</url-pattern>
+  </servlet-mapping>
 </web-app>
