@@ -83,4 +83,24 @@
     <servlet-name>InsertAbilityServlet</servlet-name>
     <url-pattern>/InsertAbilityServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CompleteRegistrationServlet</display-name>
+    <servlet-name>CompleteRegistrationServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.CompleteRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CompleteRegistrationServlet</servlet-name>
+    <url-pattern>/CompleteRegistrationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ActivationResend</display-name>
+    <servlet-name>ActivationResend</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.ActivationResend</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActivationResend</servlet-name>
+    <url-pattern>/ActivationResend</url-pattern>
+  </servlet-mapping>
 </web-app>

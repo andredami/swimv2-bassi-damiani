@@ -1,8 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet.Attribute" %>
+<%@ page import="it.polimi.ingsw2.swim.pages.SelectAbilityRegistrationServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.pages.CompleteRegistrationServlet" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
+<%
+if(session.getAttribute("Id")==null && session.getAttribute(Attribute.IN_REGISTRATION.toString())==null){
+	String url = response.encodeURL("/index.jsp");
+	response.sendRedirect(request.getContextPath() + url);
+	return;
+}
+%>
+
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="../Popup/popup.js"></script>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -19,16 +31,6 @@
 	margin-top: 0;
 }
 </style>
-
-<%
-	String email = (String)request.getSession().getAttribute("TextEmail");
-		if (email == null){
-			String url = response.encodeURL("/index.jsp");
-			response.sendRedirect(request.getContextPath() + url);
-			return;
-		}
-%>
-
 </head>
 <body class="absolute" style="width: 1250px; height: 684px; left: 180px; top: 0px; margin-left: 106; margin-top: 0">
 					
@@ -51,14 +53,14 @@
 					<p>
 						<%
 							try{
-							if (request.getSession().getAttribute("Registration").equals(1)){
-								out.println ("La prima fase della registrazione è andata a buon fine!");
-								out.println ("Ora serve che tu inserisca almeno un abilità, oppure <a href='Registration.jsp'>torna indietro</a>");
+							if (request.getSession().getAttribute(Attribute.IN_REGISTRATION.toString()).equals(1)){
+								out.println ("La prima fase della registrazione è andata a buon fine! <br>");
+								out.println ("Seleziona la tua prima abilità!");
 							}
 							}
 							catch (NullPointerException e){
-								out.println ("Seleziona le abilità che vuoi inserire nel tuo profilo");
-								out.println ("Quando hai terminato, <a href='Profile.html'>torna al tuo profilo</a>");	
+								out.println ("Seleziona l'abilità che vuoi inserire nel tuo profilo <br>");
+								out.println ("Oppure <a href='Profile.html'>torna al tuo profilo</a>");	
 								}
 						%>
 					</p>
@@ -67,51 +69,58 @@
 				
 							
 				<div id="layer6" style="position: absolute; width: 343px; height: 147px; z-index: 1; left: 77px; top: 314px" class="headerTextForm">
-							<form method="post" action="../ValidationServlet" style="border-style: ridge; width: 328px; height: 143px; position: absolute; left: 1px; top: 4px; right: 6px;">
-								Scrivi direttamente l'abilità che vuoi inserire, 
-								oppure<br />
-								fai richiesta di una nuova abilità.<br />
-								<input class="absolute" id="next" name="NextButton" style="left: 520px; top: 283px; height: 27px; width: 262px;" type="submit" value="Prosegui(attivo solo se presente una abilità)" />
+							<form method="post" action="../SelectAbilityRegistration" style="border-style: ridge; width: 328px; height: 143px; position: absolute; left: 1px; top: 4px; right: 6px;">
+								Ricerca l'abilità<br />
+								<input name="AbilitySelection.jsp/search" type="hidden" value="TRUE">
+								<input class="absolute" id="cerca" name="Cerca" style="left: 520px; top: 283px; height: 27px; width: 262px;" type="submit" value="Cerca" />
 								&nbsp;
 								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">
 								<%
 								// verifying if the request is empty or if there are no results
 								try{
-								if (request.getSession().getAttribute("EmptyRequest").equals(1)){
+								if (request.getSession().getAttribute(SelectAbilityRegistrationServlet.Attribute.EMPTY_SEARCH.toString()).equals(1)){
+									request.getSession().setAttribute(SelectAbilityRegistrationServlet.Attribute.EMPTY_SEARCH.toString(), null);
 									out.println ("Devi inserire un'abilità da ricercare.");
 								}
-								else {
-										if (request.getSession().getAttribute("NotFoundAbility").equals(1)){
-											out.println ("L'abilità richiesta non esiste. Se lo desideri puoi farne richiesta.");
-											}
+								}catch (NullPointerException e){	
 								}
-								}catch (NullPointerException e){
-									e.printStackTrace();
+								try{
+								if (request.getSession().getAttribute(CompleteRegistrationServlet.Attribute.NO_ABILITY.toString()).equals(1)){
+									request.getSession().setAttribute(CompleteRegistrationServlet.Attribute.NO_ABILITY.toString(), null);
+									out.println ("Seleziona un'abilità dalla lista qui a lato.");
+								}
+								}catch (NullPointerException e){	
 								}
 								%>
 								</label>
 								<div class="notification" style="border-style: groove; left: 431px; top: -3px; height: 250px; width: 359px">
 									<div class="notification-inner" style="width: 345px; height: 241px; margin-left: 5px; margin-top: 5px">
-										Abilità trovate (clicca sul nome per aggiungere alle scelte)
+										Abilità trovate (clicca sul nome per aggiungerla al tuo profilo)
 										<br />
 										&nbsp;
 										<ul> 
 										<%
+											String destination = "";
+											if(Attribute.IN_REGISTRATION.toString()!=null){
+												destination = "../CompleteRegistrationServlet";
+											} else {
+												destination = "../InsertAbilityServlet";
+											}
+											
 											try{
-											List<Ability> a = new ArrayList<Ability>();
-											a = (List<Ability>)request.getSession().getAttribute("abilityList");
+											List<Ability> a = (List<Ability>)request.getSession().getAttribute(SelectAbilityRegistrationServlet.Attribute.LIST.toString());
 											Iterator<Ability> i = a.iterator();
 											while (i.hasNext()){
 												Ability el = i.next();
 												%>
-												<li><a href="<%=response.encodeURL("InsertAbilityServlet?ChosenAbility="+el.getName())%>"><% out.print(el.getName()); %></a></li>
+												<li><a href="<%=response.encodeURL(destination+"?ChosenAbility="+el.getName())%>"><% out.print(el.getName()); %></a></li>
 												<li id='description'>
 												<textarea readonly='readonly' name='TextArea' rows='2' style='width: 285px'><% out.print(el.getDescription()); %></textarea>
 												</li>
 											<%
 											}
 											}catch(NullPointerException e){			
-												out.println("Non ci sono abilità registrate nel database.");
+												out.println("<li>C'è stato un errore nel caricare la lista delle abilità, <a href=\"../SelectAbilityRegistrationServlet\">riavvia la ricerca</a></li>");
 											}
 										%>							
 										</ul>

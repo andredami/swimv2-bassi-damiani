@@ -1,8 +1,22 @@
+<%@page import="it.polimi.ingsw2.swim.pages.RegistrationServlet.Attribute"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<%
+if (session.getAttribute("Id")!=null){
+	String url = response.encodeURL("/Pages/home.jsp");
+	response.sendRedirect(request.getContextPath() + url);
+	return;
+}
+if(request.getSession().getAttribute(Attribute.IN_REGISTRATION.toString())!=null){
+	String url = response.encodeURL(request.getContextPath() + "/Pages/AbilityRequest.jsp");
+	response.sendRedirect(request.getContextPath() + url);
+	return;
+}
+%>
 <meta http-equiv="content-type" content="text/html; charset=utf-8;" />
 <script type="text/javascript" src="../jquery/jquery-1.9.0.js"></script>
 <script type="text/javascript" src="functions.js"></script>
@@ -47,21 +61,44 @@ $(document).load(function () {
 					
 					<div class="entry"><p>
 						<%
+						boolean errorShown = false;
 						try {
-							if (request.getSession().getAttribute("DataException").equals(1)){
-								request.getSession().setAttribute("DataException", null);
+							if (request.getSession().getAttribute(Attribute.INVALID_DATA.toString()).equals(1)){
+								request.getSession().setAttribute(Attribute.INVALID_DATA.toString(), null);
+								errorShown = true;
 								out.println("Attenzione! I dati non sono stati inseriti correttamente. Ritenta ancora.");	
 							}
-							if (request.getSession().getAttribute("AlreadyExists").equals(1)){
-								request.getSession().setAttribute("AlreadyExists", null);
+						}
+						catch (NullPointerException e){
+						}
+						try {
+							if (request.getSession().getAttribute(Attribute.ALREADY_EXISTS.toString()).equals(1)){
+								request.getSession().setAttribute(Attribute.ALREADY_EXISTS.toString(), null);
+								errorShown = true;
 								out.println("Attenzione! I dati inseriti corrispondono ad un utente già registrato! Riprova con altri valori.");	
 							}
-							if (request.getSession().getAttribute("Wrong").equals(1)){
-								request.getSession().setAttribute("Wrong", null);
+						}
+						catch (NullPointerException e){
+						}
+						try {
+							if (request.getSession().getAttribute(Attribute.NOT_MATCHING.toString()).equals(1)){
+								request.getSession().setAttribute(Attribute.NOT_MATCHING.toString(), null);
+								errorShown = true;
 								out.println("Attenzione! La combinazione di email e password risulta errata. Ritenta ancora.");	
 							}
 						}
 						catch (NullPointerException e){
+						}
+						try {
+							if (request.getSession().getAttribute(Attribute.TIMEOUT.toString()).equals(1)){
+								request.getSession().setAttribute(Attribute.TIMEOUT.toString(), null);
+								errorShown = true;
+								out.println("Siamo spiacenti ma il tempo per completare la registrazione è scaduto. Riprova!");	
+							}
+						}
+						catch (NullPointerException e){
+						}
+						if(!errorShown){
 							out.println("Compila i seguenti campi per registrarti alla piattaforma. <br />Se invece sei già registrato, clicca <a href='../index.jsp'>qui</a>, altrimenti torna alla <a href='../index.jsp'>home</a>.");
 						}
 						%>
@@ -70,7 +107,6 @@ $(document).load(function () {
 				</div>
 				<div id="layer6" style="position: absolute; width: 476px; height: 356px; z-index: 1; left: 75px; top: 330px" class="headerTextForm">
 							<form method="post" action="<%= response.encodeURL("../RegistrationServlet")%>" style="border-style: ridge; width: 460px; height: 339px; position: absolute; left: 1px; top: 4px;">
-								<input class="absolute" id="prosegui" name="submitAndGoOn" disabled="disabled" style="height: 21px; top: 312px; left: 193px;" type="submit" value="Prosegui" />
 								<label id="LabelName" class="absolute" style="left: 10px; top: 9px; width: 46px">
 								Nome</label>
 								<label id="LabelSurname" class="absolute" style="left: 8px; top: 38px; width: 68px; right: 384px;">
@@ -90,41 +126,11 @@ $(document).load(function () {
 
 								<label id="LabelAccept" class="absolute" style="left: 46px; top: 286px; width: 177px">
 								Accetto i termini del contratto</label><br />
-								<input class="absolute" name="TextSurname" style="border-style: outset; left: 212px; top: 35px; right: 128px;" type="text" >
-								<input class="absolute" name="TextConfirmPassword" style="border-style: outset; left: 212px; top: 225px; right: 116px;" type="password" >
-								<input class="absolute" name="TextPassword" style="border-style: outset; left: 212px; top: 191px; right: 116px;" type="password" >
-								<input class="absolute" name="TextConfirmEmail" style="border-style: outset; left: 212px; top: 156px; right: 115px;" type="text" >
-								<input class="absolute" name="TextEmail" style="border-style: outset; left: 212px; top: 124px; right: 115px;" type="text" >
 								<input class="absolute" name="TextName" style="border-style: outset; left: 212px; top: 7px; right: 128px;" type="text" ><br />
-								<select name="Month" class="absolute" style="left: 266px; top: 65px; width: 45px;">
-								<%
-								Calendar c = Calendar.getInstance();
-								int thisMonth = c.get(Calendar.MONTH) + 1;
-								out.println("<option></option>");
-								for (int m=1; m <= 12; m++){
-									if(m == thisMonth){
-										out.println("<option selected>"+m+"</option>");
-									} else {
-										out.println("<option>"+m+"</option>");
-									}
-								}
-								%>
-								</select><select name="Year" class="absolute" style="left: 318px; top: 65px; width: 58px; right: 84px;">
-								<%
-								int thisYear = c.get(Calendar.YEAR);
-								out.println("<option></option>");
-								for (int y=1920; y < thisYear; y++){
-									out.println("<option>"+y+"</option>");
-								}
-								out.println("<option selected>"+thisYear+"</option>");
-								%>
-								
-								</select><select name="Gender" class="absolute" style="left: 212px; top: 98px; width: 45px;">
-								<option>M</option>
-								<option>F</option>
-								</select>
+								<input class="absolute" name="TextSurname" style="border-style: outset; left: 212px; top: 35px; right: 128px;" type="text" >
 								<select name="Day" class="absolute" style="left: 212px; top: 65px; width: 45px;">
 								<%
+								Calendar c = Calendar.getInstance();
 								int thisDay = c.get(Calendar.DAY_OF_MONTH);
 								out.println("<option></option>");
 								for (int d=1; d <= 31; d++){
@@ -136,7 +142,40 @@ $(document).load(function () {
 								}
 								%>
 								</select>
+								<select name="Month" class="absolute" style="left: 266px; top: 65px; width: 45px;">
+								<%
+								int thisMonth = c.get(Calendar.MONTH) + 1;
+								out.println("<option></option>");
+								for (int m=1; m <= 12; m++){
+									if(m == thisMonth){
+										out.println("<option selected>"+m+"</option>");
+									} else {
+										out.println("<option>"+m+"</option>");
+									}
+								}
+								%>
+								</select>
+								<select name="Year" class="absolute" style="left: 318px; top: 65px; width: 58px; right: 84px;">
+								<%
+								int thisYear = c.get(Calendar.YEAR);
+								out.println("<option></option>");
+								for (int y=1920; y < thisYear; y++){
+									out.println("<option>"+y+"</option>");
+								}
+								out.println("<option selected>"+thisYear+"</option>");
+								%>
+								
+								</select>
+								<select name="Gender" class="absolute" style="left: 212px; top: 98px; width: 45px;">
+								<option>M</option>
+								<option>F</option>
+								</select>
+								<input class="absolute" name="TextEmail" style="border-style: outset; left: 212px; top: 124px; right: 115px;" type="text" >
+								<input class="absolute" name="TextConfirmEmail" style="border-style: outset; left: 212px; top: 156px; right: 115px;" type="text" >
+								<input class="absolute" name="TextPassword" style="border-style: outset; left: 212px; top: 191px; right: 116px;" type="password" >
+								<input class="absolute" name="TextConfirmPassword" style="border-style: outset; left: 212px; top: 225px; right: 116px;" type="password" >
 								<input class="absolute" id="prosegui" name="CheckboxConfirm" onclick="javascript:goingOn();" style="left: 15px; top: 288px; width: 30px; right: 415px" type="checkbox">
+								<input class="absolute" id="prosegui" name="submitAndGoOn" disabled="disabled" style="height: 21px; top: 312px; left: 193px;" type="submit" value="Prosegui" />
 								</form>
 						</div>
 
