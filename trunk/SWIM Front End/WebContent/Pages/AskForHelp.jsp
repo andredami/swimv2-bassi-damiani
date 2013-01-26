@@ -25,7 +25,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 959px; height: 137px">
 		
-				<h1><a href="HomePage.html">SWIM</a></h1>
+				<h1><a href="">SWIM</a></h1>
 
 
 			</div>
@@ -49,7 +49,7 @@
 						<textarea readonly="readonly" name="TextArea1" class="absolute" style="border-style: groove; width: 285px; height: 123px; left: 76px; top: 418px;">Descrizione</textarea><br />
 						<br /><br /><br /><br /><br /><br />
 						Messaggio da allegare alla richiesta:
-						<form action="HelpConfirmation.html" style="height: 189px; width: 292px">
+						<form action="HomePage.jsp" style="height: 189px; width: 292px">
 							<textarea name="TextArea2" class="absolute" style="border-style:groove; width: 285px; height: 123px; left: 77px; top: 583px;">Ciao, mi potresti dare una mano con un problema? Te ne sarei grato!</textarea><br />
 							<input name="SubmitRequest" type="submit" value="Invia Richiesta" class="absolute" style="left: 78px; top: 722px; width: 97px; height: 25px" />
 							<div class="absolute" style="width: 86px; left: 283px; top: 726px">

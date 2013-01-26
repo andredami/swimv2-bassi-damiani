@@ -31,6 +31,12 @@
 	margin-top: 0;
 }
 </style>
+
+<%@ page import="java.util.*" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.*" %>
+<%@ page import="javax.naming.InitialContext"%>
+
+
 </head>
 <body class="absolute" style="width: 1250px; height: 1019px; left: 180px; top: 0px; margin-left: 106; margin-top: 0">
 			
@@ -85,21 +91,39 @@
 						<div class="notification" style="border-style: groove; left: 76px; top: 631px; height: 293px; width: 313px">
 						<div class="notification-inner" style="font-weight:bold; width: 299px; height: 281px; margin-left: 5px; margin-top: 5px">
 							<h4>Abilità</h4>
-								<form action="Profile.html">
-								<ul id="noMargin" style="height: 231px">
-										<li>
-										<input name="Checkbox4" type="checkbox" value="ON" /> Nome Abilità 1</li>
-										<li>Descrizione</li>
-										<li>
-										<input name="Checkbox5" type="checkbox" value="ON" /> Nome Abilità 2</li>
-										<li>Descrizione</li>
-										<li>
-										<input name="Checkbox6" type="checkbox" value="ON" /> Nome Abilità 3 </li>
-										<li>Descrizione</li>
-										<input name="RemoveButton1" type="submit" value="Rimuovi Abilità Selezionate" class="auto-style2" style="left: 147px; top: 308px; width: 170px;" />
-										<input name="InsertButton1" type="button" onclick="location.href='AbilitySelection.html'" value="Inserisci Nuova Abilità" class="absolute" style="left: -3px; top: 308px; width: 141px;" />
-								</ul>
-								</form>
+							<form action="Profile.html">
+							<%
+							
+							
+							Set<Ability> a;
+							
+							if (request.getSession().getAttribute("abilities")!= null){
+								a = (Set<Ability>) request.getSession().getAttribute("abilities");
+								if (a.isEmpty()){
+									out.println("Non hai abilità.");
+								Iterator<Ability> i = a.iterator();
+								if (i.hasNext()){
+								out.println("<ul id='noMargin' style='height: 231px'>");
+								while (i.hasNext()){
+								Ability el = i.next();
+								%>	
+									<li>
+										<input name="Checkbox" type="checkbox" value="ON" /> <%out.print(el.getName()); %></li>
+								<%
+								}
+								out.println("</ul>");
+								out.println("<input name='RemoveButton1' type='submit' value='Rimuovi Abilità Selezionate' class='auto-style2' style='left: 147px; top: 308px; width: 170px;' />");
+								out.println("<input name='InsertButton1' type='button' onclick='location.href='AbilitySelection.html'' value='Inserisci Nuova Abilità' class='absolute' style='left: -3px; top: 308px; width: 141px;' />");
+								
+								}
+								}
+							}else{
+								out.println("Null exception.");
+							}
+							
+							
+							%>
+							</form>
 							<br/>
 						</div>
 					</div>

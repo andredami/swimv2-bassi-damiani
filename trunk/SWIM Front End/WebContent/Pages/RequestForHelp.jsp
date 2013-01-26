@@ -16,6 +16,22 @@
 	margin-top: 0;
 }
 </style>
+<%@ page import="java.util.*" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.*" %>
+
+
+<%
+//check if exists a valid session
+	Long user = (Long)session.getAttribute("Id");
+		if (user == null){
+			String url = response.encodeURL("/index.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+			return;
+		}
+%>
+
+
+
 </head>
 <body class="absolute" style="width: 1250px; height: 684px; left: 180px; top: 0px; margin-left: 106; margin-top: 0">
 					
@@ -38,7 +54,7 @@
 					<div class="entry"><p>Ricerca l'utente che può darti una 
 						mano ricercando una sua abilità specifica, oppure 
 						ricercandolo per nome. <br />
-						Oppure <a href="HomePage.html">
+						Oppure <a href="HomePage.jsp">
 						torna alla home</a>.<br />
 								</p>
 					</div>
@@ -47,12 +63,42 @@
 						<div class="notification-inner" style="font-weight:bold; width:337px; height: 335px; margin-left: 5px; margin-top: 5px">
 							<h4>Risultati della ricerca</h4>
 							<ul id="noMargin">
+							
+							<%
+							try{
+								List<User> a = (List<User>) request.getSession().getAttribute("listUser");
+								Iterator<User> i = a.iterator();
+								if (i.hasNext()){
+									while (i.hasNext()){
+										User el = i.next();
+							%>
+							<li>
+							<div id="smallWindow" style="width: 309px">	
+								<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50" />
+								<div id="requestLabel" style="left: 56px; top: -50px; bottom: 50px; width: 249px"><a href=""><%out.print(el.getName().getFirstname()+""+el.getName().getSurname()); %></a> 
+									- <%out.print(el.getGender()); %></div>
+								<form method="post" action=<% response.encodeURL("../Pages/AskForHelp?id="+el.getId());%>>
+									<input id="selectButton" name="selectButton" type="submit" value="Seleziona" style="position:relative; left: 240px; top: -42px; width: 66px; height: 21px" />
+								</form>
+								</div>
+							</li>
+							<% 
+									}
+								}
+							} catch (NullPointerException e){
+								
+								out.print("Non ci sono utenti che possiedono quelle abilità");
+							}
+							%>
+							
+							
+							
 								<li>
 									<div id="smallWindow" style="width: 309px">	
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50" />
 										<div id="requestLabel" style="left: 56px; top: -50px; bottom: 50px; width: 249px"><a href="RequestFriendProfile.html">Utente 1</a> 
 											- Sesso</div>
-										<form method="post" action="AskForHelp.html">
+										<form method="post" action="AskForHelp.jsp">
 											<input id="selectButton" name="selectButton" type="submit" value="Seleziona" style="position:relative; left: 240px; top: -42px; width: 66px; height: 21px" />
 										</form>
 									</div>
@@ -62,7 +108,7 @@
 										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50" />
 										<div id="requestLabel" style="left: 56px; top: -50px; bottom: 50px; width: 249px"><a href="RequestFriendProfile.html">Utente 2</a> 
 											- Sesso</div>
-										<form method="post" action="AskForHelp.html">
+										<form method="post" action="AskForHelp.jsp">
 											<input id="selectButton" name="selectButton" type="submit" value="Seleziona" style="position:relative; left: 240px; top: -42px; width: 66px; height: 21px" />
 										</form>
 									</div>
@@ -84,11 +130,10 @@
 					</div>
 							
 				<div id="layer6" style="position: absolute; width: 343px; height: 147px; z-index: 1; left: 77px; top: 314px" class="headerTextForm">
-							<form method="post" action="RequestForHelp.html" style="border-style: ridge; width: 328px; height: 143px; position: absolute; left: 1px; top: 4px; right: 6px;">
+							<form method="post" action="<%= response.encodeURL("../RequestHelpServlet?id="+user)%>" style="border-style: ridge; width: 328px; height: 143px; position: absolute; left: 1px; top: 4px; right: 6px;">
 								Ricerca l'abilità che possiede l'utente <br />
 								&nbsp;&nbsp;
-								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">qui 
-								l'errore quando scrive qualcosa di assurdo</label>
+								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px"></label>
 								<input class="absolute" name="SubmitAbilityButton" style="left: 248px; top: 47px; height: 30px; width: 73px;" type="submit" value="Ricerca" />
 								<input class="absolute" name="TextAbility" style="border-style: outset; left: 25px; top: 49px; width: 205px;" type="text" />
 							</form>
@@ -101,7 +146,7 @@
 								minimo<br />
 								&nbsp;&nbsp;
 								<label id="LabelError" class="absolute" style="left: 20px; top: 115px; width: 295px">qui 
-								l'errore quando scrive qualcosa di assurdo</label>
+								</label>
 								<input class="absolute" name="SubmitAbilityButton" style="left: 248px; top: 47px; height: 30px; width: 73px;" type="submit" value="Ricerca" />
 								<input class="absolute" name="TextAbility" style="border-style: outset; left: 25px; top: 49px; width: 205px;" type="text" />
 								<input name="Checkbox1" type="checkbox" style="position:relative; left: -141px; top: 44px; width: 20px; height: 22px;"/>

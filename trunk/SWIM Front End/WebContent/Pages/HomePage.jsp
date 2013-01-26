@@ -56,7 +56,7 @@
 				<div class="welcome">
 					<div id="navigation" style="height: 22px">
 						<ul class="absolute" style="left: 734px; top: 192px; height: 18px">
-						    <li><a href="RequestForHelp.html">Cerca Aiuto</a></li>
+						    <li><a href="../Pages/RequestForHelp.jsp">Cerca Aiuto</a></li>
 						    <li><a href="/ProfileServlet">Profilo</a></li>
 							<li><a href="Login.html">Logout</a></li>						    
 						</ul>
@@ -104,7 +104,7 @@
 								}
 								}
 							}else{
-								out.println("Null exception.");
+								out.println("Non ci sono notifiche al momento.");
 							}
 							
 							
@@ -146,7 +146,7 @@
 								}
 								}
 							}else{
-								out.println("Null exception.");
+								out.println("Non ci sono richieste di amicizia al momento.");
 							}
 												
 							%>
@@ -191,7 +191,7 @@
 								}
 								}
 							}else{
-								out.println("Null exception.");
+								out.println("Non hai feedback da dare al momento.");
 							}
 												
 							%>
@@ -237,7 +237,7 @@
 								}
 								}
 							}else{
-								out.println("Null exception.");
+								out.println("Non hai richieste di aiuto per ora.");
 							}
 												
 							%>
