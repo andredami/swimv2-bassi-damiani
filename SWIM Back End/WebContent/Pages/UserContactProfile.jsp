@@ -47,10 +47,10 @@
 				<div class="welcome">
 					<div id="navigation" style="height: 22px">
 						<ul class="absolute" style="left: 672px; top: 192px; height: 18px">
-							<li><a href="<%= response.encodeURL("../Pages/ContactUser.jsp")%>">Contatta</a></li>
+							<li><a href="<%= response.encodeURL("../Pages/ContactUser.jsp?userId="+request.getSession().getAttribute("userId"))%>">Contatta</a></li>
 							<li>
-							<a href="<%= response.encodeURL("../BanUserServlet")%>">Ban Utente</a></li>
-						    <li><a href="<%= response.encodeURL("../Pages/UserList.jsp")%>">Torna Indietro</a></li>
+							<a href="<%= response.encodeURL("../BanUserServlet?userId="+request.getSession().getAttribute("userId"))%>">Ban Utente</a></li>
+						    <li><a href="<%= response.encodeURL("../UserListServlet")%>">Torna Indietro</a></li>
 						</ul>
 					</div>
 					

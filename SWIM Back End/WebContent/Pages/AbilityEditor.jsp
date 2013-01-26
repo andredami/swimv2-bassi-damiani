@@ -9,6 +9,9 @@
 <title>Modifica abilità</title>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
+<%@ page import="javax.naming.InitialContext"%>
+<%@ page
+	import="it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote"%>
 
 <%
 //check if exists a valid session
@@ -24,11 +27,11 @@
 <body>
 
 <p>Modifica abilità</p>
-<form action="<%= response.encodeURL("../AbilityEditorServlet")%>" method="post">
-	<% String count = (String)request.getParameter("Count"); %>
-	Nome: <input name="Name" type="text" value="<% out.print(request.getSession().getAttribute("Name"+count));%>"><br><br>Descrizione:<br>&nbsp;<textarea name="Description" style="width: 308px; height: 134px"><%out.print(request.getSession().getAttribute("Desc"+count));%></textarea><br>
-	<br>Alias:<input name="Text2" type="text"><input name="Button1" type="button" value="Assegna"><br>
+<form action="<%= response.encodeURL("../AbilityEditorServlet?oldName="+request.getSession().getAttribute("name")+"&oldDesc="+request.getSession().getAttribute("desc"))%>" method="post">
+	Nome: <input name="Name" type="text" value="<%out.print(request.getSession().getAttribute("name")); %>"><br><br>Descrizione:<br>&nbsp;<textarea name="Description" style="width: 308px; height: 134px"><%out.print(request.getSession().getAttribute("desc")); %></textarea><br>
+	<br>Alias:<input name="Alias" type="text"><input name="Assegna" type="button" value="Assegna"><br>
 	<br>Lista di alias:
+
 	<br><br>
 	<input name="SubmitAbility" type="submit" value="Inserisci"><br><br><br><br>
 </form>

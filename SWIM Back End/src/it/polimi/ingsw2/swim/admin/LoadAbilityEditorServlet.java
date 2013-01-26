@@ -1,7 +1,9 @@
 package it.polimi.ingsw2.swim.admin;
 
 
+import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.Administrator;
+import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
 
 import java.io.IOException;
@@ -17,19 +19,19 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class LoadAdminListServlet
  */
-public class LoadAdminListServlet extends HttpServlet {
+public class LoadAbilityEditorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LoadAdminListServlet() {
+    public LoadAbilityEditorServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
     
     public enum Attribute {
-    	LIST("passwordError");
+    	LIST("aliasList");
     	
     	private static final String componentName = "LoadAdminListServlet";
     	private final String name;
@@ -59,12 +61,15 @@ public class LoadAdminListServlet extends HttpServlet {
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("AdministrationProfileManager/remote");
-			AdministrationProfileManagerRemote a = (AdministrationProfileManagerRemote) ref;
+			Object ref = jndiContext.lookup("AbilityManager/remote");
+			AbilityManagerRemote a = (AbilityManagerRemote) ref;
 			
-			List<Administrator> list = a.retriveList();
-			request.getSession().setAttribute(Attribute.LIST.toString(), list);
-			String url = response.encodeURL("/Pages/AdminList.jsp");
+			String name = request.getParameter("name");
+			String desc = request.getParameter("desc");
+			// ci sarebbe anche da prendere gli alias
+			request.getSession().setAttribute("name", name);
+			request.getSession().setAttribute("desc", desc);
+			String url = response.encodeURL("/Pages/AbilityEditor.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			

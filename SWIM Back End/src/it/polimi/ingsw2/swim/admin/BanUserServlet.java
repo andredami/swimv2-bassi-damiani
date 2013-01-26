@@ -37,8 +37,9 @@ public class BanUserServlet extends HttpServlet {
 			Object ref = jndiContext.lookup("UserManager/remote");
 			UserManagerRemote a = (UserManagerRemote)ref;
 			
-			// retrieve user id ? come?
+			String userId = request.getParameter("userId");
 			a.banUser(userId);
+			
 
 			String url = response.encodeURL("/Pages/home.jsp");
 			response.sendRedirect(request.getContextPath() + url);

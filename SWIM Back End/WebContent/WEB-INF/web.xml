@@ -225,4 +225,14 @@
     <servlet-name>ManageAbuseServlet</servlet-name>
     <url-pattern>/ManageAbuseServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LoadAbilityEditorServlet</display-name>
+    <servlet-name>LoadAbilityEditorServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.admin.LoadAbilityEditorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoadAbilityEditorServlet</servlet-name>
+    <url-pattern>/LoadAbilityEditorServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

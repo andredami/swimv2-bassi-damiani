@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.admin;
 
+import it.polimi.ingsw2.swim.admin.LoadAdminListServlet.Attribute;
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.Administrator;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
@@ -29,10 +30,35 @@ public class LoadHomePageServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public enum Attribute {
+    	LIST("abilityRequestList");
+    	
+    	private static final String componentName = "LoadHomePageServlet";
+    	private final String name;
+    	
+    	private Attribute(String name){
+    		this.name = name;
+    	}
+    	
+    	@Override
+    	public String toString(){
+    		return componentName+"/"+name;
+    	}
+    }
+    
+    private void attributesReset(HttpServletRequest request){
+    	for(Attribute a : Attribute.values()){
+    		request.getSession().setAttribute(a.toString(), null);
+    	}
+    }
+    
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		attributesReset(request);
+		
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
@@ -42,7 +68,7 @@ public class LoadHomePageServlet extends HttpServlet {
 			AdministrationProfileManagerRemote b = (AdministrationProfileManagerRemote) ref2;
 			
 			
-			List<Ability> list = a.retriveRequestsList();
+			
 			// find the admin associated with the id of the current session
 			try {
 				Administrator admin = b.retrive(request.getSession().getAttribute("Id").toString());
@@ -51,8 +77,8 @@ public class LoadHomePageServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			request.getSession().setAttribute("list", list);
+			List<Ability> list = a.retriveRequestsList();
+			request.getSession().setAttribute(Attribute.LIST.toString(), list);
 			String url = response.encodeURL("/Pages/home.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
@@ -60,6 +86,7 @@ public class LoadHomePageServlet extends HttpServlet {
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 		
 	}
@@ -68,6 +95,7 @@ public class LoadHomePageServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		attributesReset(request);
 		
 		try {
 			// create the context
@@ -78,7 +106,7 @@ public class LoadHomePageServlet extends HttpServlet {
 			AdministrationProfileManagerRemote b = (AdministrationProfileManagerRemote) ref2;
 			
 			
-			List<Ability> list = a.retriveRequestsList();
+			
 			// find the admin associated with the id of the current session
 			try {
 				Administrator admin = b.retrive(request.getSession().getAttribute("Id").toString());
@@ -87,8 +115,9 @@ public class LoadHomePageServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			request.getSession().setAttribute("list", list);
+			List<Ability> list = a.retriveRequestsList();
+			System.err.println("Lista: "+ list);
+			request.getSession().setAttribute(Attribute.LIST.toString(), list);
 			String url = response.encodeURL("/Pages/home.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
@@ -96,10 +125,8 @@ public class LoadHomePageServlet extends HttpServlet {
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
-		
-
 	}
-		
 	}
 

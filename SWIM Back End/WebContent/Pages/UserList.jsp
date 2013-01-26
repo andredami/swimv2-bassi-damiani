@@ -34,7 +34,8 @@ try{
 	out.println("<ul>");
 	while (i.hasNext()){
 		User el = i.next();
-		out.println("<li><img src='"+el.getPicture()+"'><br>"+el.getName().getFirstname()+""+ el.getName().getSurname()+" - "+el.getGender().toString()+" - <a href='../LoadUserProfileServlet?Name="+el.getName().getFirstname()+"&Surname="+el.getName().getSurname()+"&Username=Username'>Mostra Profilo</a><br>");
+		Long id = el.getId();
+		out.println("<li><img src='"+el.getPicture()+"'><br>"+el.getName().getFirstname()+""+ el.getName().getSurname()+" - "+el.getGender().toString()+" - <a href='../LoadUserProfileServlet?id="+id+">Mostra Profilo</a><br>");
 		out.println("</li>");				
 	}
 	out.println("</ul>");
