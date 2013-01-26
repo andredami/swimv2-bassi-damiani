@@ -4,6 +4,7 @@ import it.polimi.ingsw2.swim.entities.Administrator;
 import it.polimi.ingsw2.swim.exceptions.DuplicateAdministratorException;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
+import it.polimi.ingsw2.swim.exceptions.LastAdminDeletionException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface AdministrationProfileManagerRemote {
 	void add(String username, String email, String password)
 			throws InvalidDataException, DuplicateAdministratorException;
 
-	void delete(String adminId) throws NoSuchUserException;
+	void delete(String adminId) throws NoSuchUserException, LastAdminDeletionException;
 
 	void editProfile(String userId, String username, String email)
 			throws NoSuchUserException, InvalidDataException;

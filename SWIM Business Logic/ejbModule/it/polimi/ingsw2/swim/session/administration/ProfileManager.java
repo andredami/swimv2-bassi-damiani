@@ -4,6 +4,7 @@ import it.polimi.ingsw2.swim.entities.Administrator;
 import it.polimi.ingsw2.swim.exceptions.DuplicateAdministratorException;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
+import it.polimi.ingsw2.swim.exceptions.LastAdminDeletionException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.local.MailerLocal;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
@@ -61,8 +62,8 @@ public class ProfileManager implements AdministrationProfileManagerRemote {
 	public void add(String username, String email, String password)
 			throws InvalidDataException, DuplicateAdministratorException {
 		try {
-			em.createNamedQuery("getAdministratorByUsername")
-					.setParameter("username", username).getSingleResult();
+			em.createQuery("SELECT b FROM Administrator b WHERE b.username =:username OR b.email=:email")
+					.setParameter("username", username).setParameter("email", email).getSingleResult();
 		} catch (NoResultException e) {
 			Administrator admin = new Administrator(username, email, password);
 			InvalidValue[] validatorMessages = adminValidator
@@ -80,8 +81,11 @@ public class ProfileManager implements AdministrationProfileManagerRemote {
 	}
 
 	@Override
-	public void delete(String adminId) throws NoSuchUserException {
+	public void delete(String adminId) throws NoSuchUserException, LastAdminDeletionException {
 		Administrator admin = retrive(adminId);
+		if(retriveList().size()<=1){
+			throw new LastAdminDeletionException();
+		}
 		em.remove(admin);
 	}
 

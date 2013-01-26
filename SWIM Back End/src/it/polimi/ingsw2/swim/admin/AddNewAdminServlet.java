@@ -25,12 +25,37 @@ public class AddNewAdminServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
+    
+    public enum Attribute {
+    	PASSWORD_ERROR("passwordError"),
+    	DATA_ERROR("dataError"),
+    	DUPLICATED_ERROR("duplicatedError"),
+    	INSERTED("inserted");
+    	
+    	private static final String componentName = "AddNewAdminServlet";
+    	private final String name;
+    	
+    	private Attribute(String name){
+    		this.name = name;
+    	}
+    	
+    	@Override
+    	public String toString(){
+    		return componentName+"/"+name;
+    	}
+    }
+    
+    private void attributesReset(HttpServletRequest request){
+    	for(Attribute a : Attribute.values()){
+    		request.getSession().setAttribute(a.toString(), null);
+    	}
+    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		attributesReset(request);
 	}
 
 	/**
@@ -38,7 +63,7 @@ public class AddNewAdminServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
+		attributesReset(request);
 		
 		try {
 			// create the context
@@ -53,7 +78,7 @@ public class AddNewAdminServlet extends HttpServlet {
 			String confPassword = request.getParameter("ConfirmPassword");
 			
 			if (!(confPassword.equals(password))){
-				request.getSession().setAttribute("PasswordError", 1);
+				request.getSession().setAttribute(Attribute.PASSWORD_ERROR.toString(), 1);
 				String url = response.encodeURL("/Pages/AddNewAdmin.jsp");
 				response.sendRedirect(request.getContextPath() + url);
 				return;
@@ -62,25 +87,24 @@ public class AddNewAdminServlet extends HttpServlet {
 			try {
 				a.add(user, email, password);
 			} catch (InvalidDataException e) {
-				System.err.println("Errore nella validazione dei dati");	
-				for(String s : e.invalidFields){
-				System.err.println("* " + s);}
-				request.getSession().setAttribute("DataError", 1);
+				request.getSession().setAttribute(Attribute.DATA_ERROR.toString(), 1);
 				String url = response.encodeURL("/Pages/AddNewAdmin.jsp");
 				response.sendRedirect(request.getContextPath() + url);
 				return;
 			} catch (DuplicateAdministratorException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				request.getSession().setAttribute(Attribute.DUPLICATED_ERROR.toString(), 1);
+				String url = response.encodeURL("/Pages/AddNewAdmin.jsp");
+				response.sendRedirect(request.getContextPath() + url);
+				return;
 			}
-			request.getSession().setAttribute("Inserted", 1);
-			String url = response.encodeURL("/Pages/AdminList.jsp");
+			request.getSession().setAttribute(Attribute.INSERTED.toString(), 1);
+			String url = response.encodeURL("/LoadAdminListServlet");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 
