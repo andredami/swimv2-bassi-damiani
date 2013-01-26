@@ -45,7 +45,7 @@ public class AbuseManager implements AbuseManagerRemote {
     
     @Override
     public void removeAbuse(String abuseId){
-    	Abuse abuse = em.find(Abuse.class, abuseId);
+    	Abuse abuse = em.find(Abuse.class, Long.parseLong(abuseId));
     	if(abuse != null){
     		em.remove(abuse);
     	}

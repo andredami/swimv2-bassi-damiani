@@ -8,6 +8,7 @@ import it.polimi.ingsw2.swim.session.remote.RequestManagerRemote;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -49,8 +50,10 @@ public class AbilityCreatorServlet extends HttpServlet {
 			
 			String name = request.getParameter("Name");
 			String description = request.getParameter("Description");
+			Set<String> alias;
+			Set<String> stub;
 			try {
-				a.addNewAbility(name, description, null, null);
+				a.addNewAbility(name, description, alias, stub);
 			} catch (DuplicateAliasException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

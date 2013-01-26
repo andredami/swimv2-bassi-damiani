@@ -2,6 +2,7 @@ package it.polimi.ingsw2.swim.admin;
 
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.entities.User;
+import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
 import it.polimi.ingsw2.swim.session.remote.UserManagerRemote;
 
@@ -41,8 +42,10 @@ public class LoadUserProfileServlet extends HttpServlet {
 			
 			// come ottengo lo userID?
 			
+			String userId = request.getParameter("id");
 			User user = a.retriveUserProfile(userId);
 			
+			request.getSession().setAttribute("Id", userId);
 			request.getSession().setAttribute("Name", user.getName().getFirstname());
 			request.getSession().setAttribute("Surname", user.getName().getSurname());
 			request.getSession().setAttribute("Gender", user.getGender());
@@ -62,6 +65,11 @@ public class LoadUserProfileServlet extends HttpServlet {
 		} catch (NamingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
+		} catch (NoSuchUserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
 

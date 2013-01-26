@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.admin;
 
+import it.polimi.ingsw2.swim.admin.ContactAdminServlet.Attribute;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
 import it.polimi.ingsw2.swim.session.remote.UserManagerRemote;
@@ -27,11 +28,34 @@ public class ContactUserServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+	 public enum Attribute {
+	    	SENDER_ERROR("senderError"), ADDRESSEE_ERROR("addresseeError"), DATA_ERROR("textError"), SENT("sent");
+	    	
+	    	private static final String componentName = "ContactAdminServlet";
+	    	private final String name;
+	    	
+	    	private Attribute(String name){
+	    		this.name = name;
+	    	}
+	    	
+	    	@Override
+	    	public String toString(){
+	    		return componentName+"/"+name;
+	    	}
+	    }
+	    
+	    private void attributesReset(HttpServletRequest request){
+	    	for(Attribute a : Attribute.values()){
+	    		request.getSession().setAttribute(a.toString(), null);
+	    	}
+	    }
+	
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		attributesReset(request);
 	}
 
 	/**
@@ -39,47 +63,43 @@ public class ContactUserServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		attributesReset(request);
 		
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
-			Object ref = jndiContext.lookup("AdministrationProfileManager/remote");
-			Object ref2 = jndiContext.lookup("UserManager/remote");
-			AdministrationProfileManagerRemote a = (AdministrationProfileManagerRemote) ref;
-			UserManagerRemote b = (UserManagerRemote)ref2;
+			Object ref = jndiContext.lookup("UserManager/remote");
+			UserManagerRemote a = (UserManagerRemote) ref;
 			
 			// retrieve data from the form
-			String senderId = (String) request.getSession().getAttribute("Id");
-			String addresseeId = request.getParameter("Addressee");
+
+			String addresseeId = request.getParameter("id");
 			String text = request.getParameter("Message");
-			String userId = request.getParameter ("User");
 			
-			
-			try {
-				b.sendMessage(userId, text);
-			} catch (NoSuchUserException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-			
-			try {
-				a.sendMessage(senderId, addresseeId, text);
-			} catch (NoSuchUserException e) {
-				request.getSession().setAttribute("DataError", 1);
-				String url = response.encodeURL("/Pages/ContactUser.jsp");
+			if(text.isEmpty()){
+				request.getSession().setAttribute(Attribute.DATA_ERROR.toString(), 1);
+				String url = response.encodeURL("/Pages/UserContactProfile.jsp");
 				response.sendRedirect(request.getContextPath() + url);
+				return;
 			}
-			request.getSession().setAttribute("Send", 1);
-			String url = response.encodeURL("/Pages/AdminList.jsp");
+			
+			try {
+				a.sendMessage(addresseeId, text);
+			} catch (Throwable e) {
+				request.getSession().setAttribute(Attribute.ADDRESSEE_ERROR.toString(), 1);
+				String url = response.encodeURL("/Pages/UserContactProfile.jsp");
+				response.sendRedirect(request.getContextPath() + url);
+				return;
+			}
+			request.getSession().setAttribute(Attribute.SENT.toString(), 1);
+			String url = response.encodeURL("/Pages/UserContactProfile.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 			
 		} catch (NamingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new RuntimeException();
 		}
 	}
-
 
 }

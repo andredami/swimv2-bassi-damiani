@@ -9,6 +9,7 @@
 <script type="text/javascript" src="functionsAdmin.js"></script>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
+<%@ page import="it.polimi.ingsw2.swim.admin.LoadHomePageServlet" %>
 <% 
 	// check if exists a valid session
 	Long admin = (Long)session.getAttribute("Id");
@@ -56,15 +57,12 @@
 <br>
 <a href="<%= response.encodeURL("../AbilityListServlet")%>">Lista delle abilità</a><br>
 <a href="<%= response.encodeURL("../Pages/AbilityCreation.jsp")%>">Aggiungi nuova abilità</a><br>
-<a href="">Aggiungi abilità come alias</a><br><br>
+<br><br>
 <div>
 	Lista di abilità richieste:
 	<% 
-
-		List<Ability> a = new ArrayList<Ability>();
-		a = (List<Ability>)request.getSession().getAttribute("list");
-		if (a.isEmpty())
-			out.println("Non ci sono richieste di abilità per ora.");
+	try{
+		List<Ability> a = (List<Ability>)request.getSession().getAttribute(LoadHomePageServlet.Attribute.LIST.toString());
 		ListIterator<Ability> i = a.listIterator();
 		if (i.hasNext()){
 			out.println("<ul>");
@@ -78,6 +76,10 @@
 			}
 			out.println("</ul>");
 		}
+		}
+	catch (NullPointerException e){
+		out.println("Non ci sono abilità richieste.");
+	}
 	%>
 </div>
 

@@ -25,16 +25,11 @@
 
 <h3>Aggiunta abilità</h3>
 <%
-try {
-	if (request.getSession().getAttribute("Duplicate").equals(1)){
+	if (request.getSession().getAttribute("Duplicate")!= null){
 		request.getSession().setAttribute("Duplicate", null);
 		out.println("Attenzione, si sta cercando di creare un'abilità che già esiste.");
 		out.println("<br>");
 	}
-	} catch (NullPointerException e){
-		
-	}
-
 
 %>
 <form action="<%= response.encodeURL("../AbilityCreatorServlet")%>" method="post">

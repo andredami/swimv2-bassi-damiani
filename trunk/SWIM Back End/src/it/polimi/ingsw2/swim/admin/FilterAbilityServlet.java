@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.admin;
 
+import it.polimi.ingsw2.swim.admin.AbilityListServlet.Attribute;
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
 
@@ -27,17 +28,41 @@ public class FilterAbilityServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public enum Attribute {
+    	LIST("filterAbilityList"),
+    	FILTER("filtering");
+   
+    	private static final String componentName = "LoadAdminListServlet";
+    	private final String name;
+    	
+    	private Attribute(String name){
+    		this.name = name;
+    	}
+    	
+    	@Override
+    	public String toString(){
+    		return componentName+"/"+name;
+    	}
+    }
+    
+    private void attributesReset(HttpServletRequest request){
+    	for(Attribute a : Attribute.values()){
+    		request.getSession().setAttribute(a.toString(), null);
+    	}
+    }
+    
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		attributesReset(request);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		attributesReset(request);
 		try {
 			// create the context
 			InitialContext jndiContext = new InitialContext();
@@ -52,8 +77,9 @@ public class FilterAbilityServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + url);
 				return;
 			}
-			List<Ability> abilityList = a.retriveAbilityList(filter);
-			request.getSession().setAttribute("abilityList", abilityList);
+			List<Ability> list = a.retriveAbilityList(filter);
+			request.getSession().setAttribute(Attribute.FILTER.toString(), 1);
+			request.getSession().setAttribute(Attribute.LIST.toString(), list);
 			String url = response.encodeURL("/Pages/AbilityList.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;

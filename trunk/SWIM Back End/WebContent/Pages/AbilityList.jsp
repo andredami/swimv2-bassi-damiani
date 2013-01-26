@@ -8,6 +8,10 @@
 <title>Lista abilità</title>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
+<%@ page import="it.polimi.ingsw2.swim.admin.AbilityListServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.admin.AbilityEditorServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.admin.FilterAbilityServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.admin.CancelAbilityServlet" %>
 
 <%
 //check if exists a valid session
@@ -28,40 +32,54 @@ Filtra abilità:
 <div>
 	<%
 
-	List<Ability> a = new ArrayList<Ability>();
-	a = (List<Ability>)request.getSession().getAttribute("abilityList");
-	if (a.isEmpty()){
-		out.println("Non ci sono abilità registrate nel database.");
-		%>
-		<a href="<%= response.encodeURL("../AbilityListServlet")%>">Torna indietro</a>
-		<%
+	try{ 
+		List<Ability> a;
+		// verify if a filter is applied
+		if (request.getSession().getAttribute(FilterAbilityServlet.Attribute.FILTER.toString())!=null){
+			request.getSession().setAttribute(FilterAbilityServlet.Attribute.FILTER.toString(), null);
+			a = (List<Ability>) request.getSession().getAttribute(FilterAbilityServlet.Attribute.LIST.toString());
+		}
+		else{ 
+			if (request.getSession().getAttribute(CancelAbilityServlet.Attribute.CANCEL.toString())!=null){
+				request.getSession().setAttribute(CancelAbilityServlet.Attribute.CANCEL.toString(),null);
+				a = (List<Ability>) request.getSession().getAttribute(CancelAbilityServlet.Attribute.LIST.toString());
+		}else{
+			if (request.getSession().getAttribute(AbilityEditorServlet.Attribute.MODIFY.toString())!=null){
+				request.getSession().setAttribute(AbilityEditorServlet.Attribute.MODIFY.toString(),null);
+				a = (List<Ability>) request.getSession().getAttribute(CancelAbilityServlet.Attribute.LIST.toString());
+		}else{
+			
+			// if not, display all the abilities	
+			a = (List<Ability>) request.getSession().getAttribute(AbilityListServlet.Attribute.LIST.toString());
+		}
+		}
+			}
+		
+			
+		if (a.isEmpty()){ 
+			out.println("Non ci sono abilità registrate nel database.");
+		}
+		Iterator<Ability> i = a.iterator();
+		if (i.hasNext()){
+		out.println("<ul>");
+		while (i.hasNext()){
+			Ability el = i.next();
+			String name = el.getName();
+			String desc = el.getDescription();
+			out.println("<li>Nome: "+name+" <br>");
+			out.println("Descrizione:<br>");
+			%>
+			<form method="post">
+			<textarea name="Desc" disabled="disabled" style="width: 276px; height: 100px"><%out.print(desc);%></textarea></form>
+			<br><a href="<%= response.encodeURL("../LoadAbilityEditorServlet?name="+name+"&desc="+desc)%>">Modifica</a> <a href="<%= response.encodeURL("../CancelAbilityServlet?name="+name)%>">Cancella</a>
+			<%
+			out.println("</li>");
+		}
+		out.println("</ul>");
+		}
+	}catch(NullPointerException e){
+		out.println("Non ci sono abilità disponibili.");
 	}
-	
-	
-
-	Iterator<Ability> i = a.iterator();
-	int count=0;
-	if (i.hasNext()){
-	out.println("<ul>");
-	while (i.hasNext()){
-		Ability el = i.next();
-		String name = el.getName();
-		String desc = el.getDescription();
-		request.getSession().setAttribute("Name"+count, name);
-		request.getSession().setAttribute("Desc"+count, desc);
-		out.println("<li>Nome: "+name+" <br>");
-		out.println("Descrizione:<br>");
-		%>
-		<form method="post">
-		<textarea name="TextArea" style="width: 276px; height: 100px"><%out.print(desc);%></textarea></form>
-		<br><a href="<%= response.encodeURL("../Pages/AbilityEditor.jsp?Count="+count)%>">Modifica</a> <a href="<%= response.encodeURL("../Pages/AbilityEditor.jsp?name="+name)%>">Cancella</a>
-		<%
-		out.println("</li>");
-		count++;
-	}
-	out.println("</ul>");
-	}
-
 		%>
 		<a href="<%= response.encodeURL("../LoadHomePageServlet")%>">Torna alla home</a>
 </div>

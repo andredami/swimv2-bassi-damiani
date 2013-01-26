@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.admin;
 
+import it.polimi.ingsw2.swim.admin.FilterAbilityServlet.Attribute;
 import it.polimi.ingsw2.swim.entities.Ability;
 import it.polimi.ingsw2.swim.exceptions.NoSuchAbilityException;
 import it.polimi.ingsw2.swim.session.remote.AbilityManagerRemote;
@@ -28,6 +29,28 @@ public class CancelAbilityServlet extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    public enum Attribute {
+    	LIST("cancelledAbilityList"),
+    	CANCEL ("cancelled");
+   
+    	private static final String componentName = "CancelAbilityServlet";
+    	private final String name;
+    	
+    	private Attribute(String name){
+    		this.name = name;
+    	}
+    	
+    	@Override
+    	public String toString(){
+    		return componentName+"/"+name;
+    	}
+    }
+    
+    private void attributesReset(HttpServletRequest request){
+    	for(Attribute a : Attribute.values()){
+    		request.getSession().setAttribute(a.toString(), null);
+    	}
+    }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -45,6 +68,10 @@ public class CancelAbilityServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			List<Ability> list = a.retriveAbilityList();
+			request.getSession().setAttribute(Attribute.CANCEL.toString(), 1);
+			request.getSession().setAttribute(Attribute.LIST.toString(), list);
 			String url = response.encodeURL("/Pages/AbilityList.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
