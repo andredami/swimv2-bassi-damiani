@@ -5,13 +5,15 @@ import it.polimi.ingsw2.swim.exceptions.DuplicateAdministratorException;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
-import it.polimi.ingsw2.swim.session.Mailer;
+import it.polimi.ingsw2.swim.session.local.MailerLocal;
 import it.polimi.ingsw2.swim.session.remote.AdministrationProfileManagerRemote;
 
 import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -142,7 +144,14 @@ public class ProfileManager implements AdministrationProfileManagerRemote {
 			throw new NoSuchUserException("toUser");
 		}
 		
-		new Mailer().sendEmail(addressee.getEmail(), "[SWIM] L'amminsitratore "+sender.getUsername()+" ti ha scritto.", text);
+		InitialContext ctx;
+		try {
+			ctx = new InitialContext();
+			MailerLocal mailer = (MailerLocal) ctx.lookup("Mailer/local");
+			mailer.sendEmail(addressee.getEmail(), "[SWIM] L'amminsitratore "+sender.getUsername()+" ti ha scritto.", text);
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

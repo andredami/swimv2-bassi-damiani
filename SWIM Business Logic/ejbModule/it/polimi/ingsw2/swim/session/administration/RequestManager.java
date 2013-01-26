@@ -137,7 +137,7 @@ public class RequestManager implements RequestManagerRemote {
 								user.getId().toString(),
 								"L'abilità "
 										+ stub.getName()
-										+ " che avevi richiesto è stata accetta e aggiunta automaticamente al tuo profilo con il nome "
+										+ " che avevi richiesto � stata accetta e aggiunta automaticamente al tuo profilo con il nome "
 										+ ability.getName());
 					} catch (NoSuchUserException e) {
 						throw new RuntimeException();

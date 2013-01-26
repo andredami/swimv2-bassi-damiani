@@ -2,6 +2,7 @@ package it.polimi.ingsw2.swim.session;
 
 import it.polimi.ingsw2.swim.session.local.MailerLocal;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -27,7 +28,7 @@ import javax.mail.internet.MimeMessage;
 /**
  * Session Bean implementation class Mailer
  */
-@Stateless
+@Stateless(name = "Mailer")
 @Local
 public class Mailer implements MailerLocal {
 
@@ -45,8 +46,7 @@ public class Mailer implements MailerLocal {
 				"Grazie #userFirstname per esserti registrato su SWIMv2, \n"
 						+ "Per completare la registrazione, conferma la tua identià verificando il tuo indirizzo e-mail. \n"
 						+ "Segui questo link: http://" + Mailer.domain
-						+ "/userActivation?id=#id&tk=#activationToken"), 
-		PASSWORD_RECOVERY(
+						+ "/userActivation?id=#id&tk=#activationToken"), PASSWORD_RECOVERY(
 				"Recupera la tua password su SWIM.",
 				"Hai richiesto di recuperare la tua password. \n "
 						+ "Per accedere al sistema puoi usare questa password temporanea: #temp \n"
@@ -75,30 +75,32 @@ public class Mailer implements MailerLocal {
 
 	}
 
-	@Resource
+	@Resource(name="domain", mappedName="domain")
 	private static String domain;
-
-	@Resource
-	private static int port;
-	@Resource
+	@Resource(name="port", mappedName="port")
+	private static String port;
+	@Resource(name="host", mappedName="host")
 	private static String host;
-	@Resource
+	@Resource(name="from", mappedName="from")
 	private static String from;
-	@Resource
+	@Resource(name="auth", mappedName="auth")
 	private static boolean auth;
-	@Resource
+	@Resource(name="username", mappedName="username")
 	private static String username;
-	@Resource
+	@Resource(name="password", mappedName="password")
 	private static String password;
-	@Resource
+	@Resource(name="protocol", mappedName="protocol")
 	private static String protocol;
-	@Resource
+	@Resource(name="debug", mappedName="debug")
 	private static boolean debug;
 
 	/**
 	 * Default constructor.
+	 * 
+	 * @throws
 	 */
 	public Mailer() {
+
 	}
 
 	@Override
@@ -124,6 +126,9 @@ public class Mailer implements MailerLocal {
 		switch (Protocol.valueOf(protocol)) {
 		case SMTPS:
 			props.put("mail.smtp.ssl.enable", true);
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
+
 			break;
 		case TLS:
 			props.put("mail.smtp.starttls.enable", true);
@@ -131,7 +136,7 @@ public class Mailer implements MailerLocal {
 		}
 		Authenticator authenticator = null;
 		if (auth) {
-			props.put("mail.smtp.auth", true);
+			props.put("mail.smtp.auth", "true");
 			authenticator = new Authenticator() {
 				private PasswordAuthentication pa = new PasswordAuthentication(
 						username, password);
@@ -146,7 +151,8 @@ public class Mailer implements MailerLocal {
 		session.setDebug(debug);
 		MimeMessage message = new MimeMessage(session);
 		try {
-			message.setFrom(new InternetAddress(from));
+			InternetAddress senderAddress = new InternetAddress(from, "SWIMv2");
+			message.setFrom(senderAddress);
 			InternetAddress[] address = { new InternetAddress(to) };
 			message.setRecipients(Message.RecipientType.TO, address);
 			message.setSubject(subject);
@@ -155,6 +161,8 @@ public class Mailer implements MailerLocal {
 			Transport.send(message);
 		} catch (MessagingException ex) {
 			ex.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -13,6 +13,7 @@ import it.polimi.ingsw2.swim.validation.NameValidator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -30,7 +31,8 @@ import org.hibernate.validator.InvalidValue;
 @Remote
 public class UserDirectoryManager implements UserDirectoryManagerRemote {
 
-	private static final int ENTRIES_PER_PAGE = 25;
+	@Resource(name="entriesPerPage", mappedName="entriesPerPage")
+	private static int ENTRIES_PER_PAGE = 25;
 
 	@PersistenceContext(unitName = "persistentData")
 	private EntityManager em;
@@ -62,11 +64,9 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 			}
 		}
 
-		String selectQuery = "SELECT u" + "FROM User u" + "WHERE ";
+		String selectQuery = "SELECT u FROM User u WHERE ";
 		String emailClause = "u.email =:email";
-		String usernameClause = "u.name.getFirstname() =:firstname AND"
-				+ "u.name.getSurname() =:surname"
-				+ "ORDER BY u.name.getSurname(), u.name.getFirstname()";
+		String usernameClause = "u.name.getFirstname() =:firstname AND u.name.getSurname() =:surname ORDER BY u.name.getSurname(), u.name.getFirstname()";
 
 		Query query = null;
 		if (emailValidator.isValid(email)) {
@@ -129,8 +129,8 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 
 		List<User> returnList = new ArrayList<User>();
 
-		String selectQuery = "SELECT u" + "FROM User u" + "WHERE ";
-		String userClause = "u.status = it.polimi.ingsw2.swim.entities.User.Status.REGISTERED AND ";
+		String selectQuery = "SELECT u FROM User u WHERE ";
+		String userClause = "u.status = REGISTERED AND ";
 		String friendClause = ":user IN i.friendships AND ";
 
 		// TODO: Full georeferenced filtering cannot be implemented at the

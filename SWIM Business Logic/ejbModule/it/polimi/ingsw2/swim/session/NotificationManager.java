@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ import javax.persistence.PersistenceContext;
 @Remote
 public class NotificationManager implements NotificationManagerRemote {
 
+	@Resource(name="maxNotification", mappedName="maxNotification")
 	private static final int  MAX_NOTIFICATION = 25;
 
 	@PersistenceContext(unitName = "persistentData")
