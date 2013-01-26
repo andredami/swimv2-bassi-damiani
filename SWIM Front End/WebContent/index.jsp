@@ -84,7 +84,7 @@
 								Resta collegato
 								<input name="submitLogin" style="height: 20px; left: 121px; top: 69px" type="submit" value="Accedi" /><br />
 								Non hai un account?
-								<a href="<%= response.encodeURL("../swim/Pages/Registration.jsp")%>">Registrati</a> </span></form>
+								<a href="<%= response.encodeURL("Pages/Registration.jsp")%>">Registrati</a> </span></form>
 						</div>
 					</div>
 				</div>

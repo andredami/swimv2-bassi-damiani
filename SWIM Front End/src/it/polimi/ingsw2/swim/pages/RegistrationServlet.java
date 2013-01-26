@@ -104,7 +104,7 @@ public class RegistrationServlet extends HttpServlet {
 				response.sendRedirect(request.getContextPath() + url);
 				return;
 			}
-			request.getSession().setAttribute(Attribute.IN_REGISTRATION.toString(), 1);
+			request.getSession().setAttribute(Attribute.IN_REGISTRATION.toString(), r);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/SelectAbilityRegistrationServlet");
 			dispatcher.forward(request, response);
 			return;
