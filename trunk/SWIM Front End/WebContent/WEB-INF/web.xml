@@ -103,4 +103,44 @@
     <servlet-name>ActivationResend</servlet-name>
     <url-pattern>/ActivationResend</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CreateHomePageServlet</display-name>
+    <servlet-name>CreateHomePageServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.CreateHomePageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreateHomePageServlet</servlet-name>
+    <url-pattern>/CreateHomePageServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>NotificationReadServlet</display-name>
+    <servlet-name>NotificationReadServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.NotificationReadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NotificationReadServlet</servlet-name>
+    <url-pattern>/NotificationReadServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FriendshipRequestServlet</display-name>
+    <servlet-name>FriendshipRequestServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.FriendshipRequestServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FriendshipRequestServlet</servlet-name>
+    <url-pattern>/FriendshipRequestServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ProfileServlet</display-name>
+    <servlet-name>ProfileServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.ProfileServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/ProfileServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

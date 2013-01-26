@@ -8,7 +8,7 @@
 <title>Lista Abusi</title>
 <%@ page import="java.util.*" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.*" %>
-<%@ page import="it.polimi.ingsw2.swim.admin.ManageAbuseServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.admin.AbuseListServlet" %>
 
 <% 
 	// check if exists a valid session
@@ -27,7 +27,7 @@
 <%
 
 	try{
-		List<Abuse> a = (List<Abuse>)request.getSession().getAttribute(ManageAbuseServlet.Attribute.LIST.toString());
+		List<Abuse> a = (List<Abuse>)request.getSession().getAttribute(AbuseListServlet.Attribute.LIST.toString());
 		Iterator<Abuse> i = a.iterator();
 		if (i.hasNext()){
 			out.println("<ul>");

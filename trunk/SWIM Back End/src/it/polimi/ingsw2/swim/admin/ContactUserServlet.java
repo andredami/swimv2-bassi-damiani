@@ -31,7 +31,7 @@ public class ContactUserServlet extends HttpServlet {
 	 public enum Attribute {
 	    	SENDER_ERROR("senderError"), ADDRESSEE_ERROR("addresseeError"), DATA_ERROR("textError"), SENT("sent");
 	    	
-	    	private static final String componentName = "ContactAdminServlet";
+	    	private static final String componentName = "ContactUserServlet";
 	    	private final String name;
 	    	
 	    	private Attribute(String name){

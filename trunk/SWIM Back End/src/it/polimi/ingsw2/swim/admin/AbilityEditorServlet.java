@@ -37,7 +37,7 @@ public class AbilityEditorServlet extends HttpServlet {
     public enum Attribute {
     	MODIFY("modifyAbilityList");
     	
-    	private static final String componentName = "LoadAdminListServlet";
+    	private static final String componentName = "AbilityEditorServlet";
     	private final String name;
     	
     	private Attribute(String name){

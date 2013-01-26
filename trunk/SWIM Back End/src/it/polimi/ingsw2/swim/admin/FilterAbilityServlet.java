@@ -32,7 +32,7 @@ public class FilterAbilityServlet extends HttpServlet {
     	LIST("filterAbilityList"),
     	FILTER("filtering");
    
-    	private static final String componentName = "LoadAdminListServlet";
+    	private static final String componentName = "FilterAbilityServlet";
     	private final String name;
     	
     	private Attribute(String name){
