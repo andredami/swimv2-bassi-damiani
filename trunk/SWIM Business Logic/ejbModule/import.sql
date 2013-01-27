@@ -8,38 +8,38 @@ INSERT INTO `swimdb`.`user` (`id`, `birthdate`, `email`, `gender`, `firstname`, 
 INSERT INTO `swimdb`.`user` (`id`, `birthdate`, `email`, `gender`, `firstname`, `surname`, `password`, `city`, `province`, `street`, `streetNumber`, `zip`, `evaluation`, `evaluationCount`, `mobile`, `skype`, `status`, `telephone`) VALUES ('5', '1991-11-09', 'utente5@mail.com', '1', 'Name5', 'Surname5', '74ad50605a2b9f7533ecebe0215482ef', 'Palermo', 'Palermo', 'Margherite', '15', '12343', '4', '20', '3292354235', 'utente5@mail.it', '1', '0333234754');
 
 
-INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO: Carpentiere', 'ESEMPIO: si diletta in lavori manuali', 0);
-INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO: Parrucchiere', 'ESEMPIO: cura i capelli delle persone', 0);
-INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO: Acconciatore', 'ESEMPIO: crea acconciature per persone', 1);
+INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Carpentiere', 'ESEMPIO si diletta in lavori manuali', 0);
+INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Parrucchiere', 'ESEMPIO cura i capelli delle persone', 0);
+INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Acconciatore', 'ESEMPIO crea acconciature per persone', 1);
 
-INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('1', 'ESEMPIO: Ho ricevuto una richiesta volgare da parte di utente1', 'prova@prova.it', false);
-INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('2', 'ESEMPIO: Testo di esempio per un abuso già gestito', 'esempio@abuso.it', true);
-INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('3', 'ESEMPIO: Testo di esempio per un abuso non già gestito', 'esempio2@abuso.it', false);
+INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('1', 'ESEMPIO Ho ricevuto una richiesta volgare da parte di utente1', 'prova@prova.it', false);
+INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('2', 'ESEMPIO Testo di esempio per un abuso già gestito', 'esempio@abuso.it', true);
+INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('3', 'ESEMPIO Testo di esempio per un abuso non già gestito', 'esempio2@abuso.it', false);
 
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO: Carpentiere', '1', 'ESEMPIO: Carpentiere', '1');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO: Acconciatore', '1', 'ESEMPIO: Acconciatore', '1');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO: Parrucchiere', '3', 'ESEMPIO: Parrucchiere', '3');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO: Carpentiere', '4', 'ESEMPIO: Carpentiere', '4');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO: Parrucchiere', '5', 'ESEMPIO: Parrucchiere', '5');
+INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Carpentiere', '1', 'ESEMPIO Carpentiere', '1');
+INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Acconciatore', '1', 'ESEMPIO Acconciatore', '1');
+INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Parrucchiere', '3', 'ESEMPIO Parrucchiere', '3');
+INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Carpentiere', '4', 'ESEMPIO Carpentiere', '4');
+INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Parrucchiere', '5', 'ESEMPIO Parrucchiere', '5');
 
-INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('muratore', 'ESEMPIO: Carpentiere');
-INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('parrucchiera', 'ESEMPIO: Parrucchiere');
-INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('barbiere', 'ESEMPIO: Parrucchiere');
+INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('muratore', 'ESEMPIO Carpentiere');
+INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('parrucchiera', 'ESEMPIO Parrucchiere');
+INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('barbiere', 'ESEMPIO Parrucchiere');
 
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('1', 'ESEMPIO: Testo di richiesta di aiuto in attesa', false, '2013-01-25', '1');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('2', 'ESEMPIO: Testo di richiesta di aiuto accettata', true, '2013-01-01', '1');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('3', 'ESEMPIO: Testo di richiesta di aiuto conclusa', true, '2012-12-01', '1');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('4', 'ESEMPIO: Testo di messaggio di risposta A', true, '2013-01-02', '4');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('5', 'ESEMPIO: Testo di messaggio di risposta B', true, '2013-01-03', '1');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('6', 'ESEMPIO: Testo di messaggio di risposta C', true, '2013-01-04', '4');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('7', 'ESEMPIO: Richiesta di amicizia', false, '2013-01-25', '1');
-INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('8', 'ESEMPIO: Notifica da parte del team amministrativo', false, '2013-01-26', '1');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('1', 'ESEMPIO Testo di richiesta di aiuto in attesa', false, '2013-01-25', '1');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('2', 'ESEMPIO Testo di richiesta di aiuto accettata', true, '2013-01-01', '1');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('3', 'ESEMPIO Testo di richiesta di aiuto conclusa', true, '2012-12-01', '1');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('4', 'ESEMPIO Testo di messaggio di risposta A', true, '2013-01-02', '4');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('5', 'ESEMPIO Testo di messaggio di risposta B', true, '2013-01-03', '1');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('6', 'ESEMPIO Testo di messaggio di risposta C', true, '2013-01-04', '4');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('7', 'ESEMPIO Richiesta di amicizia', false, '2013-01-25', '1');
+INSERT INTO `swimdb`.`notification` (`id`, `description`, `readByUser`, `timestamp`, `addressee_id`) VALUES ('8', 'ESEMPIO Notifica da parte del team amministrativo', false, '2013-01-26', '1');
 
 INSERT INTO `swimdb`.`friendshiprequest` (`id`, `sender_id`) VALUES ('7', '5');
 
-INSERT INTO `swimdb`.`help` (`helpedFeedback`, `helperFeedback`, `state`, `id`, `ability_name`, `sender_id`) VALUES (null, null, '0', '1', 'ESEMPIO: Carpentiere', '4');
-INSERT INTO `swimdb`.`help` (`helpedFeedback`, `helperFeedback`, `state`, `id`, `ability_name`, `sender_id`) VALUES (null, null, '1', '2', 'ESEMPIO: Carpentiere', '3');
-INSERT INTO `swimdb`.`help` (`helpedFeedback`, `helperFeedback`, `state`, `id`, `ability_name`, `sender_id`) VALUES ('4', '5', '2', '3', 'ESEMPIO: Carpentiere', '4');
+INSERT INTO `swimdb`.`help` (`helpedFeedback`, `helperFeedback`, `state`, `id`, `ability_name`, `sender_id`) VALUES (null, null, '0', '1', 'ESEMPIO Carpentiere', '4');
+INSERT INTO `swimdb`.`help` (`helpedFeedback`, `helperFeedback`, `state`, `id`, `ability_name`, `sender_id`) VALUES (null, null, '1', '2', 'ESEMPIO Carpentiere', '3');
+INSERT INTO `swimdb`.`help` (`helpedFeedback`, `helperFeedback`, `state`, `id`, `ability_name`, `sender_id`) VALUES ('4', '5', '2', '3', 'ESEMPIO Carpentiere', '4');
 
 INSERT INTO `swimdb`.`message` (`id`, `helpRelation_id`, `sender_id`) VALUES ('4', '1', '1');
 INSERT INTO `swimdb`.`message` (`id`, `helpRelation_id`, `sender_id`) VALUES ('5', '1', '4');
