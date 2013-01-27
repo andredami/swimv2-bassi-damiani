@@ -11,6 +11,8 @@ INSERT INTO `swimdb`.`user` (`id`, `birthdate`, `email`, `gender`, `firstname`, 
 INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Carpentiere', 'ESEMPIO si diletta in lavori manuali', 0);
 INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Parrucchiere', 'ESEMPIO cura i capelli delle persone', 0);
 INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Acconciatore', 'ESEMPIO crea acconciature per persone', 1);
+INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Eliminatore', 'ESEMPIO testo di esempio', 0);
+INSERT INTO `swimdb`.`ability` (`name`, `description`, `isStub`) VALUES ('ESEMPIO Aiutante', 'ESEMPIO altra abilità richiesta', 1);
 
 INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('1', 'ESEMPIO Ho ricevuto una richiesta volgare da parte di utente1', 'prova@prova.it', false);
 INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('2', 'ESEMPIO Testo di esempio per un abuso già gestito', 'esempio@abuso.it', true);
