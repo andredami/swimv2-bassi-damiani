@@ -5,6 +5,7 @@ import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.util.Digester;
 import it.polimi.ingsw2.swim.validation.OfAge;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -19,7 +20,12 @@ import org.hibernate.validator.NotEmpty;
 import org.hibernate.validator.NotNull;
 
 @MappedSuperclass
-public class TempUser {
+public class TempUser implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -602855167934559517L;
+
 	@NotEmpty
 	@NotNull
 	private String password;

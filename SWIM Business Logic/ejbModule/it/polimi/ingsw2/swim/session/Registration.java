@@ -61,7 +61,7 @@ public class Registration implements RegistrationRemote {
 			String surname, Calendar birthdate, Gender gender)
 			throws InvalidDataException, UserAlreadyExistsException {
 		email = email.toLowerCase();
-		if (state != State.INIT) {
+		if (state == State.USER_FINALIZED) {
 			throw new IllegalStateException();
 		}
 
@@ -86,6 +86,11 @@ public class Registration implements RegistrationRemote {
 			temp = null;
 			throw new UserAlreadyExistsException();
 		}
+	}
+	
+	@Override
+	public TempUser getTempUser(){
+		return temp;
 	}
 
 	@Override

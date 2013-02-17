@@ -1,5 +1,6 @@
 package it.polimi.ingsw2.swim.session.remote;
 
+import it.polimi.ingsw2.swim.entities.TempUser;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Gender;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
@@ -19,5 +20,7 @@ public interface RegistrationRemote {
 			UserAlreadyExistsException;
 
 	void sendActivationEmail();
+
+	TempUser getTempUser();
 
 }
