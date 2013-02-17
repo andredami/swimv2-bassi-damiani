@@ -37,25 +37,10 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 		}
 	}
 
-	private void attributesReset(HttpServletRequest request) {
-		for (Attribute a : Attribute.values()) {
-			request.getSession().setAttribute(a.toString(), null);
-		}
-	}
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public SelectAbilityRegistrationServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		attributesReset(request);
 		try {
 			// Starting the context
 			InitialContext jndiContext = new InitialContext();
@@ -63,15 +48,13 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 			AbilitySearchRemote a = (AbilitySearchRemote) ref; 
 			
 			List<Ability> abilityList = null;
-			if(request.getParameter("AbilitySelection.jsp/search")!=null){
+			if(request.getParameter("SubmitAbilityButton")!=null){
 				String searchKey = request.getParameter("TextAbility");
 				if(searchKey == null || searchKey.isEmpty()){
-					System.err.println("non trovo TextAbility");
-					request.getSession().setAttribute(Attribute.EMPTY_SEARCH.toString(), 1);
+					request.setAttribute(Attribute.EMPTY_SEARCH.toString(), 1);
 					abilityList = a.findAbility("");
 				} else {
-					System.err.println("trovo TextAbility e filtro per "+searchKey);
-					request.getSession().setAttribute(Attribute.SEARCH_KEY.toString(), searchKey);
+					request.setAttribute(Attribute.SEARCH_KEY.toString(), searchKey);
 					abilityList = a.findAbility(searchKey);
 				}
 			} else {
@@ -79,10 +62,8 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 			}
 			
 			
-			System.err.println("lista lunga: "+abilityList.size());
-			request.getSession().setAttribute(Attribute.LIST.toString(), abilityList);
-			String url = response.encodeURL("/Pages/AbilitySelection.jsp");
-			response.sendRedirect(request.getContextPath() + url);
+			request.setAttribute(Attribute.LIST.toString(), abilityList);
+			request.getRequestDispatcher("/Pages/AbilitySelection.jsp").forward(request, response);
 			return;
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -96,7 +77,7 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		attributesReset(request);
+		request.getRequestDispatcher("/Pages/AbilitySelection.jsp").forward(request, response);
 	}
 	
 	
