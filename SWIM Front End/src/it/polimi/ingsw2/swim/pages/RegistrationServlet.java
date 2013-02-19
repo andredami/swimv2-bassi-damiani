@@ -53,17 +53,18 @@ public class RegistrationServlet extends HttpServlet {
 		try {
 			// Starting the context
 			
-			RegistrationRemote r = null;
-			if(request.getSession().getAttribute(Attribute.REGISTRATION_AGENT.toString()) == null){
+			RegistrationRemote registrationAgent = null;
+			if(request.getSession().getAttribute(Attribute.REGISTRATION_AGENT.toString()) == null || request.getSession().getAttribute(Attribute.REGISTRATION_COMPLETE.toString()) != null){
+				request.getSession().setAttribute(Attribute.REGISTRATION_COMPLETE.toString(), null);
 				InitialContext jndiContext = new InitialContext();
 				Object ref = jndiContext.lookup("Registration/remote");
-				r = (RegistrationRemote) ref;
-				request.getSession().setAttribute(Attribute.REGISTRATION_AGENT.toString(), r);
+				registrationAgent = (RegistrationRemote) ref;
+				request.getSession().setAttribute(Attribute.REGISTRATION_AGENT.toString(), registrationAgent);
 			} else {
-				r = (RegistrationRemote) request.getSession().getAttribute(Attribute.REGISTRATION_AGENT.toString());
+				registrationAgent = (RegistrationRemote) request.getSession().getAttribute(Attribute.REGISTRATION_AGENT.toString());
 			}
 			
-			if(r == null){
+			if(registrationAgent == null){
 				throw new RuntimeException();
 			}
 			
@@ -74,7 +75,7 @@ public class RegistrationServlet extends HttpServlet {
 			// verify password and email 
 			if (!(email.equals(confirmedEmail)) || !(password.equals(confirmedPassword))){
 				request.setAttribute(Attribute.NOT_MATCHING.toString(), 1);
-				String url = response.encodeURL("Pages/Registration.jsp");
+				String url = response.encodeURL("/Pages/Registration.jsp");
 				request.getRequestDispatcher(url).forward(request, response);
 				return;
 			}
@@ -88,7 +89,7 @@ public class RegistrationServlet extends HttpServlet {
 			Gender gender = Gender.valueOf(request.getParameter("Gender"));
 			
 			try {
-				r.createUser(password, email, name, surname, birthdate, gender);
+				registrationAgent.createUser(password, email, name, surname, birthdate, gender);
 			} catch (InvalidDataException e) {
 				// invio frase di errore
 				request.setAttribute(Attribute.INVALID_DATA.toString(), 1);
@@ -103,7 +104,7 @@ public class RegistrationServlet extends HttpServlet {
 				return;
 			}
 			
-			request.getRequestDispatcher("/SelectAbilityRegistrationServlet").forward(request, response);
+			request.getRequestDispatcher(response.encodeURL("/SelectAbilityRegistrationServlet")).forward(request, response);
 			return;
 		} catch (NamingException e) {
 			e.printStackTrace();
@@ -117,7 +118,7 @@ public class RegistrationServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/SelectAbilityRegistrationServlet").forward(request, response);
+		request.getRequestDispatcher(response.encodeURL("/SelectAbilityRegistrationServlet")).forward(request, response);
 	}
 	
 }

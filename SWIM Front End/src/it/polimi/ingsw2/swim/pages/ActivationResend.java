@@ -4,8 +4,6 @@ import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,29 +31,25 @@ public class ActivationResend extends HttpServlet {
 		}
 	}
 
-	private void attributesReset(HttpServletRequest request) {
-		for (Attribute a : Attribute.values()) {
-			request.getSession().setAttribute(a.toString(), null);
-		}
-	}
-
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		attributesReset(request);
-		try {
-			InitialContext ctx = new InitialContext();
-			RegistrationRemote registrationController = (RegistrationRemote) ctx.lookup("Registration/remote");
-			registrationController.sendActivationEmail();
-			request.getSession().setAttribute(Attribute.RESENT.toString(), 1);
-			String url = response.encodeURL("/Pages/RegistrationConfirmation.jsp");
-			response.sendRedirect(request.getContextPath() + url);
-		} catch (NamingException e) {
-			e.printStackTrace();
-			throw new RuntimeException();
-		}
-		
+			RegistrationRemote registrationAgent;
+			if(request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString()) == null || request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString()) == null){
+				request.getSession().setAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(), null);
+				request.getSession().setAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString(), null);
+				response.sendRedirect(response.encodeURL(request.getContextPath() + "/Pages/Registration.jsp"));
+				return;
+			} else {
+				registrationAgent = (RegistrationRemote) request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString());
+			}
+
+			registrationAgent.sendActivationEmail();
+
+			request.setAttribute(Attribute.RESENT.toString(), 1);
+			
+			request.getRequestDispatcher(response.encodeURL("/Pages/RegistrationConfirmation.jsp")).forward(request,response);
 	}
 
 }

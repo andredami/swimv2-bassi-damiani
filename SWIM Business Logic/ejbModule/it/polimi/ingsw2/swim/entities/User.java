@@ -40,10 +40,10 @@ import org.hibernate.validator.NotNull;
  */
 @NamedQueries({
 		@NamedQuery(name = "getUserByEmail", query = "SELECT u FROM User u WHERE u.email =:email"),
-		@NamedQuery(name = "getUserWithFriends", query = "SELECT u FROM User u join fetch u.friendships WHERE u.id =:id AND u.status = REGISTERED"),
-		@NamedQuery(name = "getUserWithAbilities", query = "SELECT u FROM User u join fetch u.abilities WHERE u.id =:id AND u.status = REGISTERED"),
-		@NamedQuery(name = "getUserWithNotification", query = "SELECT u FROM User u join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED"),
-		@NamedQuery(name = "getCompleteUser", query = "SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id AND u.status = REGISTERED") })
+		@NamedQuery(name = "getUserWithFriends", query = "SELECT u FROM User u LEFT JOIN FETCH u.friendships WHERE u.id =:id AND u.status = REGISTERED"),
+		@NamedQuery(name = "getUserWithAbilities", query = "SELECT u FROM User u LEFT JOIN FETCH u.abilities WHERE u.id =:id AND u.status = REGISTERED"),
+		@NamedQuery(name = "getUserWithNotification", query = "SELECT u FROM User u LEFT JOIN FETCH u.notifications WHERE u.id =:id AND u.status = REGISTERED"),
+		@NamedQuery(name = "getCompleteUser", query = "SELECT u FROM User u LEFT JOIN FETCH u.abilities LEFT JOIN FETCH u.friendships LEFT JOIN FETCH u.notifications WHERE u.id =:id AND u.status = REGISTERED") })
 @Entity
 public class User extends TempUser implements Serializable {
 
@@ -84,7 +84,7 @@ public class User extends TempUser implements Serializable {
 
 	private Integer evaluationCount = 0;
 
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany
 	@NotEmpty
 	private Set<Ability> abilities;
 

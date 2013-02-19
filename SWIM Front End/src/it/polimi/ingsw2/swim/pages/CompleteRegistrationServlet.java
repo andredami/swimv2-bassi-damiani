@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CompleteRegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
 	public enum Attribute {
 		NO_ABILITY("noAbility");
 
@@ -33,63 +33,65 @@ public class CompleteRegistrationServlet extends HttpServlet {
 		}
 	}
 
-	private void attributesReset(HttpServletRequest request) {
-		for (Attribute a : Attribute.values()) {
-			request.getSession().setAttribute(a.toString(), null);
-		}
-	}
-	
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public CompleteRegistrationServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		attributesReset(request);
-		if(request.getSession().getAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString())==null){
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		RegistrationRemote registrationAgent = (RegistrationRemote) request
+				.getSession().getAttribute(
+						RegistrationServlet.Attribute.REGISTRATION_AGENT
+								.toString());
+		if (registrationAgent == null) {
 			String url = response.encodeURL("/index.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
 		}
-		
-		if(request.getParameter("ChosenAbility") == null || request.getParameter("ChosenAbility").isEmpty()){
-			request.getSession().setAttribute(Attribute.NO_ABILITY.toString(), 1);
-			String url = response.encodeURL("/Pages/AbilitySelection.jsp");
-			response.sendRedirect(request.getContextPath() + url);
+
+		if (request.getParameter("chosenAbility") == null
+				|| request.getParameter("chosenAbility").isEmpty()) {
+			request.setAttribute(Attribute.NO_ABILITY.toString(), 1);
+			request.getRequestDispatcher(response.encodeURL("/Pages/AbilitySelection.jsp"))
+					.forward(request, response);
 			return;
 		}
-			RegistrationRemote registrationController = (RegistrationRemote) request.getSession().getAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString());
-			String[] entry = { request.getParameter("ChosenAbility") };
-			try {
-				registrationController.registerUser(entry);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), null);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString(), 1);
-				registrationController.sendActivationEmail();
-				String url = response.encodeURL("/Pages/RegistrationConfirmation.jsp");
-				response.sendRedirect(request.getContextPath() + url);
-			} catch (InvalidDataException e) {
-				request.getSession().setAttribute(Attribute.NO_ABILITY.toString(), 1);
-				String url = response.encodeURL("/Pages/AbilitySelection.jsp");
-				response.sendRedirect(request.getContextPath() + url);
-			} catch (UserAlreadyExistsException e) {
-				request.getSession().setAttribute(RegistrationServlet.Attribute.ALREADY_EXISTS.toString(), 1);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), null);
-				registrationController.abort();
-				String url = response.encodeURL("/Pages/Registration.jsp");
-				response.sendRedirect(request.getContextPath() + url);
-			} catch (IllegalStateException e){
-				request.getSession().setAttribute(RegistrationServlet.Attribute.TIMEOUT.toString(), 1);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.IN_REGISTRATION.toString(), null);
-				registrationController.abort();
-				String url = response.encodeURL("/Pages/Registration.jsp");
-				response.sendRedirect(request.getContextPath() + url);
-			}		
+		String[] entry = { request.getParameter("chosenAbility") };
+		try {
+			registrationAgent.registerUser(entry);
+			request.getSession()
+					.setAttribute(
+							RegistrationServlet.Attribute.REGISTRATION_COMPLETE
+									.toString(),
+							1);
+			registrationAgent.sendActivationEmail();
+			String url = response
+					.encodeURL("/Pages/RegistrationConfirmation.jsp");
+			response.sendRedirect(request.getContextPath() + url);
+		} catch (InvalidDataException e) {
+			request.setAttribute(Attribute.NO_ABILITY.toString(),
+					1);
+			request.getRequestDispatcher(response.encodeURL("/SelectAbilityRegistrationServlet"))
+					.forward(request, response);
+		} catch (UserAlreadyExistsException e) {
+			request.setAttribute(
+					RegistrationServlet.Attribute.ALREADY_EXISTS.toString(), 1);
+			request.getSession().setAttribute(
+					RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(),
+					null);
+			registrationAgent.abort();
+			request.getRequestDispatcher(response.encodeURL("/Pages/Registration.jsp"))
+					.forward(request, response);
+		} catch (IllegalStateException e) {
+			request.setAttribute(
+					RegistrationServlet.Attribute.TIMEOUT.toString(), 1);
+			request.getSession().setAttribute(
+					RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(),
+					null);
+			registrationAgent.abort();
+			request.getRequestDispatcher(response.encodeURL("/Pages/Registration.jsp"))
+					.forward(request, response);
+		}
 	}
 
 }

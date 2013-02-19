@@ -27,6 +27,9 @@ public class TelephoneValidator implements PropertyConstraint,
 	@Override
 	public boolean isValid(Object arg0) {
 		String arg;
+		if(arg0 == null){
+			return true;
+		}
 		if(arg0 instanceof String){
 			arg = (String) arg0;
 		} else {

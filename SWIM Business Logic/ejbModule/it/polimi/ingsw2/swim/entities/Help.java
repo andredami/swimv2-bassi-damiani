@@ -30,7 +30,7 @@ import org.hibernate.validator.NotNull;
 		{
 			@NamedQuery(
 					name = "getCompleteHelp",
-					query = "SELECT h FROM Help h JOIN FETCH h.conversation WHERE h.id =:id"),
+					query = "SELECT h FROM Help h LEFT JOIN FETCH h.conversation WHERE h.id =:id"),
 			@NamedQuery(
 					name = "getActiveHelpByUser",
 					query = "SELECT h FROM Help h JOIN h.addressee t JOIN h.sender f WHERE (t.id =:user OR f.id =:user) AND h.state <> CLOSED"),

@@ -16,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 /**
@@ -27,26 +28,27 @@ public class Activation implements ActivationRemote {
 
 	@PersistenceContext(unitName = "persistentData")
 	private EntityManager em;
-	
-    /**
-     * Default constructor. 
-     */
-	public Activation(){
+
+	/**
+	 * Default constructor.
+	 */
+	public Activation() {
 		super();
 	}
-	
+
 	@Override
     public void activateUser(String userId, String activationToken) throws NoSuchUserException, InvalidActivationCode {
-        User user = em.find(User.class, Long.parseLong(userId));
-        if(user == null){
+		try{
+			User user = (User) em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.abilities WHERE u.id =:id").setParameter("id", Long.parseLong(userId)).getSingleResult();
+			user.confirmRegistration(activationToken);
+			em.merge(user);
+		} catch(NoResultException e){
         	throw new NoSuchUserException();
+        } catch(IllegalStateException e){
         }
-        user.confirmRegistration(activationToken);
-        em.merge(user);
     }
 
-    
-    public void sendActivationEmail(User user) {
+	public void sendActivationEmail(User user) {
 		if (user.getStatus() == Status.REGISTERED) {
 			return;
 		}

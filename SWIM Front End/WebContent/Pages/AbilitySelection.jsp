@@ -1,4 +1,3 @@
-<%@page import="org.jboss.aspects.security.Unchecked"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*"%>
@@ -129,13 +128,13 @@
 										String destination = "";
 										switch (mode) {
 										case REGISTRATION:
-											destination = "../CompleteRegistrationServlet";
+											destination = "/CompleteRegistrationServlet";
 											break;
 										case PROFILE:
-											destination = "../InsertAbilityServlet";
+											destination = "/InsertAbilityServlet";
 											break;
 										case FILTER:
-											destination = "../HelpRequestUser";
+											destination = "/HelpRequestUser";
 											break;
 										}
 
@@ -170,32 +169,28 @@
 											Iterator<Ability> i = a.iterator();
 													while (i.hasNext()) {
 														Ability el = i.next();
-														if (mode != AbilitySelectionMode.PROFILE
-																&& !el.isStub()) {
+														if (!el.isStub()) {
 										%>
 										<li><a
 											href=" <%=response.encodeURL(CONTEXT_PATH + destination
-									+ "?ChosenAbility=" + el.getName())%>">
+									+ "?chosenAbility=" + el.getName().replace(' ', '+'))%>">
 												<%
 													out.print(el.getName());
 												%>
 										</a></li>
 										<li id='description'><textarea readonly='readonly'
-												name='TextArea' rows='2' style='width: 285px'>
-																<%
-																	out.print(el.getDescription());
-																%>
+												name='TextArea' rows='2' style='width: 285px'><%out.print(el.getDescription());%>
 															</textarea></li>
 										<%
-											} else {
+											} else if(mode == AbilitySelectionMode.PROFILE) {
 										%>
 										<li>[Abilità proposta] <%
 											out.print(el.getName());
 										%><br />
 											<a
 											href="<%=response
-									.encodeURL(CONTEXT_PATH + "/SubscribeAbility?ChosenAbility="
-											+ el.getName())%>">
+									.encodeURL(CONTEXT_PATH + "/SubscribeAbility?chosenAbility="
+											+ el.getName().replace(' ', '+'))%>">
 												Sottoscrivi </a> questa abilità per averla nonappena
 											disponibile!
 										</li>

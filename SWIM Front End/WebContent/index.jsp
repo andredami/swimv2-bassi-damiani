@@ -1,5 +1,8 @@
+<%@page import="it.polimi.ingsw2.swim.pages.UserActivationServlet.Attribute"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="it.polimi.ingsw2.swim.pages.UserActivationServlet" %>
+<%  String CONTEXT_PATH=request.getContextPath(); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,9 +10,7 @@
 
 <title>Swim</title>
 
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="<%= CONTEXT_PATH + "/css/style.css" %>" rel="stylesheet" type="text/css" media="screen" />
 <style type="text/css">
 .auto-style1 {
 	margin-top: 0;
@@ -40,7 +41,7 @@
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 959px; height: 137px">
 		
-				<h1><a href="../index.jsp">SWIM</a></h1>
+				<h1><a href="<%= CONTEXT_PATH + "/index.jsp" %>">SWIM</a></h1>
 
 
 			</div>
@@ -53,17 +54,18 @@
 					
 					<div class="entry"> &nbsp;<div>
 						<p>
-						<a href="../Pages/RequestForHelp">Ricerca aiuto anche se non possiedi un account!</a>
+						SWIMv2 è l'esclusiva piattaforma online che vi permetterà di offrire le vostre abilità lavorative e usufruire delle abilità delle altre persone registrate! Incomincia anche tu registrandoti! </p>
+						<p><a href="<%= CONTEXT_PATH + "/Pages/RequestForHelp" %>">Ricerca aiuto anche se non possiedi un account!</a><br /></p>
+						<p>
 						<%
-							try {
-								if (request.getSession().getAttribute("ErrorLogin").equals(1)){
-									request.getSession().setAttribute("ErrorLogin", null);
-									out.println("Attenzione! La combinazione di email è password è errata. Ritenta ancora.");
-								}
-							}
-							catch (NullPointerException e){
-								out.println("SWIMv2 è l'esclusiva piattaforma online che vi permetterà di offrire le vostre abilità lavorative e usufruire delle abilità delle altre persone registrate! Incomincia anche tu registrandoti!");
-							}
+							if(request.getAttribute(UserActivationServlet.Attribute.FAILED.toString()) != null){
+								out.println("<span style=\"font-weight: bolder; color: red;\">Attivazione fallita.</span>");
+							//TODO: Adattare a richiesta
+							} else if(request.getAttribute(UserActivationServlet.Attribute.SUCCESS.toString()) != null){
+								out.println("<span style=\"font-weight: bolder; color: green;\">Utente attivato con successo! Ora puoi effettuare il login.</span>");
+							}else if(session.getAttribute("ErrorLogin") != null){
+								out.println("<span style=\"font-weight: bolder; color: red;\">Attenzione, accesso fallito! La combinazione di email è password è errata. Ritenta ancora.</span>");
+							} 
 						%>
 						</p>
 						</div>

@@ -109,7 +109,7 @@ public class Registration implements RegistrationRemote {
 
 		for (String s : entries) {
 			Ability ability = em.find(Ability.class, s);
-			if (ability != null && !abilities.contains(ability)) {
+			if (ability != null && !abilities.contains(ability) && !ability.isStub()) {
 				abilities.add(ability);
 				hasOneAbility = true;
 			}
