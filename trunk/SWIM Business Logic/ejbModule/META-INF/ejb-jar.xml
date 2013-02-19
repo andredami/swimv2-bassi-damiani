@@ -10,7 +10,7 @@
 				<description>The domain on which the application answers.</description>
 				<env-entry-name>domain</env-entry-name>
 				<env-entry-type>java.lang.String</env-entry-type>
-				<env-entry-value>localhost:8080</env-entry-value>
+				<env-entry-value>localhost:8080/swim</env-entry-value>
 			</env-entry>
 			<env-entry>
 				<description>SMTP server</description>

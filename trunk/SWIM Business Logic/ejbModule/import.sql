@@ -18,11 +18,17 @@ INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('
 INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('2', 'ESEMPIO Testo di esempio per un abuso già gestito', 'esempio@abuso.it', true);
 INSERT INTO `swimdb`.`abuse` (`id`, `descriprion`, `email`, `handled`) VALUES ('3', 'ESEMPIO Testo di esempio per un abuso non già gestito', 'esempio2@abuso.it', false);
 
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Carpentiere', '1', 'ESEMPIO Carpentiere', '1');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Acconciatore', '1', 'ESEMPIO Acconciatore', '1');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Parrucchiere', '3', 'ESEMPIO Parrucchiere', '3');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Carpentiere', '4', 'ESEMPIO Carpentiere', '4');
-INSERT INTO `swimdb`.`ability_user` (`abilities_name`, `users_id`, `Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Parrucchiere', '5', 'ESEMPIO Parrucchiere', '5');
+INSERT INTO `swimdb`.`user_ability` (`users_id`, `abilities_name`) VALUES ('1', 'ESEMPIO Carpentiere');
+INSERT INTO `swimdb`.`user_ability` (`users_id`, `abilities_name`) VALUES ('2', 'ESEMPIO Eliminatore');
+INSERT INTO `swimdb`.`user_ability` (`users_id`, `abilities_name`) VALUES ('3', 'ESEMPIO Parrucchiere');
+INSERT INTO `swimdb`.`user_ability` (`users_id`, `abilities_name`) VALUES ('4', 'ESEMPIO Carpentiere');
+INSERT INTO `swimdb`.`user_ability` (`users_id`, `abilities_name`) VALUES ('5', 'ESEMPIO Eliminatore');
+
+INSERT INTO `swimdb`.`ability_user` (`Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Aiutante', '1');
+INSERT INTO `swimdb`.`ability_user` (`Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Acconciatore', '1');
+INSERT INTO `swimdb`.`ability_user` (`Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Aiutante', '3');
+INSERT INTO `swimdb`.`ability_user` (`Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Acconciatore', '4');
+INSERT INTO `swimdb`.`ability_user` (`Ability_name`, `subscribers_id`) VALUES ('ESEMPIO Aiutante', '5');
 
 INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('muratore', 'ESEMPIO Carpentiere');
 INSERT INTO `swimdb`.`alias` (`name`, `ability_name`) VALUES ('parrucchiera', 'ESEMPIO Parrucchiere');

@@ -35,13 +35,13 @@ import org.hibernate.validator.NotNull;
 			"WHERE ab.name =:ability OR al.name =:ability"),	
 	@NamedQuery(
 			name = "getAbilityWithSubscriber",
-			query = "SELECT a FROM Ability a join fetch a.subscribers WHERE a.name =:ability"),
+			query = "SELECT a FROM Ability a LEFT JOIN FETCH a.subscribers WHERE a.name =:ability"),
 	@NamedQuery(
 			name = "getAbilityWithAlias", 
-			query = "SELECT a FROM Ability a join fetch a.alias WHERE a.name =:ability"),
+			query = "SELECT a FROM Ability a LEFT JOIN FETCH a.alias WHERE a.name =:ability"),
 	@NamedQuery(
 			name = "getCompleteAbility",
-			query = "SELECT a FROM Ability a join fetch a.subscribers join fetch a.alias " +
+			query = "SELECT a FROM Ability a LEFT JOIN FETCH a.subscribers LEFT JOIN FETCH a.alias " +
 					"WHERE a.name =:ability")
 })
 
@@ -95,7 +95,7 @@ public class Ability implements Serializable {
 	 * @category Many-to-Many Relations
 	 * @see User
 	 */
-	@ManyToMany
+	@ManyToMany(mappedBy = "abilities")
 	private Set<User> users;
 
 	/**

@@ -1,17 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="it.polimi.ingsw2.swim.session.remote.RegistrationRemote" %>
 <%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet" %>
 <%@ page import="it.polimi.ingsw2.swim.pages.ActivationResend" %>
+<%	String CONTEXT_PATH = request.getContextPath(); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
 <title>Swim</title>
-
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="<%= CONTEXT_PATH + "/css/style.css" %>" rel="stylesheet" type="text/css" media="screen" />
 <style type="text/css">
 .auto-style1 {
 	margin-top: 0;
@@ -22,12 +21,15 @@
 </style>
 
 <%
-if(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString() == null){
-	String url = response.encodeURL(request.getContextPath() + "/index.jsp");
-	response.sendRedirect(request.getContextPath() + url);
+RegistrationRemote registrationAgent;
+if(session.getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString()) == null || session.getAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString()) == null){
+	session.setAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(), null);
+	session.setAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString(), null);
+	response.sendRedirect(CONTEXT_PATH + "/Pages/Registration.jsp");
 	return;
+} else {
+	registrationAgent = (RegistrationRemote) session.getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString());
 }
-
 %>
 
 
@@ -42,7 +44,7 @@ if(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString() == null){
 		<div id="header" style="width: 961px">
 			<div id="logo" style="width: 959px; height: 137px">
 		
-				<h1><a href="../index.jsp">SWIM</a></h1>
+				<h1><a href="<%= CONTEXT_PATH + "/index.jsp" %>">SWIM</a></h1>
 
 
 			</div>
@@ -55,20 +57,15 @@ if(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString() == null){
 					
 					<div class="entry"> &nbsp;<div>
 						<p>Hai quasi fatto! Stai per ricevere una mail che contiene un link che ti permetterà di convalidare la tua registrazione.<br>
-						nel caso non avessi ancora ricevuto nulla entro dieci minuti, <a href="../ActivationResend">reinvia la mail di attivazione</a>.
-						
+						nel caso non avessi ancora ricevuto nulla entro dieci minuti, <a href="<%= CONTEXT_PATH + "/ActivationResend" %>">reinvia la mail di attivazione</a>.
+						</p>
 						<p>
 						<%
-							try {
-								if (request.getSession().getAttribute(ActivationResend.Attribute.RESENT.toString())!=null){
-									request.getSession().setAttribute(ActivationResend.Attribute.RESENT.toString(), null);
+								if (request.getAttribute(ActivationResend.Attribute.RESENT.toString())!=null){
 						%>
 									Mail di attivazione reinviata con successo.
 						<%
 								}
-							}
-							catch (NullPointerException e){
-							}
 						%>
 						</p>
 						</div>

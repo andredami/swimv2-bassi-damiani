@@ -32,7 +32,8 @@ import javax.mail.internet.MimeMessage;
 @Local
 public class Mailer implements MailerLocal {
 
-	private static final String TOKEN = "[^\\\\]#";
+	private static final String TOKEN = "\\\\{0}#";
+	private static final String RESERVED_TOKEN = "\\\\{0}\\$";
 	private static final Pattern customTokenPattern = Pattern.compile(TOKEN
 			+ "(\\w+)");
 
@@ -45,7 +46,7 @@ public class Mailer implements MailerLocal {
 				"Conferma la tua registrazione a SWIM.",
 				"Grazie #userFirstname per esserti registrato su SWIMv2, \n"
 						+ "Per completare la registrazione, conferma la tua identià verificando il tuo indirizzo e-mail. \n"
-						+ "Segui questo link: http://" + Mailer.domain
+						+ "Segui questo link: http://$domain"
 						+ "/userActivation?id=#id&tk=#activationToken"), PASSWORD_RECOVERY(
 				"Recupera la tua password su SWIM.",
 				"Hai richiesto di recuperare la tua password. \n "
@@ -112,9 +113,11 @@ public class Mailer implements MailerLocal {
 		String subject = new String(type.baseSubject);
 		String text = new String(type.baseText);
 		for (Entry<String, String> param : parameters.entrySet()) {
-			subject.replaceAll(TOKEN + param.getKey(), param.getValue());
-			text.replaceAll(TOKEN + param.getKey(), param.getValue());
+			subject = subject.replaceAll(TOKEN + param.getKey(), param.getValue());
+			text = text.replaceAll(TOKEN + param.getKey(), param.getValue());
 		}
+		subject = subject.replaceAll(RESERVED_TOKEN + "domain", domain);
+		text = text.replaceAll(RESERVED_TOKEN + "domain", domain);
 		sendEmail(to, subject, text);
 	}
 

@@ -39,7 +39,7 @@ public class UserManager implements UserManagerRemote {
     @Override
     public User retriveUserProfile(String userId) throws NoSuchUserException{
 		try {
-			return (User) em.createQuery("SELECT u FROM User u join fetch u.abilities join fetch u.friendships join fetch u.notifications WHERE u.id =:id").setParameter("id", userId).getSingleResult();
+			return (User) em.createQuery("SELECT u FROM User u LEFT JOIN FETCH u.abilities LEFT JOIN FETCH u.friendships LEFT JOIN FETCH u.notifications WHERE u.id =:id").setParameter("id", userId).getSingleResult();
 		} catch (NoResultException e) {
 			throw new NoSuchUserException();
 		}

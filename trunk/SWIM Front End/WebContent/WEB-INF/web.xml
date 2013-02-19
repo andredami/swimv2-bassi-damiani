@@ -153,4 +153,14 @@
     <servlet-name>RequestHelpServlet</servlet-name>
     <url-pattern>/RequestHelpServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>userActivation</display-name>
+    <servlet-name>userActivation</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.pages.UserActivationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>userActivation</servlet-name>
+    <url-pattern>/userActivation</url-pattern>
+  </servlet-mapping>
 </web-app>

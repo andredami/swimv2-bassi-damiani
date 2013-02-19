@@ -35,7 +35,7 @@ public class AbilitySearch implements AbilitySearchRemote {
 		if(name == null || name.isEmpty()){
 			query = em.createQuery("SELECT b FROM Ability b");
 		} else {
-		query = em.createQuery("SELECT b FROM Ability b JOIN FETCH b.alias c WHERE b.name LIKE ':namePattern' OR c.name LIKE ':namePattern'");
+		query = em.createQuery("SELECT DISTINCT b FROM Ability b LEFT JOIN FETCH b.alias c WHERE (b.name LIKE :namePattern) OR (c.name LIKE :namePattern)");
 		query.setParameter("namePattern", "%" + name + "%");
 		}
 		return query.getResultList();
