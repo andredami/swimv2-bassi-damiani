@@ -1,5 +1,6 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets.registration;
 
+import it.polimi.ingsw2.swim.servlets.SessionAttribute;
 import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
@@ -36,13 +37,13 @@ public class ActivationResend extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			RegistrationRemote registrationAgent;
-			if(request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString()) == null || request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString()) == null){
-				request.getSession().setAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(), null);
-				request.getSession().setAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString(), null);
+			if(request.getSession().getAttribute(SessionAttribute.REGISTRATION_AGENT.toString()) == null || request.getSession().getAttribute(SessionAttribute.REGISTRATION_COMPLETED.toString()) == null){
+				request.getSession().setAttribute(SessionAttribute.REGISTRATION_AGENT.toString(), null);
+				request.getSession().setAttribute(SessionAttribute.REGISTRATION_COMPLETED.toString(), null);
 				response.sendRedirect(response.encodeURL(request.getContextPath() + "/Pages/Registration.jsp"));
 				return;
 			} else {
-				registrationAgent = (RegistrationRemote) request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString());
+				registrationAgent = (RegistrationRemote) request.getSession().getAttribute(SessionAttribute.REGISTRATION_AGENT.toString());
 			}
 
 			registrationAgent.sendActivationEmail();

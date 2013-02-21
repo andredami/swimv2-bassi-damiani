@@ -1,4 +1,4 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets.restricted;
 
 import it.polimi.ingsw2.swim.entities.Abuse;
 import it.polimi.ingsw2.swim.entities.FriendshipRequest;

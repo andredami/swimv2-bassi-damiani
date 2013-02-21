@@ -1,7 +1,8 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets.registration;
 
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
+import it.polimi.ingsw2.swim.servlets.SessionAttribute;
 import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class CompleteRegistrationServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		RegistrationRemote registrationAgent = (RegistrationRemote) request
 				.getSession().getAttribute(
-						RegistrationServlet.Attribute.REGISTRATION_AGENT
+						SessionAttribute.REGISTRATION_AGENT
 								.toString());
 		if (registrationAgent == null) {
 			String url = response.encodeURL("/index.jsp");
@@ -61,7 +62,7 @@ public class CompleteRegistrationServlet extends HttpServlet {
 			registrationAgent.registerUser(entry);
 			request.getSession()
 					.setAttribute(
-							RegistrationServlet.Attribute.REGISTRATION_COMPLETE
+							SessionAttribute.REGISTRATION_COMPLETED
 									.toString(),
 							1);
 			registrationAgent.sendActivationEmail();
@@ -75,18 +76,18 @@ public class CompleteRegistrationServlet extends HttpServlet {
 					.forward(request, response);
 		} catch (UserAlreadyExistsException e) {
 			request.setAttribute(
-					RegistrationServlet.Attribute.ALREADY_EXISTS.toString(), 1);
+					InitRegistrationServlet.Attribute.ALREADY_EXISTS.toString(), 1);
 			request.getSession().setAttribute(
-					RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(),
+					SessionAttribute.REGISTRATION_AGENT.toString(),
 					null);
 			registrationAgent.abort();
 			request.getRequestDispatcher(response.encodeURL("/Pages/Registration.jsp"))
 					.forward(request, response);
 		} catch (IllegalStateException e) {
 			request.setAttribute(
-					RegistrationServlet.Attribute.TIMEOUT.toString(), 1);
+					InitRegistrationServlet.Attribute.TIMEOUT.toString(), 1);
 			request.getSession().setAttribute(
-					RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(),
+					SessionAttribute.REGISTRATION_AGENT.toString(),
 					null);
 			registrationAgent.abort();
 			request.getRequestDispatcher(response.encodeURL("/Pages/Registration.jsp"))

@@ -1,7 +1,8 @@
-<%@page import="it.polimi.ingsw2.swim.pages.UserActivationServlet.Attribute"%>
+<%@page import="it.polimi.ingsw2.swim.servlets.registration.UserActivationServlet.Attribute"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="it.polimi.ingsw2.swim.pages.UserActivationServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.SessionAttribute" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.registration.UserActivationServlet" %>
 <%  String CONTEXT_PATH=request.getContextPath(); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -21,10 +22,10 @@
 </style>
 
 <%
-	Long user = (Long)session.getAttribute("Id");
+	Long user = (Long)session.getAttribute(SessionAttribute.USER_ID.toString());
 		if (user != null){
-			String url = response.encodeURL("/Pages/HomePage.jsp");
-			response.sendRedirect(request.getContextPath() + url);
+			String url = response.encodeURL(request.getContextPath() + "/Pages/HomePage.jsp");
+			response.sendRedirect(url);
 			return;
 		}
 %>
