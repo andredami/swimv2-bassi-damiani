@@ -1,4 +1,4 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets.registration;
 
 import it.polimi.ingsw2.swim.exceptions.InvalidActivationCode;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;

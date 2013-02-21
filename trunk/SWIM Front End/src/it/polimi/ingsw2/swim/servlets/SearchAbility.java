@@ -1,4 +1,4 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets;
 
 
 import it.polimi.ingsw2.swim.entities.Ability;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class RegistrationServlet
  */
-public class SelectAbilityRegistrationServlet extends HttpServlet {
+public class SearchAbility extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
 	public enum Attribute {
@@ -69,17 +69,5 @@ public class SelectAbilityRegistrationServlet extends HttpServlet {
 			e.printStackTrace();
 			throw new RuntimeException();
 		}
-		
-		
 	}
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/Pages/AbilitySelection.jsp").forward(request, response);
-	}
-	
-	
-	
 }

@@ -2,14 +2,10 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*"%>
 <%@ page import="it.polimi.ingsw2.swim.entities.Ability"%>
-<%@ page import="it.polimi.ingsw2.swim.pages.AbilitySelectionMode"%>
-<%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet"%>
-<%@ page
-	import="it.polimi.ingsw2.swim.pages.SelectAbilityRegistrationServlet"%>
-<%@ page
-	import="it.polimi.ingsw2.swim.pages.CompleteRegistrationServlet"%>
-<%@ page
-	import="it.polimi.ingsw2.swim.session.remote.RegistrationRemote"%>
+<%@ page import="it.polimi.ingsw2.swim.servlets.AbilitySelectionMode"%>
+<%@ page import="it.polimi.ingsw2.swim.servlets.SearchAbility.Attribute"%>
+<%@ page import="it.polimi.ingsw2.swim.session.remote.RegistrationRemote"%>
+<%@ page import="it.polimi.ingsw2.swim.servlets.SessionAttribute" %>
 <%
 	String CONTEXT_PATH = request.getContextPath();
 %>
@@ -21,12 +17,12 @@
 <%
 	AbilitySelectionMode mode = AbilitySelectionMode.FILTER;
 	RegistrationRemote registrationAgent = (RegistrationRemote) session
-			.getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT
+			.getAttribute(SessionAttribute.REGISTRATION_AGENT
 					.toString());
 
 	//TODO: PROFILE
 	if (request.getAttribute("profileediting") != null) {
-		if (session.getAttribute("USER") == null) {
+		if (session.getAttribute(SessionAttribute.USER_ID.toString()) == null) {
 			String url = response.encodeURL("/Pages/home.jsp");
 			response.sendRedirect(request.getContextPath() + url);
 			return;
@@ -126,28 +122,29 @@
 									<br /> &nbsp;
 									<%
 										String destination = "";
-										switch (mode) {
-										case REGISTRATION:
-											destination = "/CompleteRegistrationServlet";
-											break;
-										case PROFILE:
-											destination = "/InsertAbilityServlet";
-											break;
-										case FILTER:
-											destination = "/HelpRequestUser";
-											break;
-										}
+																	switch (mode) {
+																	case REGISTRATION:
+																		destination = "/CompleteRegistrationServlet";
+																		break;
+																	case PROFILE:
+																		destination = "/InsertAbilityServlet";
+																		break;
+																	case FILTER:
+																		destination = "/HelpRequestUser";
+																		break;
+																	}
 
-										try {
-											List<Ability> a = (List<Ability>) request
-													.getAttribute(SelectAbilityRegistrationServlet.Attribute.LIST
-															.toString());
-											if (a.isEmpty()) {
+																	try {
+																		@SuppressWarnings("unchecked")
+																		List<Ability> a = (List<Ability>) request
+																				.getAttribute(Attribute.LIST
+																						.toString());
+																		if (a.isEmpty()) {
 									%>
 									<p>
 										Non è stata trovata nessuna abilità che corrisponde alla
 										ricerca "<%=request
-							.getAttribute(SelectAbilityRegistrationServlet.Attribute.SEARCH_KEY
+							.getAttribute(Attribute.SEARCH_KEY
 									.toString())%>"
 										<br />
 

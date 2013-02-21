@@ -1,8 +1,9 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets.registration;
 
 import it.polimi.ingsw2.swim.entities.User.Gender;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
 import it.polimi.ingsw2.swim.exceptions.UserAlreadyExistsException;
+import it.polimi.ingsw2.swim.servlets.SessionAttribute;
 import it.polimi.ingsw2.swim.session.remote.RegistrationRemote;
 
 import java.io.IOException;
@@ -19,16 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class RegistrationServlet
  */
-public class RegistrationServlet extends HttpServlet {
+public class InitRegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	public enum Attribute {
 		NOT_MATCHING("notMatching"), 
 		INVALID_DATA("invalidData"),
 		ALREADY_EXISTS("already"),
-		REGISTRATION_AGENT("registration"),
-		TIMEOUT("timeout"),
-		REGISTRATION_COMPLETE("completed");
+		TIMEOUT("timeout");
 
 		private static final String componentName = "RegistrationServlet";
 		private final String name;
@@ -54,14 +53,14 @@ public class RegistrationServlet extends HttpServlet {
 			// Starting the context
 			
 			RegistrationRemote registrationAgent = null;
-			if(request.getSession().getAttribute(Attribute.REGISTRATION_AGENT.toString()) == null || request.getSession().getAttribute(Attribute.REGISTRATION_COMPLETE.toString()) != null){
-				request.getSession().setAttribute(Attribute.REGISTRATION_COMPLETE.toString(), null);
+			if(request.getSession().getAttribute(SessionAttribute.REGISTRATION_AGENT.toString()) == null || request.getSession().getAttribute(SessionAttribute.REGISTRATION_COMPLETED.toString()) != null){
+				request.getSession().setAttribute(SessionAttribute.REGISTRATION_COMPLETED.toString(), null);
 				InitialContext jndiContext = new InitialContext();
 				Object ref = jndiContext.lookup("Registration/remote");
 				registrationAgent = (RegistrationRemote) ref;
-				request.getSession().setAttribute(Attribute.REGISTRATION_AGENT.toString(), registrationAgent);
+				request.getSession().setAttribute(SessionAttribute.REGISTRATION_AGENT.toString(), registrationAgent);
 			} else {
-				registrationAgent = (RegistrationRemote) request.getSession().getAttribute(Attribute.REGISTRATION_AGENT.toString());
+				registrationAgent = (RegistrationRemote) request.getSession().getAttribute(SessionAttribute.REGISTRATION_AGENT.toString());
 			}
 			
 			if(registrationAgent == null){

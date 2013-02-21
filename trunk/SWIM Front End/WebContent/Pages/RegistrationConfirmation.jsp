@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="it.polimi.ingsw2.swim.session.remote.RegistrationRemote" %>
-<%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet" %>
-<%@ page import="it.polimi.ingsw2.swim.pages.ActivationResend" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.SessionAttribute" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.registration.ActivationResend" %>
 <%	String CONTEXT_PATH = request.getContextPath(); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -22,13 +22,13 @@
 
 <%
 RegistrationRemote registrationAgent;
-if(session.getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString()) == null || session.getAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString()) == null){
-	session.setAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString(), null);
-	session.setAttribute(RegistrationServlet.Attribute.REGISTRATION_COMPLETE.toString(), null);
+if(session.getAttribute(SessionAttribute.REGISTRATION_AGENT.toString()) == null || session.getAttribute(SessionAttribute.REGISTRATION_COMPLETED.toString()) == null){
+	session.setAttribute(SessionAttribute.REGISTRATION_AGENT.toString(), null);
+	session.setAttribute(SessionAttribute.REGISTRATION_COMPLETED.toString(), null);
 	response.sendRedirect(CONTEXT_PATH + "/Pages/Registration.jsp");
 	return;
 } else {
-	registrationAgent = (RegistrationRemote) session.getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString());
+	registrationAgent = (RegistrationRemote) session.getAttribute(SessionAttribute.REGISTRATION_AGENT.toString());
 }
 %>
 

@@ -3,8 +3,8 @@
 
 
 <%@ page import="java.util.*, java.lang.System" %>
-<%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet.Attribute"%>
-<%@ page import="it.polimi.ingsw2.swim.pages.RegistrationServlet" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.registration.InitRegistrationServlet.Attribute"%>
+<%@ page import="it.polimi.ingsw2.swim.servlets.SessionAttribute"%>
 <%@ page import="it.polimi.ingsw2.swim.session.remote.RegistrationRemote" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.TempUser" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.User" %>
@@ -22,8 +22,8 @@ if (session.getAttribute("USER") != null){
 }
 %>
 <meta http-equiv="content-type" content="text/html; charset=utf-8;" />
-<script type="text/javascript" src="<%= CONTEXT_PATH + "/jquery/jquery-1.9.0.js" %>"></script>
-<script type="text/javascript" src="<%= CONTEXT_PATH + "/Pages/functions.js" %>"></script>
+<script type="text/javascript" src="<%= CONTEXT_PATH + "/javascript/jquery/jquery-1.9.0.js" %>"></script>
+<script type="text/javascript" src="<%= CONTEXT_PATH + "/javascript/functions.js" %>"></script>
 <script>
 $(document).load(function () {
 	$("#prosegui").attr("disabled","disabled");
@@ -108,7 +108,7 @@ $(document).load(function () {
 				</div>
 				<%
 					TempUser tempUser = null;
-					RegistrationRemote registrationAgent = (RegistrationRemote) request.getSession().getAttribute(RegistrationServlet.Attribute.REGISTRATION_AGENT.toString());
+					RegistrationRemote registrationAgent = (RegistrationRemote) request.getSession().getAttribute(SessionAttribute.REGISTRATION_AGENT.toString());
 					if(registrationAgent != null){
 							tempUser = registrationAgent.getTempUser();
 					}

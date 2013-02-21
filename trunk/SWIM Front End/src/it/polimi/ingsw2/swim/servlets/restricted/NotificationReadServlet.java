@@ -1,4 +1,4 @@
-package it.polimi.ingsw2.swim.pages;
+package it.polimi.ingsw2.swim.servlets.restricted;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class FriendshipRequestServlet
+ * Servlet implementation class NotificationReadServlet
  */
-public class FriendshipRequestServlet extends HttpServlet {
+public class NotificationReadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public FriendshipRequestServlet() {
+    public NotificationReadServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
