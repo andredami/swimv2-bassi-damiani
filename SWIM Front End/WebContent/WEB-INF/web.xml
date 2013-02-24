@@ -4,12 +4,62 @@
   <servlet>
     <display-name>LoginServlet</display-name>
     <servlet-name>LoginServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.LoginServlet</servlet-class>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.LoginServlet</servlet-class>
   </servlet>
   <servlet>
     <display-name>RegistrationServlet</display-name>
     <servlet-name>RegistrationServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.RegistrationServlet</servlet-class>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.registration.InitRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>SelectAbilityRegistrationServlet</display-name>
+    <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.SearchAbility</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>SearchAbilityServlet</display-name>
+    <servlet-name>SearchAbilityServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.SearchAbility</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>InsertAbilityServlet</display-name>
+    <servlet-name>InsertAbilityServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.restricted.InsertAbilityServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>CompleteRegistrationServlet</display-name>
+    <servlet-name>CompleteRegistrationServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.registration.CompleteRegistrationServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>ActivationResend</display-name>
+    <servlet-name>ActivationResend</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.registration.ActivationResend</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>NotificationReadServlet</display-name>
+    <servlet-name>NotificationReadServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.restricted.NotificationReadServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>FriendshipRequestServlet</display-name>
+    <servlet-name>FriendshipRequestServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.restricted.FriendshipRequestServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>ProfileServlet</display-name>
+    <servlet-name>ProfileServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.restricted.ProfileServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>RequestHelpServlet</display-name>
+    <servlet-name>RequestHelpServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.restricted.RequestHelpServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>userActivation</display-name>
+    <servlet-name>userActivation</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.registration.UserActivationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>LoginServlet</servlet-name>
@@ -18,6 +68,46 @@
   <servlet-mapping>
     <servlet-name>RegistrationServlet</servlet-name>
     <url-pattern>/RegistrationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
+    <url-pattern>/SelectAbilityRegistrationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>SearchAbilityServlet</servlet-name>
+    <url-pattern>/SearchAbilityServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>InsertAbilityServlet</servlet-name>
+    <url-pattern>/InsertAbilityServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CompleteRegistrationServlet</servlet-name>
+    <url-pattern>/CompleteRegistrationServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ActivationResend</servlet-name>
+    <url-pattern>/ActivationResend</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>NotificationReadServlet</servlet-name>
+    <url-pattern>/NotificationReadServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FriendshipRequestServlet</servlet-name>
+    <url-pattern>/FriendshipRequestServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProfileServlet</servlet-name>
+    <url-pattern>/ProfileServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RequestHelpServlet</servlet-name>
+    <url-pattern>/RequestHelpServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>userActivation</servlet-name>
+    <url-pattern>/userActivation</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
@@ -45,122 +135,12 @@
   </error-page>
   <servlet>
     <description></description>
-    <display-name>SelectAbilityRegistrationServlet</display-name>
-    <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.SelectAbilityRegistrationServlet</servlet-class>
+    <display-name>LogoutServlet</display-name>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.LogoutServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>SelectAbilityRegistrationServlet</servlet-name>
-    <url-pattern>/SelectAbilityRegistrationServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ValidationServlet</display-name>
-    <servlet-name>ValidationServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.ValidationServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ValidationServlet</servlet-name>
-    <url-pattern>/ValidationServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>SearchAbilityServlet</display-name>
-    <servlet-name>SearchAbilityServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.SearchAbilityServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>SearchAbilityServlet</servlet-name>
-    <url-pattern>/SearchAbilityServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>InsertAbilityServlet</display-name>
-    <servlet-name>InsertAbilityServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.InsertAbilityServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>InsertAbilityServlet</servlet-name>
-    <url-pattern>/InsertAbilityServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>CompleteRegistrationServlet</display-name>
-    <servlet-name>CompleteRegistrationServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.CompleteRegistrationServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CompleteRegistrationServlet</servlet-name>
-    <url-pattern>/CompleteRegistrationServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ActivationResend</display-name>
-    <servlet-name>ActivationResend</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.ActivationResend</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ActivationResend</servlet-name>
-    <url-pattern>/ActivationResend</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>CreateHomePageServlet</display-name>
-    <servlet-name>CreateHomePageServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.CreateHomePageServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>CreateHomePageServlet</servlet-name>
-    <url-pattern>/CreateHomePageServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>NotificationReadServlet</display-name>
-    <servlet-name>NotificationReadServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.NotificationReadServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>NotificationReadServlet</servlet-name>
-    <url-pattern>/NotificationReadServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>FriendshipRequestServlet</display-name>
-    <servlet-name>FriendshipRequestServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.FriendshipRequestServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>FriendshipRequestServlet</servlet-name>
-    <url-pattern>/FriendshipRequestServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>ProfileServlet</display-name>
-    <servlet-name>ProfileServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.ProfileServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ProfileServlet</servlet-name>
-    <url-pattern>/ProfileServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>RequestHelpServlet</display-name>
-    <servlet-name>RequestHelpServlet</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.RequestHelpServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RequestHelpServlet</servlet-name>
-    <url-pattern>/RequestHelpServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>userActivation</display-name>
-    <servlet-name>userActivation</servlet-name>
-    <servlet-class>it.polimi.ingsw2.swim.pages.UserActivationServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>userActivation</servlet-name>
-    <url-pattern>/userActivation</url-pattern>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/LogoutServlet</url-pattern>
   </servlet-mapping>
 </web-app>
