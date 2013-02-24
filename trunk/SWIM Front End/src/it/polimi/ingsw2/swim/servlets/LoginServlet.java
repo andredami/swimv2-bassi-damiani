@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
 			// if the authentication is correct, start the session and redirect
 			// the user to the servlet that creates the home page
 			String url = response.encodeURL(request.getContextPath()
-					+ "/Pages/Home.jsp");
+					+ "/Pages/HomePage.jsp");
 			response.sendRedirect(url);
 			return;
 		} catch (NamingException e) {

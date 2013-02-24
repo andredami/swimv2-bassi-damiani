@@ -1,3 +1,4 @@
+<%@page import="it.polimi.ingsw2.swim.servlets.LoginServlet"%>
 <%@page import="it.polimi.ingsw2.swim.servlets.registration.UserActivationServlet.Attribute"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -61,10 +62,9 @@
 						<%
 							if(request.getAttribute(UserActivationServlet.Attribute.FAILED.toString()) != null){
 								out.println("<span style=\"font-weight: bolder; color: red;\">Attivazione fallita.</span>");
-							//TODO: Adattare a richiesta
 							} else if(request.getAttribute(UserActivationServlet.Attribute.SUCCESS.toString()) != null){
 								out.println("<span style=\"font-weight: bolder; color: green;\">Utente attivato con successo! Ora puoi effettuare il login.</span>");
-							}else if(session.getAttribute("ErrorLogin") != null){
+							} else if(request.getAttribute(LoginServlet.Attribute.FAILED.toString()) != null){
 								out.println("<span style=\"font-weight: bolder; color: red;\">Attenzione, accesso fallito! La combinazione di email è password è errata. Ritenta ancora.</span>");
 							} 
 						%>
@@ -83,8 +83,7 @@
 								<input class="absolute" name="Password" style="left: 66px; top: 33px" type="password" /><br />
 								</label>
 								<br />
-								<input name="rememberBox" type="checkbox" /><span class="headerText"> 
-								Resta collegato
+								<span class="headerText">
 								<input name="submitLogin" style="height: 20px; left: 121px; top: 69px" type="submit" value="Accedi" /><br />
 								Non hai un account?
 								<a href="<%= response.encodeURL("Pages/Registration.jsp")%>">Registrati</a> </span></form>

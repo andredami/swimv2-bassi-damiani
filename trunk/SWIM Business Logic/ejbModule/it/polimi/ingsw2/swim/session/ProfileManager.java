@@ -8,17 +8,20 @@ import it.polimi.ingsw2.swim.exceptions.InvalidPasswordException;
 import it.polimi.ingsw2.swim.exceptions.LastAbilityDeletionException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.exceptions.NotAuthorizedException;
+import it.polimi.ingsw2.swim.session.local.ProfileManagerLocal;
 import it.polimi.ingsw2.swim.session.remote.ProfileManagerRemote;
 
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.hibernate.validator.ClassValidator;
 import org.hibernate.validator.InvalidValue;
@@ -27,8 +30,9 @@ import org.hibernate.validator.InvalidValue;
  * Session Bean implementation class ProfileManager
  */
 @Stateless
-@Remote
-public class ProfileManager implements ProfileManagerRemote {
+@Remote(ProfileManagerRemote.class)
+@Local(ProfileManagerLocal.class)
+public class ProfileManager implements ProfileManagerRemote, ProfileManagerLocal {
 
 	@PersistenceContext(unitName = "persistentData")
 	private EntityManager em;
@@ -43,27 +47,28 @@ public class ProfileManager implements ProfileManagerRemote {
 		super();
 	}
 
-	private void gainStrictAuthorization(String userId, String askingUserId) throws NotAuthorizedException{
-		if(!userId.equals(askingUserId)){
+	private void gainStrictAuthorization(String userId, String askingUserId)
+			throws NotAuthorizedException {
+		if (!userId.equals(askingUserId)) {
 			throw new NotAuthorizedException();
 		}
 	}
 
 	private void gainAuthorization(String userId, String askingUserId)
 			throws NoSuchUserException, NotAuthorizedException {
-		if(userId.equals(askingUserId)){
+		if (userId.equals(askingUserId)) {
 			return;
 		}
-		
+
 		User returned = (User) em.find(User.class, Long.parseLong(userId));
-		if(returned == null){
+		if (returned == null) {
 			throw new NoSuchUserException();
 		}
 
 		User asker;
-		try{
-		asker = (User) em.createNamedQuery("getUserWithFriends")
-				.setParameter("id", askingUserId).getSingleResult();
+		try {
+			asker = (User) em.createNamedQuery("getUserWithFriends")
+					.setParameter("id", askingUserId).getSingleResult();
 		} catch (NoResultException e) {
 			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
@@ -85,21 +90,34 @@ public class ProfileManager implements ProfileManagerRemote {
 			List<Help> helps = em.createNamedQuery("getActiveHelpByUsers")
 					.setParameter("usera", returned.getId())
 					.setParameter("userb", asker.getId()).getResultList();
-			if(helps.size()>0){
+			if (helps.size() > 0) {
 				auth = true;
 			}
 		}
-		
-		
-		if(!auth){
+
+		if (!auth) {
 			throw new NotAuthorizedException();
 		}
 	}
-	
+
+	@Override
+	public User getUser(String userId, String askingUserId)
+			throws NoSuchUserException, NotAuthorizedException {
+
+		gainAuthorization(userId, askingUserId);
+
+		User u = em.find(User.class, Long.parseLong(userId));
+		if (u != null && u.getStatus() == User.Status.REGISTERED) {
+			return u;
+		} else {
+			throw new NoSuchUserException();
+		}
+	}
+
 	@Override
 	public User getUserWithFriends(String userId, String askingUserId)
 			throws NoSuchUserException, NotAuthorizedException {
-		
+
 		gainAuthorization(userId, askingUserId);
 
 		try {
@@ -134,7 +152,7 @@ public class ProfileManager implements ProfileManagerRemote {
 		gainAuthorization(userId, askingUserId);
 		try {
 			return (User) em.createNamedQuery("getUserWithNotifications")
-					.setParameter("id", userId).getSingleResult();
+					.setParameter("id", Long.parseLong(userId)).getSingleResult();
 		} catch (NoResultException e) {
 			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
@@ -157,10 +175,9 @@ public class ProfileManager implements ProfileManagerRemote {
 			throw new NoSuchUserException();
 		}
 	}
-	
-	
-	User getUserWithFriends(String userId)
-			throws NoSuchUserException {
+
+	@Override
+	public User getUserWithFriends(String userId) throws NoSuchUserException {
 
 		try {
 			return (User) em.createNamedQuery("getUserWithFriends")
@@ -173,8 +190,8 @@ public class ProfileManager implements ProfileManagerRemote {
 		}
 	}
 
-	User getUserWithAbilities(String userId)
-			throws NoSuchUserException {
+	@Override
+	public User getUserWithAbilities(String userId) throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getUserWithAbilities")
 					.setParameter("id", userId).getSingleResult();
@@ -186,11 +203,13 @@ public class ProfileManager implements ProfileManagerRemote {
 		}
 	}
 
-	User getUserWithNotifications(String userId)
-			throws NoSuchUserException {
+	@Override
+	public User getUserWithNotifications(String userId) throws NoSuchUserException {
 		try {
-			return (User) em.createNamedQuery("getUserWithNotifications")
-					.setParameter("id", userId).getSingleResult();
+			Query query = em.createNamedQuery("getUserWithNotifications");
+			query.setParameter("id", Long.parseLong(userId));
+			User user = (User) query.getSingleResult();
+			return user;
 		} catch (NoResultException e) {
 			throw new NoSuchUserException();
 		} catch (NonUniqueResultException e) {
@@ -199,8 +218,8 @@ public class ProfileManager implements ProfileManagerRemote {
 		}
 	}
 
-	User retriveProfile(String userId)
-			throws NoSuchUserException {
+	@Override
+	public User retriveProfile(String userId) throws NoSuchUserException {
 		try {
 			return (User) em.createNamedQuery("getCompleteUser")
 					.setParameter("id", userId).getSingleResult();
@@ -287,7 +306,8 @@ public class ProfileManager implements ProfileManagerRemote {
 
 	@Override
 	public void addAbilities(String userId, Set<String> abilities,
-			String askingUserId) throws NoSuchUserException, NotAuthorizedException {
+			String askingUserId) throws NoSuchUserException,
+			NotAuthorizedException {
 		gainStrictAuthorization(userId, askingUserId);
 		User user = getUserWithAbilities(userId, askingUserId);
 		for (String abilityName : abilities) {

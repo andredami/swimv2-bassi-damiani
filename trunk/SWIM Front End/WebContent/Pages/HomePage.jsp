@@ -1,6 +1,19 @@
+<%@page import="it.polimi.ingsw2.swim.entities.Help.State"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="javax.naming.InitialContext" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.User" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.Notification" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.FriendshipRequest" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.Help" %>
+<%@ page import="it.polimi.ingsw2.swim.entities.Message" %>
+<%@ page import="it.polimi.ingsw2.swim.session.remote.ProfileManagerRemote" %>
+<%@ page import="it.polimi.ingsw2.swim.session.remote.NotificationManagerRemote" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.SessionAttribute" %>
+<% String CONTEXT_PATH = request.getContextPath(); %>
+<% SimpleDateFormat datePrinter = new SimpleDateFormat("dd/MM/yyyy"); %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -8,20 +21,21 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <%
 //check if exists a valid session
-	Long user = (Long)session.getAttribute("Id");
-		if (user == null){
-			String url = response.encodeURL("/index.jsp");
-			response.sendRedirect(request.getContextPath() + url);
+	Long userId = (Long) session.getAttribute(SessionAttribute.USER_ID.toString());
+	User user;
+		if (userId == null){
+			String url = response.encodeURL(CONTEXT_PATH + "/index.jsp");
+			response.sendRedirect(url);
 			return;
-		}
+		} else {
+			user = ((ProfileManagerRemote) (new InitialContext()).lookup("ProfileManager/remote")).getUser(userId.toString(), userId.toString());
+		} 
 %>
 
 
 <title>Swim</title>
 
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<link href="../css/style.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="<%= CONTEXT_PATH %>/css/style.css" rel="stylesheet" type="text/css" media="screen" />
 <style type="text/css">
 .auto-style1 {
 	margin-top: 0;
@@ -40,9 +54,12 @@
 					<a href="HomePage.html">SWIM</a>
 				</h1>
 				<label id="labelUser">
-					<a href="<%= response.encodeURL("../ProfileServlet")%>">Nome cognome</a>
+					<a href="<%= response.encodeURL(CONTEXT_PATH + "/ProfileServlet")%>"><%=user.getName().toString() %></a>
 				</label>
-				<img alt="" id="userImage" />
+				<%
+					String picture = CONTEXT_PATH + (user.getPicture() != null ? ("/upload/" + user.getPicture()) : "/images/imgProfileSmall.gif");
+				%>
+				<img alt="<%=user.getName().toString() %> Picture" id="userImage" src="<%=picture%>"/>
 			</div>
 
 			</div>
@@ -55,84 +72,81 @@
 				<div class="welcome">
 					<div id="navigation" style="height: 22px">
 						<ul class="absolute" style="left: 734px; top: 192px; height: 18px">
-						    <li><a href="../Pages/RequestForHelp.jsp">Cerca Aiuto</a></li>
-						    <li><a href="/ProfileServlet">Profilo</a></li>
-							<li><a href="Login.html">Logout</a></li>						    
+						    <li><a href="<%= response.encodeURL(CONTEXT_PATH + "/Pages/RequestForHelp.jsp")%>">Cerca Aiuto</a></li>
+						    <li><a href="<%= response.encodeURL(CONTEXT_PATH + "/ProfileServlet")%>">Profilo</a></li>
+							<li><a href="<%= response.encodeURL(CONTEXT_PATH + "/LogoutServlet")%>">Logout</a></li>						    
 						</ul>
-
 					</div>
-
-					
 					<div class="entry">
 						<p></p>
-						<h3>Home</h3>
-					
+						<h3>Home</h3>					
 					</div>
+					<%
+								NotificationManagerRemote notificationManager = (NotificationManagerRemote) (new InitialContext()).lookup("NotificationManager/remote");
+					
+								List<FriendshipRequest> friendshipRequests = notificationManager.retriveFriendshipRequestsByUser(userId.toString());
+								List<Help> helpRequests = notificationManager.retriveHelpRelationStatusByUser(userId.toString());
+								List<Message> messages = notificationManager.retriveIncomingMessagesByUser(userId.toString());
+								List<Notification> notifications = notificationManager.retriveNotificationsByUser(userId.toString());
+							%>
 					<div class="notification" style="border-style: groove; left: 76px; top: 297px; height: 263px; width: 787px">
 						<div class="notification-inner" style="width: 773px; height: 254px; margin-left: 5px; margin-top: 5px">
 							<h4>Notifiche</h4>
+							
 							<%
-							
-							
-							List<Notification> a;
-							
-							if (request.getSession().getAttribute(CreateHomePageServlet.Attribute.NOTIFICATION.toString())!= null){
-								a = (List<Notification>) request.getSession().getAttribute(CreateHomePageServlet.Attribute.NOTIFICATION.toString());
-								if (a.isEmpty()){
-									out.println("Non ci sono notifiche al momento.");
-								// if a is empty messaggio
-								Iterator<Notification> i = a.iterator();
-								if (i.hasNext()){
-								out.println("<ul id='noMargin'>");
+								if(notifications.isEmpty()){
+							%>
+								Nessuna nuova notifica.
+							<%
+								} else {
+								Iterator<Notification> i = notifications.iterator();
+							%>
+							<ul id='noMargin'>
+							<%
 								while (i.hasNext()){
 								Notification el = i.next();
-								%>	
+							%>	
 									<li>
 									<div id="smallWindow" style="width: 727px">	
-										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50" />
-										<div id="requestLabel" style="left: 61px; top: -50px; bottom: 50px; width: 655px"><a href=""><%out.print(el.getAddressee().getName().getFirstname()+" "+ el.getAddressee().getName().getSurname()); %></a> 
-											<%out.print(el.getText()); %> - <%out.print(el.getTimestamp()); %></div>
-										<form method="post" action="/NotificationReadServlet">
-											<input type="submit" name="notificationButton" value="Segna come letta" style="left: 607px; top: -42px; width: 110px"/>										</form>
+										<%out.print(el.getText()); %> - <%out.print(datePrinter.format(el.getTimestamp().getTime())); %>
 									</div>
 									</li>
-								<%
+							<%
 								}
-								out.println("</ul>");
-							
+							%>
+								</ul>
+							<%
 								}
-								}
-							}else{
-								out.println("Non ci sono notifiche al momento.");
-							}
-							
-							
 							%>
 						</div>
 					</div>
 					<div class="notification" style="border-style: groove; left: 76px; top: 566px; height: 479px; width: 260px">
 						<div class="notification-inner" style="font-weight:bold; width:246px; height: 470px; margin-left: 5px; margin-top: 5px">
-							<h4>Richieste amicizia</h4>
+							<h4>Richieste di amicizia</h4>
 							
-							<% 
-							List<FriendshipRequest> b;
-							
-							if (request.getSession().getAttribute(CreateHomePageServlet.Attribute.FRIEND.toString())!= null){
-								b = (List<FriendshipRequest>) request.getSession().getAttribute(CreateHomePageServlet.Attribute.FRIEND.toString());
-								if (b.isEmpty()){
-									out.println("Non ci sono richieste di amicizia al momento.");
-								// if a is empty messaggio
-								Iterator<FriendshipRequest> i = b.iterator();
-								if (i.hasNext()){
-								out.println("<ul id='noMargin'>");
+							<%
+								if(friendshipRequests.isEmpty()){
+							%>
+								Nessuna nuova richiesta di amicizia.
+							<%
+								} else {
+								Iterator<FriendshipRequest> i = friendshipRequests.iterator();
+							%>
+								<ul id='noMargin'>
+							<%
 								while (i.hasNext()){
 								FriendshipRequest el = i.next();
-								%>	
+							%>
 									<li>
-									<div id="smallWindow">	
-										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50" />
-										<div id="requestLabel"><a href=""><%out.print(el.getSender().getName().getFirstname()+" "+ el.getSender().getName().getSurname()); %></a> ha richiesto la tua amicizia</div>
-										<form method="post" action="/FriendshipRequestServlet">
+									<div id="smallWindow">
+							<%
+								User sender = el.getSender();
+								String iPicture = CONTEXT_PATH + (sender.getPicture() != null ? ("/upload/" + sender.getPicture()) : "/images/imgProfileSmall.gif");
+							%>			
+										<img alt="<%=sender.getName().toString() %> Picture" id="smallImage" height="50" src="<%=iPicture %>" width="50" />
+										<div id="requestLabel"><a href="<%=response.encodeURL(CONTEXT_PATH + "/Pages/FriendProfile?profile=" + sender.getId().toString()) %>" target="_blank"><%=sender.getName().toString() %></a> ha richiesto la tua amicizia</div>
+										<form method="post" action="<%=response.encodeURL(CONTEXT_PATH + "/FriendshipRequestServlet") %>">
+											<input name="newFriendId" type="hidden" value="<%=el.getSender().getId().toString()%>" />
 											<input id="acceptButton" name="acceptButton" type="submit" value="Accetta" />
 											<input id="denyButton" name="denyButton" type="submit" value="Rifiuta" />
 										</form>
@@ -140,107 +154,125 @@
 									</li>
 								<%
 								}
-								out.println("</ul>");
-							
+							%>
+								</ul>
+							<%
 								}
-								}
-							}else{
-								out.println("Non ci sono richieste di amicizia al momento.");
-							}
-												
 							%>
 						</div>
 					</div>
 					<div class="notification" style="border-style: groove; left: 340px; top: 566px; height: 479px; width: 260px">
 						<div class="notification-inner" style="font-weight:bold; width: 245px; height: 470px; margin-left: 5px; margin-top: 5px">
-							<h4>Feedback</h4>
+							<h4>Messaggi</h4>
 							
-							<% 
-							List<Message> c;
-							
-							if (request.getSession().getAttribute(CreateHomePageServlet.Attribute.MESSAGE.toString())!= null){
-								c = (List<Message>) request.getSession().getAttribute(CreateHomePageServlet.Attribute.MESSAGE.toString());
-								if (c.isEmpty()){
-									out.println("Non ci sono richieste di feedback al momento.");
-								// if a is empty messaggio
-								Iterator<Message> i = c.iterator();
-								if (i.hasNext()){
-								out.println("<ul id='noMargin'>");
+							<%
+								if(messages.isEmpty()){
+							%>
+								Nessun nuovo messaggio.
+							<%
+								} else {
+								Iterator<Message> i = messages.iterator();
+							%>
+								<ul id='noMargin'>
+							<%
 								while (i.hasNext()){
 								Message el = i.next();
-								%>	
+							%>
 									<li>
-									<div id="smallWindow">	
-										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
-										<div id="requestLabel"><a href="FriendProfile.html"><%out.print(el.getSender()); %></a> 
+									<div id="smallWindow">
+							<%
+								User sender = el.getSender();
+								String iPicture = CONTEXT_PATH + (sender.getPicture() != null && !sender.getPicture().isEmpty() ? ("/upload/" + sender.getPicture()) : "/images/imgProfileSmall.gif");
+							%>		
+										<img alt="<%=sender.getName() %> Picture" id="smallImage" height="50" src="<%=iPicture %> Picture" width="50"/>
+										<div id="requestLabel"><a href="<%=response.encodeURL(CONTEXT_PATH + "/Pages/FriendProfile.jsp?profile=" + sender.getId().toString())%>" target="_blank"><%=sender.getName().toString() %></a> 
 											<br />
-											<% %><br />
-											DateTime
+											(<%=datePrinter.format(el.getTimestamp().getTime()) %>)
+											<br />
+											<textarea readonly="readonly" rows="4">
+											<%=el.getText() %>
+											</textarea>
+											<br />
+											<a href="<%=response.encodeURL(CONTEXT_PATH + "/Pages/Conversation.jsp?msg=" + el.getId().toString()) %>" target="_blank">Rivedi la conversazione e rispondi</a>
 										</div>
-										<form method="post">
-											<input type="button" onclick="javascript:open_winFeedback('../Popup/FeedbackPopup.html', 'feedbackPopup');" id="feedbackButton" name="feedbackButton" value="Valuta"/>
-										</form>
 									</div>
 
 								</li>
-								<%
+							<%
 								}
-								out.println("</ul>");
-							
-								}
-								}
-							}else{
-								out.println("Non hai feedback da dare al momento.");
-							}
-												
 							%>
-							
+								</ul>
+							<%
+								}
+							%>
 						</div>
 					</div>
 					<div class="notification" style="border-style: groove; left: 603px; top: 566px; height: 479px; width: 260px">
 						<div class="notification-inner" style="font-weight:bold; width: 246px; height: 470px; margin-left: 5px; margin-top: 5px">
 							<h4>Richieste aiuto</h4>
 							
-							<% 
-							List<Help> d;
-							
-							if (request.getSession().getAttribute(CreateHomePageServlet.Attribute.HELP.toString())!= null){
-								d = (List<Help>) request.getSession().getAttribute(CreateHomePageServlet.Attribute.HELP.toString());
-								if (d.isEmpty()){
-									out.println("Non ci sono richieste di aiuto al momento.");
-								// if a is empty messaggio
-								Iterator<Help> i = d.iterator();
-								if (i.hasNext()){
-								out.println("<ul id='noMargin'>");
+							<%
+								if(helpRequests.isEmpty()){
+							%>
+								Nessuna richiesta d'aiuto attiva.
+							<%
+								} else {
+								Iterator<Help> i = helpRequests.iterator();
+							%>
+								<ul id='noMargin'>
+							<%
 								while (i.hasNext()){
 								Help el = i.next();
-								%>	
+								if(el.getState() == State.CLOSED){
+									continue;
+								}
+							%>
 									<li>
-									<div id="smallWindow">	
-										<img alt="" id="smallImage" height="50" src="../images/imgProfileSmall.gif" width="50"/>
-										<div id="requestLabel"><a href=""><%out.print(el.getSender().getName().getFirstname()+" "+ el.getSender().getName().getSurname()); %></a> 
+									<div id="smallWindow">
+							<%
+								User other;
+								if(el.getSender().getId() == userId){
+									other = el.getAddressee();
+								} else {
+									other = el.getSender();
+								}
+								String iPicture = CONTEXT_PATH + (other.getPicture() != null && !other.getPicture().isEmpty() ? ("/upload/" + other.getPicture()) : "/images/imgProfileSmall.gif");
+							%>	
+										<img alt="<%=other.getName() %> Picture" id="smallImage" height="50" src="<%=iPicture %>" width="50"/>
+										<div id="requestLabel"><a href="<%=response.encodeURL(CONTEXT_PATH + "/Pages/FriendProfile.jsp?profile=" + other.getId().toString())%>" target="_blank"><%=other.getName().toString() %></a> 
 											<br />
-											<%out.print(el.getAbility()); %><br />
-											<%out.print(el.getTimestamp()); %>
+											Abilità: <%=el.getAbility().getName().toString() %>
+											<br />
+											Stato: <%=el.getState().toString() %>
+											<br />
 										</div>
 										<form method="post" action="/HelpRequest.jsp">
-											<input type="submit" id="feedbackButton" name="helpRequestButton"value="Vai alla richiesta" style="left: 105px; top: -43px; width: 110px"/>
+							<%
+								if(el.getState() == State.REQUESTED && el.getSender().getId() != userId){
+							%>
+											<input id="acceptButton" name="acceptButton" type="submit" value="Accetta" />
+											<input id="denyButton" name="denyButton" type="submit" value="Rifiuta" />
+							<%
+								} else if (el.getState() == State.REQUESTED) {
+							%>
+									Richiesta in attesa di conferma.
+							<%
+								} else if (el.getState() == State.ACCEPTED) {
+							%>
+									<input id="closeButton" name="closeButton" type="submit" value="Valuta e chiudi" />
+							<%									
+								} 
+							%>
 										</form>
 									</div>
-
 								</li>
-								<%
+							<%
 								}
-								out.println("</ul>");
-							
-								}
-								}
-							}else{
-								out.println("Non hai richieste di aiuto per ora.");
-							}
-												
 							%>
-								
+								</ul>
+							<%
+								}
+							%>
 						</div>
 					</div>
 				</div>

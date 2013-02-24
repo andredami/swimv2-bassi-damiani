@@ -6,6 +6,7 @@ import it.polimi.ingsw2.swim.entities.Message;
 import it.polimi.ingsw2.swim.entities.Notification;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
+import it.polimi.ingsw2.swim.session.local.ProfileManagerLocal;
 import it.polimi.ingsw2.swim.session.remote.NotificationManagerRemote;
 
 import java.util.Iterator;
@@ -15,6 +16,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -26,10 +29,11 @@ import javax.persistence.PersistenceContext;
 public class NotificationManager implements NotificationManagerRemote {
 
 	@Resource(name="maxNotification", mappedName="maxNotification")
-	private static final int  MAX_NOTIFICATION = 25;
+	private static int  MAX_NOTIFICATION = 25;
 
 	@PersistenceContext(unitName = "persistentData")
-	private EntityManager em;
+	private EntityManager em; 
+	
 	
     /**
      * Default constructor. 
@@ -40,27 +44,28 @@ public class NotificationManager implements NotificationManagerRemote {
 
     @Override
 	public void sendNotification(String addresseeId, String text) throws NoSuchUserException {
-		User addressee = new ProfileManager().getUserWithNotifications(addresseeId);
+		User addressee;
+		addressee = getProfileManager().getUserWithNotifications(addresseeId);
 		addressee.addNotification(new Notification(addressee, text));
 		em.merge(addressee);
 	}
 	
 	void sendFriendshipRequest(String addresseeId, String senderId) throws NoSuchUserException {
 		User sender;
-    	try {
-			sender = new ProfileManager().getUserWithNotifications(addresseeId);
+		try {
+			sender = getProfileManager().getUserWithNotifications(addresseeId);
 		} catch (NoSuchUserException e) {
 			throw new NoSuchUserException("fromUser");
 		}
-    	User addressee;
-    	try {
-    		addressee = new ProfileManager().getUserWithNotifications(addresseeId);
+		User addressee;
+		try {
+			addressee = getProfileManager().getUserWithNotifications(addresseeId);
 		} catch (NoSuchUserException e) {
 			throw new NoSuchUserException("toUser");
 		}
-    	if(!sender.getFriendships().contains(addressee) && !addressee.getFriendships().contains(sender)){
-    		addressee.addNotification(new FriendshipRequest(addressee,sender));
-    		em.merge(addressee);
+		if(!sender.getFriendships().contains(addressee) && !addressee.getFriendships().contains(sender)){
+			addressee.addNotification(new FriendshipRequest(addressee,sender));
+			em.merge(addressee);
 		}
 	}
 	
@@ -75,7 +80,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	
 	@Override
 	public List<Notification> retriveNotificationsByUser(String userId) throws NoSuchUserException{
-		User user = new ProfileManager().getUserWithNotifications(userId);
+		User user = getProfileManager().getUserWithNotifications(userId);
 		List<Notification> allNotifications = user.getNotification();
 		List<Notification> output = new LinkedList<Notification>();
 		int count = 0;
@@ -92,7 +97,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	
 	@Override
 	public List<Message> retriveIncomingMessagesByUser(String userId) throws NoSuchUserException{
-		User user = new ProfileManager().getUserWithNotifications(userId);
+		User user = getProfileManager().getUserWithNotifications(userId);
 		List<Notification> allNotifications = user.getNotification();
 		List<Message> output = new LinkedList<Message>();
 		Iterator<Notification> iterator = allNotifications.iterator();
@@ -107,7 +112,7 @@ public class NotificationManager implements NotificationManagerRemote {
 	
 	@Override
 	public List<FriendshipRequest> retriveFriendshipRequestsByUser(String userId) throws NoSuchUserException{
-		User user = new ProfileManager().getUserWithNotifications(userId);
+		User user = getProfileManager().getUserWithNotifications(userId);
 		List<Notification> allNotifications = user.getNotification();
 		List<FriendshipRequest> output = new LinkedList<FriendshipRequest>();
 		Iterator<Notification> iterator = allNotifications.iterator();
@@ -124,5 +129,13 @@ public class NotificationManager implements NotificationManagerRemote {
 	@Override
 	public List<Help> retriveHelpRelationStatusByUser(String userId) throws NoSuchUserException{
 		return em.createNamedQuery("getActiveHelpByUser").setParameter("user", Long.parseLong(userId)).getResultList();
+	}
+	
+	private ProfileManagerLocal getProfileManager(){
+		try {
+			return (ProfileManagerLocal) (new InitialContext()).lookup("ProfileManager/local");
+		} catch (NamingException e) {
+			throw new RuntimeException();
+		}
 	}
 }
