@@ -64,7 +64,7 @@
 						</div>
 						<br /><br /><br /><br /><br /><br />
 						Messaggio da allegare alla richiesta:
-						<form action="<%=response.encodeURL(CONTEXT_PATH + "/RegisterHelpRequest") %>" style="height: 189px; width: 292px">
+						<form method="post" action="<%=response.encodeURL(CONTEXT_PATH + "/RegisterHelpRequest") %>" style="height: 189px; width: 292px">
 							<textarea name="Text" class="absolute" style="border-style:groove; width: 285px; height: 123px; left: 77px; top: 583px;"></textarea><br />
 							<input type="hidden" name="ability" id="ability" value="<%=ability %>" />
 							<input type="hidden" name="addressee" id="addressee" value="<%=addressee %>" />

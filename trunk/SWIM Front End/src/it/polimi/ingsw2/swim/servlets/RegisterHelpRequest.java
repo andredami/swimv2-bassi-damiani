@@ -29,11 +29,13 @@ public class RegisterHelpRequest extends HttpServlet {
 			try {
 				helpManager.registerHelpRequest(request.getParameter("addressee"), ((Long) request.getSession().getAttribute(SessionAttribute.USER_ID.toString())).toString(), request.getParameter("ability"), request.getParameter("text"));
 			} catch (InvalidDataException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				request.setAttribute("errorInvalid", 1);
+				request.getRequestDispatcher("/index.jsp").forward(request, response);
+				return;
 			} catch (NoSuchUserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				request.setAttribute("errorUser", 1);
+				request.getRequestDispatcher("/index.jsp").forward(request, response);
+				return;
 			}
 		} catch (NamingException e) {
 			e.printStackTrace();
