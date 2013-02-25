@@ -23,7 +23,7 @@ public class HelpRequestUser extends HttpServlet {
 	
 	public enum Attribute {
 		WRONG_DATA("error"),
-		RESULT("res");
+		RESULT("res"), REGISTRATION("reg");
 
 		private static final String componentName = "LoginServlet";
 		private final String name;
@@ -68,6 +68,11 @@ public class HelpRequestUser extends HttpServlet {
 				}
 				
 				try {
+					if(request.getSession().getAttribute(SessionAttribute.USER_ID.toString()) == null){
+						request.setAttribute(Attribute.REGISTRATION.toString(), 1);
+						request.getRequestDispatcher("/Pages/Registration.jsp").forward(request, response);
+						return;
+					}
 					List<User> results = directory.findUserByAbility(((Long) request.getSession().getAttribute(SessionAttribute.USER_ID.toString())).toString(), request.getParameter("chosenAbility"), location, minFeedback, page);
 					request.setAttribute(Attribute.RESULT.toString(), results);
 					request.getRequestDispatcher("/Pages/RequestForHelp.jsp").forward(request, response);

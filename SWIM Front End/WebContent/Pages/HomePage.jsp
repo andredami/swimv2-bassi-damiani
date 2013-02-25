@@ -3,6 +3,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.*" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="it.polimi.ingsw2.swim.servlets.AbilitySelectionMode" %>
 <%@ page import="javax.naming.InitialContext" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.User" %>
 <%@ page import="it.polimi.ingsw2.swim.entities.Notification" %>
@@ -51,7 +52,7 @@
 			<div id="logo">
 		
 				<h1>
-					<a href="HomePage.html">SWIM</a>
+					<a href="HomePage.jsp">SWIM</a>
 				</h1>
 				<label id="labelUser">
 					<a href="<%= response.encodeURL(CONTEXT_PATH + "/ProfileServlet")%>"><%=user.getName().toString() %></a>
@@ -72,8 +73,8 @@
 				<div class="welcome">
 					<div id="navigation" style="height: 22px">
 						<ul class="absolute" style="left: 734px; top: 192px; height: 18px">
-						    <li><a href="<%= response.encodeURL(CONTEXT_PATH + "/Pages/RequestForHelp.jsp")%>">Cerca Aiuto</a></li>
-						    <li><a href="<%= response.encodeURL(CONTEXT_PATH + "/ProfileServlet")%>">Profilo</a></li>
+						    <li><a href="<%= response.encodeURL(CONTEXT_PATH + "/Pages/AbilitySelection.jsp?" + AbilitySelectionMode.FILTER.toString())%>">Cerca Aiuto</a></li>
+						    <!-- <li><a href="<%= response.encodeURL(CONTEXT_PATH + "/ProfileServlet")%>">Profilo</a></li> -->
 							<li><a href="<%= response.encodeURL(CONTEXT_PATH + "/LogoutServlet")%>">Logout</a></li>						    
 						</ul>
 					</div>
