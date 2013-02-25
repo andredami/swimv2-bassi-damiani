@@ -143,4 +143,24 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/LogoutServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>HelpRequestUser</display-name>
+    <servlet-name>HelpRequestUser</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.HelpRequestUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HelpRequestUser</servlet-name>
+    <url-pattern>/HelpRequestUser</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>RegisterHelpRequest</display-name>
+    <servlet-name>RegisterHelpRequest</servlet-name>
+    <servlet-class>it.polimi.ingsw2.swim.servlets.RegisterHelpRequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterHelpRequest</servlet-name>
+    <url-pattern>/RegisterHelpRequest</url-pattern>
+  </servlet-mapping>
 </web-app>

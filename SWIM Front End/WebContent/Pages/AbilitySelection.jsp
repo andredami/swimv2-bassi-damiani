@@ -15,21 +15,26 @@
 <head>
 
 <%
-	AbilitySelectionMode mode = AbilitySelectionMode.FILTER;
+	AbilitySelectionMode mode;
 	RegistrationRemote registrationAgent = (RegistrationRemote) session
-			.getAttribute(SessionAttribute.REGISTRATION_AGENT
-					.toString());
-
-	//TODO: PROFILE
-	if (request.getAttribute("profileediting") != null) {
+	.getAttribute(SessionAttribute.REGISTRATION_AGENT
+	.toString());
+	
+	if(request.getParameter(AbilitySelectionMode.FILTER.toString()) != null) {
+		mode = AbilitySelectionMode.FILTER;
+	} else if (request.getParameter(AbilitySelectionMode.PROFILE.toString()) != null) {
 		if (session.getAttribute(SessionAttribute.USER_ID.toString()) == null) {
-			String url = response.encodeURL("/Pages/home.jsp");
-			response.sendRedirect(request.getContextPath() + url);
+			String url = response.encodeURL(CONTEXT_PATH + "/Pages/home.jsp");
+			response.sendRedirect(url);
 			return;
 		}
 		mode = AbilitySelectionMode.PROFILE;
 	} else if (registrationAgent != null) {
 		mode = AbilitySelectionMode.REGISTRATION;
+	} else {
+		String url = response.encodeURL(CONTEXT_PATH + "/Pages/home.jsp");
+		response.sendRedirect(url);
+		return;
 	}
 %>
 
@@ -103,7 +108,7 @@
 						style="position: absolute; width: 343px; height: 147px; z-index: 1; left: 77px; top: 314px"
 						class="headerTextForm">
 						Ricerca l'abilità<br />
-						<form method="post" action="<%=response.encodeURL(CONTEXT_PATH + "/SelectAbilityRegistrationServlet")%>"
+						<form method="post" action="<%=response.encodeURL(CONTEXT_PATH + "/SearchAbilityServlet?" + mode.toString())%>"
 							style="height: 148px">
 							<input class="absolute" name="SubmitAbilityButton"
 								style="left: 182px; top: 81px; height: 30px; width: 129px;"

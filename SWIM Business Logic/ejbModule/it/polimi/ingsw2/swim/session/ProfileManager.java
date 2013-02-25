@@ -101,10 +101,8 @@ public class ProfileManager implements ProfileManagerRemote, ProfileManagerLocal
 	}
 
 	@Override
-	public User getUser(String userId, String askingUserId)
+	public User getUser(String userId)
 			throws NoSuchUserException, NotAuthorizedException {
-
-		gainAuthorization(userId, askingUserId);
 
 		User u = em.find(User.class, Long.parseLong(userId));
 		if (u != null && u.getStatus() == User.Status.REGISTERED) {

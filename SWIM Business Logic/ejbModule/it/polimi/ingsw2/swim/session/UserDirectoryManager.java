@@ -5,7 +5,6 @@ import it.polimi.ingsw2.swim.entities.Address;
 import it.polimi.ingsw2.swim.entities.User;
 import it.polimi.ingsw2.swim.entities.User.Status;
 import it.polimi.ingsw2.swim.exceptions.InvalidDataException;
-import it.polimi.ingsw2.swim.exceptions.LocationMissingException;
 import it.polimi.ingsw2.swim.exceptions.NoSuchUserException;
 import it.polimi.ingsw2.swim.session.remote.UserDirectoryManagerRemote;
 import it.polimi.ingsw2.swim.validation.NameValidator;
@@ -75,7 +74,7 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 			query = em.createQuery(selectQuery + usernameClause);
 		}
 
-		query.setFirstResult((page * ENTRIES_PER_PAGE) - 1);
+		query.setFirstResult(((page - 1) * ENTRIES_PER_PAGE));
 		query.setMaxResults(ENTRIES_PER_PAGE);
 
 		return query.getResultList();
@@ -85,7 +84,7 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 	@Override
 	public List<User> findUserByAbility(String userId, String abilityName,
 			String location, int minFeedback, int page)
-			throws LocationMissingException, InvalidDataException,
+			throws InvalidDataException,
 			NoSuchUserException {
 		if (abilityName == null) {
 			throw new IllegalArgumentException();
@@ -93,7 +92,8 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 
 		Ability ability = em.find(Ability.class, abilityName);
 		if (ability == null) {
-			throw new InvalidDataException();
+			InvalidValue[] invalid = {new InvalidValue("Abilità innesistente", Ability.class, "name", null, null)};
+			throw new InvalidDataException(invalid);
 		}
 
 		User user = null;
@@ -104,7 +104,7 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 			}
 		}
 
-		Address address;
+		Address address = null;
 		if (location != null) {
 			address = new Address(location);
 			InvalidValue[] validationMessages = addressValidator
@@ -113,14 +113,14 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 				throw new InvalidDataException(validationMessages);
 			}
 		} else {
-			if (user == null) {
-				throw new LocationMissingException();
+			if(user != null){
+				address = user.getAddress();
 			}
-			address = user.getAddress();
 		}
 
-		if (minFeedback < -5 || minFeedback > 5) {
-			minFeedback = -5;
+		float min = minFeedback;
+		if (min < -5 || min > 5) {
+			min = -5;
 		}
 
 		if (page <= 0) {
@@ -129,17 +129,20 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 
 		List<User> returnList = new ArrayList<User>();
 
-		String selectQuery = "SELECT u FROM User u WHERE ";
-		String userClause = "u.status = REGISTERED AND ";
-		String friendClause = ":user IN i.friendships AND ";
+		String selectQuery = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.abilities a LEFT JOIN FETCH u.friendships f WHERE ";
+		String userClause = "u.status = it.polimi.ingsw2.swim.entities.User$Status.REGISTERED AND ";
+		String friendClause = "f =:user AND ";
 
+		String locationClause = "";
+		if(address != null){
 		// TODO: Full georeferenced filtering cannot be implemented at the
 		// moment due to main geolocation services free license restrictions.
-		String locationClause = "u.address.getCity() = :address AND ";
+		locationClause = "u.address.city = :address AND ";
+		}
 
 		String feedbackClause = "u.evaluation >= :minFeedback AND ";
-		String abilityClause = ":ability IN u.abilities ";
-		String orderByClause = "ORDER BY u.evaluation DESC ";
+		String abilityClause = "a =:ability ";
+		String orderByClause = "ORDER BY u.evaluation DESC";
 
 		int results = 0;
 		if (user != null) {
@@ -151,12 +154,14 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 			// TODO: Full georeferenced filtering cannot be implemented at the
 			// moment due to main geolocation services free license
 			// restrictions.
+			if(address!=null){
 			friendsQuery.setParameter("address", address.getCity());
-			friendsQuery.setParameter("minFeedback", minFeedback);
+			}
+			friendsQuery.setParameter("minFeedback", min);
 			friendsQuery.setParameter("ability", ability);
 
 			if (friendsQuery.getResultList().size() - (page * ENTRIES_PER_PAGE) > 0) {
-				friendsQuery.setFirstResult((page * ENTRIES_PER_PAGE) - 1);
+				friendsQuery.setFirstResult(((page - 1) * ENTRIES_PER_PAGE));
 				friendsQuery.setMaxResults(ENTRIES_PER_PAGE);
 
 				List<User> friends = friendsQuery.getResultList();
@@ -172,10 +177,12 @@ public class UserDirectoryManager implements UserDirectoryManagerRemote {
 		// TODO: Full georeferenced filtering cannot be implemented at the
 		// moment due to main geolocation services free license
 		// restrictions.
+		if(address != null){
 		query.setParameter("address", address.getCity());
-		query.setParameter("minFeedback", minFeedback);
+		}
+		query.setParameter("minFeedback", min);
 		query.setParameter("ability", ability);
-		query.setFirstResult((page * ENTRIES_PER_PAGE) - results - 1);
+		query.setFirstResult(((page - 1) * ENTRIES_PER_PAGE) - results);
 		query.setMaxResults(ENTRIES_PER_PAGE - results);
 
 		returnList.addAll(query.getResultList());

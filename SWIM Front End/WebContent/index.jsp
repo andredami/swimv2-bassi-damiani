@@ -1,3 +1,4 @@
+<%@page import="it.polimi.ingsw2.swim.servlets.AbilitySelectionMode"%>
 <%@page import="it.polimi.ingsw2.swim.servlets.LoginServlet"%>
 <%@page import="it.polimi.ingsw2.swim.servlets.registration.UserActivationServlet.Attribute"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -57,7 +58,7 @@
 					<div class="entry"> &nbsp;<div>
 						<p>
 						SWIMv2 è l'esclusiva piattaforma online che vi permetterà di offrire le vostre abilità lavorative e usufruire delle abilità delle altre persone registrate! Incomincia anche tu registrandoti! </p>
-						<p><a href="<%= CONTEXT_PATH + "/Pages/RequestForHelp" %>">Ricerca aiuto anche se non possiedi un account!</a><br /></p>
+						<p><a href="<%= CONTEXT_PATH + "/Pages/AbilitySelection.jsp?" + AbilitySelectionMode.FILTER.toString() %>">Ricerca aiuto anche se non possiedi un account!</a><br /></p>
 						<p>
 						<%
 							if(request.getAttribute(UserActivationServlet.Attribute.FAILED.toString()) != null){
