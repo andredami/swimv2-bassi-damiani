@@ -37,7 +37,7 @@ public interface ProfileManagerRemote {
 
 	User retriveProfile(String userId, String askingUserId) throws NoSuchUserException, NotAuthorizedException;
 
-	User getUser(String userId, String askingUserId)
+	User getUser(String userId)
 			throws NoSuchUserException, NotAuthorizedException;
 
 }

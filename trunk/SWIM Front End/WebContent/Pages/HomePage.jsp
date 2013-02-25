@@ -28,7 +28,7 @@
 			response.sendRedirect(url);
 			return;
 		} else {
-			user = ((ProfileManagerRemote) (new InitialContext()).lookup("ProfileManager/remote")).getUser(userId.toString(), userId.toString());
+			user = ((ProfileManagerRemote) (new InitialContext()).lookup("ProfileManager/remote")).getUser(userId.toString());
 		} 
 %>
 
